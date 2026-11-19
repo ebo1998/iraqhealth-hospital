@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -5,6 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>دليل المستشفيات والقطاعات الصحية وصالات العمليات - العراق</title>
   <style>
+    /* =====================================================================
+       متغيرات التصميم والهوية البصرية (فيروزي/أزرق محيطي/سليت نظيف)
+       ===================================================================== */
     :root {
       --bg: #f4f7fa;
       --card: #ffffff;
@@ -15,10 +19,14 @@
       --accent: #0284c7;
       --border: #dce4ee;
       --chip: #eef6f5;
+      --chip-blue: #e0f2fe;
       --warn: #b45309;
       --warn-bg: #fef3c7;
+      --ok: #047857;
+      --ok-bg: #d1fae5;
       --shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
     }
+
     body.dark {
       --bg: #0b1220;
       --card: #131c31;
@@ -29,11 +37,16 @@
       --accent: #38bdf8;
       --border: #24324d;
       --chip: #192942;
+      --chip-blue: #142942;
       --warn: #fbbf24;
       --warn-bg: rgba(251, 191, 36, 0.14);
+      --ok: #34d399;
+      --ok-bg: rgba(52, 211, 153, 0.14);
       --shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
     }
+
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
       font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial, sans-serif;
@@ -42,13 +55,20 @@
       line-height: 1.65;
       transition: background 0.25s, color 0.25s;
     }
+
     header {
       background: linear-gradient(135deg, var(--primary-dark), var(--primary), var(--accent));
       color: #fff;
       padding: 20px 16px 24px;
       box-shadow: var(--shadow);
     }
-    .wrap { max-width: 1200px; margin: 0 auto; padding: 0 14px; }
+
+    .wrap {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 14px;
+    }
+
     .top-bar {
       display: flex;
       flex-wrap: wrap;
@@ -56,51 +76,83 @@
       justify-content: space-between;
       gap: 12px;
     }
-    h1 { margin: 0; font-size: 1.45rem; }
-    .subtitle { margin: 6px 0 0; opacity: 0.92; font-size: 0.95rem; }
-    .actions { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    h1 {
+      margin: 0;
+      font-size: 1.45rem;
+      font-weight: 800;
+    }
+
+    .subtitle {
+      margin: 6px 0 0;
+      opacity: 0.94;
+      font-size: 0.94rem;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
     button, select, input {
       font-family: inherit;
       font-size: 0.92rem;
     }
+
     .btn {
-      border: none;
+      border: 1px solid rgba(255, 255, 255, 0.28);
       border-radius: 10px;
       padding: 8px 14px;
       cursor: pointer;
-      font-weight: 600;
-      background: rgba(255,255,255,0.18);
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.18);
       color: #fff;
-      backdrop-filter: blur(6px);
       transition: 0.2s;
     }
-    .btn:hover { background: rgba(255,255,255,0.28); }
+
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.28);
+    }
+
     .btn-solid {
       background: var(--primary);
       color: #fff;
       border: none;
       border-radius: 10px;
-      padding: 9px 15px;
-      font-weight: 600;
+      padding: 9px 16px;
+      font-weight: 700;
       cursor: pointer;
+      transition: 0.2s;
     }
-    .btn-solid:hover { background: var(--primary-dark); }
+
+    .btn-solid:hover {
+      background: var(--primary-dark);
+    }
+
     .btn-outline {
       background: transparent;
       color: var(--primary);
       border: 1px solid var(--primary);
       border-radius: 9px;
       padding: 6px 12px;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
-      font-size: 0.85rem;
+      font-size: 0.84rem;
+      transition: 0.2s;
     }
+
+    .btn-outline:hover {
+      background: var(--chip);
+    }
+
     .tabs {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
       margin: 16px 0;
     }
+
     .tab-btn {
       background: var(--card);
       color: var(--text);
@@ -110,20 +162,30 @@
       cursor: pointer;
       font-weight: 700;
       box-shadow: var(--shadow);
+      transition: 0.2s;
     }
+
     .tab-btn.active {
       background: var(--primary);
       color: #fff;
       border-color: var(--primary);
     }
-    .panel { display: none; }
-    .panel.active { display: block; }
+
+    .panel {
+      display: none;
+    }
+
+    .panel.active {
+      display: block;
+    }
+
     .toolbar {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 10px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
+
     .control {
       background: var(--card);
       color: var(--text);
@@ -132,11 +194,42 @@
       padding: 10px 12px;
       width: 100%;
     }
+
+    /* شريط المحافظات الـ 18 السريع */
+    .gov-strip {
+      display: flex;
+      gap: 7px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 14px;
+      scrollbar-width: thin;
+    }
+
+    .gov-pill {
+      background: var(--card);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 6px 13px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: 0.18s;
+    }
+
+    .gov-pill.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(315px, 1fr));
       gap: 14px;
     }
+
     .card {
       background: var(--card);
       border: 1px solid var(--border);
@@ -144,54 +237,192 @@
       padding: 16px;
       box-shadow: var(--shadow);
     }
-    .card h3 { margin: 0 0 8px; color: var(--primary); font-size: 1.1rem; }
-    .card h4 { margin: 12px 0 6px; font-size: 0.98rem; color: var(--accent); }
-    .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+
+    .card h3 {
+      margin: 0 0 8px;
+      color: var(--primary);
+      font-size: 1.12rem;
+      font-weight: 800;
+    }
+
+    .card h4 {
+      margin: 12px 0 6px;
+      font-size: 0.98rem;
+      color: var(--accent);
+      font-weight: 800;
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 8px 0;
+    }
+
     .chip {
       background: var(--chip);
       color: var(--text);
       border: 1px solid var(--border);
       padding: 4px 10px;
       border-radius: 999px;
-      font-size: 0.82rem;
+      font-size: 0.81rem;
+      font-weight: 600;
     }
+
+    .chip-blue {
+      background: var(--chip-blue);
+      color: var(--accent);
+      border-color: transparent;
+    }
+
+    .seq-list {
+      margin: 8px 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: seq;
+    }
+
+    .seq-item {
+      counter-increment: seq;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 9px 11px;
+      margin-bottom: 7px;
+      border-radius: 11px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      cursor: pointer;
+      transition: 0.18s;
+    }
+
+    .seq-item:hover {
+      border-color: var(--primary);
+      transform: translateY(-1px);
+    }
+
+    .seq-item::before {
+      content: counter(seq);
+      min-width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .seq-title {
+      flex: 1;
+      font-weight: 700;
+      font-size: 0.92rem;
+    }
+
     .warn-box {
       background: var(--warn-bg);
       color: var(--warn);
-      padding: 8px 12px;
+      padding: 9px 12px;
       border-radius: 10px;
       font-size: 0.86rem;
       margin: 8px 0;
     }
-    ul { margin: 6px 0; padding-right: 20px; }
-    li { margin-bottom: 4px; }
+
+    .ok-box {
+      background: var(--ok-bg);
+      color: var(--ok);
+      padding: 9px 12px;
+      border-radius: 10px;
+      font-size: 0.86rem;
+      margin: 8px 0;
+    }
+
+    ul, ol {
+      margin: 6px 0;
+      padding-right: 20px;
+    }
+
+    li {
+      margin-bottom: 4px;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 8px;
-      font-size: 0.86rem;
+      font-size: 0.85rem;
     }
+
     th, td {
       border: 1px solid var(--border);
       padding: 7px 9px;
       text-align: right;
     }
-    th { background: var(--chip); color: var(--primary); }
-    .kit-svg-box {
+
+    th {
+      background: var(--chip);
+      color: var(--primary);
+      font-weight: 800;
+    }
+
+    /* عرض السيتات والأدوات مع صورة قابلة للتكبير */
+    .set-preview {
       background: #0f172a;
       border-radius: 12px;
       padding: 10px;
-      margin: 10px 0;
+      margin: 8px 0;
       cursor: zoom-in;
       border: 1px solid var(--border);
       text-align: center;
     }
-    .kit-svg-box span {
+
+    .set-preview span {
       display: block;
       color: #cbd5e1;
       font-size: 0.78rem;
       margin-top: 4px;
     }
+
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .tool-card {
+      border: 1px solid var(--border);
+      background: var(--bg);
+      border-radius: 11px;
+      padding: 8px;
+      cursor: zoom-in;
+      transition: 0.18s;
+    }
+
+    .tool-card:hover {
+      border-color: var(--accent);
+    }
+
+    .tool-card .tool-name {
+      font-weight: 700;
+      font-size: 0.82rem;
+      margin-top: 5px;
+      color: var(--text);
+    }
+
+    .tool-card .tool-std {
+      font-size: 0.74rem;
+      color: var(--muted);
+    }
+
     .video-box {
       margin-top: 10px;
       border-radius: 12px;
@@ -199,12 +430,15 @@
       border: 1px solid var(--border);
       background: #000;
     }
+
     .video-box iframe {
       width: 100%;
-      height: 210px;
+      height: 225px;
       border: 0;
       display: block;
     }
+
+    /* نافذة منبثقة (Modal) */
     .modal {
       display: none;
       position: fixed;
@@ -215,18 +449,24 @@
       justify-content: center;
       padding: 16px;
     }
-    .modal.open { display: flex; }
+
+    .modal.open {
+      display: flex;
+    }
+
     .modal-content {
       background: var(--card);
       color: var(--text);
-      max-width: 780px;
+      max-width: 860px;
       width: 100%;
       max-height: 90vh;
       overflow: auto;
       border-radius: 16px;
       padding: 18px;
       position: relative;
+      box-shadow: var(--shadow);
     }
+
     .close-btn {
       position: sticky;
       top: 0;
@@ -238,15 +478,18 @@
       padding: 6px 12px;
       cursor: pointer;
       font-weight: 700;
+      z-index: 5;
     }
+
     .form-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 10px;
     }
+
     footer {
-      margin-top: 32px;
-      padding: 18px 14px 28px;
+      margin-top: 34px;
+      padding: 20px 14px 30px;
       border-top: 1px solid var(--border);
       text-align: center;
       color: var(--muted);
@@ -255,93 +498,174 @@
   </style>
 </head>
 <body>
+  <!-- رأس التطبيق -->
   <header>
     <div class="wrap">
       <div class="top-bar">
         <div>
           <h1>دليل المستشفيات والقطاعات الصحية وصالات العمليات — العراق</h1>
-          <p class="subtitle">المحافظات الـ 18، القطاعات الصحية، المستشفيات، صالات العمليات، السيتات الجراحية، الخيوط، والردهات</p>
+          <p class="subtitle">18 محافظة • المستشفيات والقطاعات بالتسلسل • صالات العمليات والسيتات والخيوط والقسطرة • فيديوهات تعليمية</p>
         </div>
         <div class="actions">
-          <button class="btn" id="themeBtn">الوضع الليلي</button>
-          <button class="btn" id="addHospBtn">+ إضافة مستشفى</button>
+          <button type="button" class="btn" id="themeBtn">الوضع الليلي</button>
+          <button type="button" class="btn" id="addHospBtn">+ إضافة مستشفى</button>
         </div>
       </div>
     </div>
   </header>
 
+  <!-- المحتوى الرئيسي -->
   <main class="wrap">
+    <!-- التبويبات الرئيسية -->
     <nav class="tabs" role="tablist">
-      <button class="tab-btn active" data-tab="govs">المحافظات والقطاعات والمستشفيات</button>
-      <button class="tab-btn" data-tab="surgeries">صالات العمليات والسيتات والخيوط</button>
-      <button class="tab-btn" data-tab="wards">الردهات والمفرز الطبي والأشعة</button>
+      <button type="button" class="tab-btn active" data-tab="govs">المحافظات (18) والمستشفيات والقطاعات</button>
+      <button type="button" class="tab-btn" data-tab="or">صالات العمليات والسيتات والخيوط والأجهزة</button>
+      <button type="button" class="tab-btn" data-tab="videos">فيديوهات أنواع العمليات التعليمية</button>
+      <button type="button" class="tab-btn" data-tab="wards">الردهات والمفرز الطبي والأشعة</button>
     </nav>
 
-    <!-- القسم الأول -->
+    <!-- القسم الأول: المحافظات الـ 18 والقطاعات والمستشفيات -->
     <section id="tab-govs" class="panel active">
+      <div id="govQuickStrip" class="gov-strip" aria-label="اختيار المحافظة السريع"></div>
       <div class="toolbar">
-        <input type="text" id="searchInput" class="control" placeholder="ابحث عن محافظة، قطاع، أو مستشفى..." />
         <select id="govSelect" class="control">
-          <option value="ALL">جميع المحافظات (18)</option>
+          <option value="ALL">جميع المحافظات (18 محافظة)</option>
         </select>
+        <input type="text" id="govSearch" class="control" placeholder="ابحث عن محافظة، مستشفى (آزادي، الجمهوري، التوليد، النسائية...)، أو قطاع صحي..." />
       </div>
+      <div id="hospitalDetailBanner"></div>
       <div id="govsContainer" class="grid"></div>
     </section>
 
-    <!-- القسم الثاني -->
-    <section id="tab-surgeries" class="panel">
+    <!-- القسم الثاني: صالات العمليات والتخصصات والسيتات والخيوط والقسطرة والأجهزة -->
+    <section id="tab-or" class="panel">
       <div class="toolbar">
-        <select id="specSelect" class="control">
-          <option value="ALL">جميع التخصصات الجراحية</option>
+        <select id="orSpecSelect" class="control">
+          <option value="ALL">جميع أقسام العمليات (الكبرى، العامة والناظور، ENT، البولية، النسائية، الكسور، العصبية، التجميل، القلب والصدر)</option>
         </select>
-        <input type="text" id="surgerySearch" class="control" placeholder="ابحث عن عملية أو أداة أو خيط جراحي..." />
+        <input type="text" id="orSearch" class="control" placeholder="ابحث عن عملية، سيت جراحي، خيط، قسطرة، صوندة تخدير، أو جهاز..." />
       </div>
-      <div id="surgeriesContainer" class="grid"></div>
+      <div id="orContainer" class="grid"></div>
     </section>
 
-    <!-- القسم الثالث -->
+    <!-- القسم الثالث: قسم فيديوهات أنواع العمليات التعليمية للطلاب والدراسات -->
+    <section id="tab-videos" class="panel">
+      <div class="toolbar">
+        <select id="videoSpecSelect" class="control">
+          <option value="ALL">جميع تخصصات الفيديوهات التعليمية</option>
+        </select>
+        <input type="text" id="videoSearch" class="control" placeholder="ابحث في الفيديوهات التعليمية حسب نوع العملية..." />
+      </div>
+      <div id="videosContainer" class="grid"></div>
+    </section>
+
+    <!-- القسم الرابع: الردهات والمفرز الطبي والأشعة -->
     <section id="tab-wards" class="panel">
       <div id="wardsContainer" class="grid"></div>
     </section>
   </main>
 
-  <!-- نافذة تكبير السيت / إضافة مستشفى -->
-  <div class="modal" id="modalBox">
+  <!-- نافذة التفاصيل والتكبير والإضافة -->
+  <div class="modal" id="modalBox" role="dialog" aria-modal="true">
     <div class="modal-content" id="modalBody"></div>
   </div>
 
+  <!-- التذييل مع الحقوق -->
   <footer>
-    <div>مرجع تفاعلي للقطاع الصحي العراقي — صالات العمليات والسيتات الجراحية والردهات</div>
-    <div style="margin-top:6px; font-weight:700; color:var(--primary);">صنع من قبل إبراهيم إسماعيل • #MadeByIbrahimIsmail</div>
+    <div>مرجع تفاعلي للقطاع الصحي العراقي وصالات العمليات والردهات والتعليم الطبي</div>
+    <div style="margin-top:6px; font-weight:800; color:var(--primary);">صنع من قبل إبراهيم إسماعيل • #MadeByIbrahimIsmail</div>
   </footer>
 
   <script>
+    // =====================================================================
+    // 1. بيانات المحافظات العراقية الـ 18 بالتسلسل مع المستشفيات والقطاعات
+    // =====================================================================
     const GOVERNORATES = [
       {
         name: "بغداد",
-        directorates: ["صحة الكرخ", "صحة الرصافة"],
-        sectors: ["قطاع الرصافة الأول", "قطاع الكرخ الأول", "قطاع المدائن", "قطاع أبو غريب", "قطاع المحمودية"],
+        directorates: ["دائرة صحة بغداد الكرخ", "دائرة صحة بغداد الرصافة", "دائرة مدينة الطب"],
+        sectors: ["قطاع الرصافة الأول", "قطاع الكرخ الأول", "قطاع المدائن الصحي", "قطاع أبو غريب الصحي", "قطاع المحمودية الصحي"],
         hospitals: [
-          { name: "مدينة الطب - مستشفى بغداد التعليمي", type: "تعليمي تخصصي", beds: 1000, units: ["صالات عمليات كبرى وناظور", "ردهات باطنية وجراحية", "الجناح الخاص والخاص المطور", "المفرز الطارئ والطوارئ الكبرى", "الأشعة والمفراس والرنين والمختبر المركزي"] },
-          { name: "مستشفى الكندي التعليمي", type: "تعليمي عام", beds: 400, units: ["صالات عمليات عامة ونسائية وكسور", "ردهات رجال ونساء وأطفال", "الجناح العام", "المفرز الطبي والطوارئ", "الأشعة والسونار والمختبر"] }
-        ]
-      },
-      {
-        name: "كركوك",
-        directorates: ["دائرة صحة كركوك"],
-        sectors: ["قطاع الدبس الصحي", "قطاع داقوق الصحي", "قطاع الحويجة الصحي", "قطاع كركوك الأول"],
-        hospitals: [
-          { name: "مستشفى كركوك العام (الجمهوري)", type: "عام", beds: 400, units: ["صالات عمليات عامة وكسور وبولية وENT", "ردهات جراحة وباطنية", "الجناح العام", "المفرز الطارئ والطوارئ", "الأشعة والمفراس والمختبر"] },
-          { name: "مستشفى الدبس العام", type: "عام قضاء", beds: 80, units: ["صالة عمليات صغرى وطوارئ", "ردهات عامة", "المفرز الطبي", "الأشعة والمختبر"] }
+          {
+            name: "مستشفى بغداد التعليمي (مدينة الطب)",
+            kind: "مستشفى تعليمي مركزي",
+            beds: 1000,
+            departments: [
+              "1. المفرز الطبي وقسم الطوارئ الكبرى",
+              "2. صالات العمليات الكبرى (عامة، عصبية، قلبية، بولية، نسائية)",
+              "3. صالات العمليات الصغرى والناظور",
+              "4. الردهات الجراحية والباطنية",
+              "5. الجناح العام والجناح الخاص",
+              "6. وحدات العناية المركزة (ICU / CCU / RCU)",
+              "7. قسم الأشعة والمفراس (CT) والرنين (MRI) والسونار",
+              "8. المختبرات التخصصية ومصرف الدم المركزي"
+            ]
+          },
+          {
+            name: "مستشفى الجمهوري / الكندي التعليمي",
+            kind: "مستشفى تعليمي عام",
+            beds: 420,
+            departments: [
+              "1. المفرز الطبي والطوارئ العامة",
+              "2. صالات العمليات الكبرى",
+              "3. صالات العمليات الصغرى والناظور",
+              "4. الردهات الجراحية والباطنية",
+              "5. الجناح العام والخاص",
+              "6. العناية المركزة (ICU)",
+              "7. قسم الأشعة والسونار والمفراس",
+              "8. المختبر ومصرف الدم"
+            ]
+          },
+          {
+            name: "مستشفى التوليد والنسائية التعليمي",
+            kind: "مستشفى تخصصي للنسائية والتوليد",
+            beds: 300,
+            departments: [
+              "1. مفرز التوليد والطوارئ النسائية",
+              "2. صالات العمليات القيصرية والنسائية الكبرى",
+              "3. صالات الولادة الطبيعية والعمليات الصغرى",
+              "4. ردهات النسائية وما بعد الولادة",
+              "5. الجناح العام والخاص",
+              "6. عناية الخدج وحديثي الولادة (NICU) وعناية الأم",
+              "7. السونار والدوبلر والأشعة المتنقلة",
+              "8. المختبر ومصرف الدم"
+            ]
+          }
         ]
       },
       {
         name: "البصرة",
         directorates: ["دائرة صحة البصرة"],
-        sectors: ["قطاع الزبير", "قطاع القرنة", "قطاع أبي الخصيب", "قطاع الفاو"],
+        sectors: ["قطاع الزبير الصحي", "قطاع القرنة الصحي", "قطاع أبي الخصيب الصحي", "قطاع الفاو الصحي"],
         hospitals: [
-          { name: "مستشفى البصرة التعليمي (الجمهوري)", type: "تعليمي", beds: 500, units: ["صالات عمليات كبرى وناظور وعظام", "ردهات تخصصية", "الجناح العام", "المفرز والطوارئ", "الأشعة والمختبر"] },
-          { name: "مستشفى الزبير العام", type: "عام", beds: 150, units: ["صالات عمليات", "ردهات عامة", "المفرز الطبي", "الأشعة والمختبر"] }
+          {
+            name: "المستشفى الجمهوري (البصرة التعليمي)",
+            kind: "مستشفى تعليمي عام",
+            beds: 500,
+            departments: [
+              "1. المفرز الطبي والطوارئ",
+              "2. صالات العمليات الكبرى والناظور",
+              "3. صالات العمليات الصغرى",
+              "4. الردهات الجراحية والباطنية",
+              "5. الجناح العام والخاص",
+              "6. العناية المركزة (ICU)",
+              "7. الأشعة والمفراس والسونار",
+              "8. المختبر ومصرف الدم"
+            ]
+          },
+          {
+            name: "مستشفى البصرة للنسائية والأطفال / التوليد",
+            kind: "مستشفى تخصصي",
+            beds: 260,
+            departments: [
+              "1. مفرز التوليد والطوارئ",
+              "2. صالات العمليات القيصرية والنسائية",
+              "3. ردهات الولادة والنسائية والأطفال",
+              "4. الجناح العام",
+              "5. عناية الخدج (NICU)",
+              "6. السونار والأشعة والمختبر"
+            ]
+          }
         ]
       },
       {
@@ -349,496 +673,1350 @@
         directorates: ["دائرة صحة نينوى"],
         sectors: ["قطاع الموصل الأيسر", "قطاع الموصل الأيمن", "قطاع الحمدانية", "قطاع تلعفر"],
         hospitals: [
-          { name: "مستشفى السلام التعليمي", type: "تعليمي", beds: 400, units: ["صالات عمليات", "ردهات جراحة وباطنية", "الجناح العام", "المفرز والطوارئ", "الأشعة والمختبر"] }
+          {
+            name: "مستشفى الجمهوري / السلام التعليمي",
+            kind: "مستشفى تعليمي عام",
+            beds: 420,
+            departments: [
+              "1. المفرز الطبي والطوارئ",
+              "2. صالات العمليات الكبرى والناظور",
+              "3. صالات العمليات الصغرى",
+              "4. الردهات الجراحية والباطنية",
+              "5. الجناح العام والخاص",
+              "6. العناية المركزة (ICU)",
+              "7. الأشعة والمفراس والسونار",
+              "8. المختبر ومصرف الدم"
+            ]
+          },
+          {
+            name: "مستشفى الخنساء للتوليد والنسائية والأطفال",
+            kind: "مستشفى تخصصي",
+            beds: 300,
+            departments: [
+              "1. مفرز التوليد والطوارئ",
+              "2. صالات العمليات القيصرية والنسائية",
+              "3. ردهات التوليد والنسائية والأطفال",
+              "4. الجناح العام",
+              "5. عناية الخدج (NICU)",
+              "6. السونار والمختبر"
+            ]
+          }
         ]
       },
       {
         name: "أربيل",
         directorates: ["مديرية صحة أربيل"],
-        sectors: ["قطاع سوران", "قطاع كويسنجق", "قطاع شقلاوة", "قطاع خبات"],
+        sectors: ["قطاع سوران الصحي", "قطاع كويسنجق الصحي", "قطاع شقلاوة الصحي", "قطاع خبات الصحي"],
         hospitals: [
-          { name: "مستشفى رزكاري التعليمي", type: "تعليمي", beds: 450, units: ["صالات عمليات", "ردهات تخصصية", "الجناح العام", "المفرز والطوارئ", "الأشعة والمختبر"] }
+          {
+            name: "مستشفى رزكاري التعليمي",
+            kind: "مستشفى تعليمي عام",
+            beds: 450,
+            departments: [
+              "1. المفرز الطبي والطوارئ",
+              "2. صالات العمليات الكبرى",
+              "3. صالات العمليات الصغرى والناظور",
+              "4. الردهات الجراحية والباطنية",
+              "5. الجناح العام والخاص",
+              "6. العناية المركزة (ICU)",
+              "7. الأشعة والمفراس والرنين والسونار",
+              "8. المختبر ومصرف الدم"
+            ]
+          },
+          {
+            name: "مستشفى أربيل التعليمي / الجمهوري",
+            kind: "مستشفى تعليمي",
+            beds: 360,
+            departments: [
+              "1. المفرز والطوارئ",
+              "2. صالات العمليات الكبرى والصغرى",
+              "3. الردهات الجراحية والباطنية",
+              "4. الجناح العام",
+              "5. العناية المركزة والأشعة والمختبر"
+            ]
+          },
+          {
+            name: "مستشفى التوليد والنسائية في أربيل",
+            kind: "مستشفى تخصصي للتوليد والنسائية",
+            beds: 240,
+            departments: [
+              "1. مفرز الولادة والطوارئ النسائية",
+              "2. صالات العمليات القيصرية والنسائية",
+              "3. ردهات النسائية والتوليد",
+              "4. الجناح العام والخاص",
+              "5. عناية الخدج (NICU) والسونار والمختبر"
+            ]
+          }
         ]
       },
       {
         name: "السليمانية",
         directorates: ["مديرية صحة السليمانية"],
-        sectors: ["قطاع حلبجة/شارزور", "قطاع رانية", "قطاع دوكان", "قطاع جمجمال"],
+        sectors: ["قطاع شارزور الصحي", "قطاع رانية الصحي", "قطاع دوكان الصحي", "قطاع جمجمال الصحي"],
         hospitals: [
-          { name: "مستشفى شار التعليمي", type: "تعليمي تخصصي", beds: 400, units: ["صالات عمليات تخصصية", "ردهات باطنية وجراحية وعناية", "الجناح العام", "المفرز والطوارئ", "الأشعة والمختبر"] }
+          {
+            name: "مستشفى شار التعليمي",
+            kind: "مستشفى تعليمي تخصصي",
+            beds: 420,
+            departments: [
+              "1. المفرز الطبي والطوارئ",
+              "2. صالات العمليات الكبرى والتخصصية",
+              "3. صالات العمليات الصغرى والناظور",
+              "4. الردهات الجراحية والباطنية",
+              "5. الجناح العام والخاص",
+              "6. العناية المركزة (ICU / CCU)",
+              "7. الأشعة والمفراس والرنين والسونار",
+              "8. المختبر ومصرف الدم"
+            ]
+          },
+          {
+            name: "مستشفى التوليد والنسائية في السليمانية",
+            kind: "مستشفى تخصصي للتوليد والنسائية",
+            beds: 220,
+            departments: [
+              "1. مفرز التوليد والطوارئ",
+              "2. صالات العمليات القيصرية والنسائية",
+              "3. ردهات النسائية والتوليد",
+              "4. الجناح العام",
+              "5. عناية الخدج (NICU) والسونار والمختبر"
+            ]
+          }
         ]
       },
       {
         name: "دهوك",
         directorates: ["مديرية صحة دهوك"],
-        sectors: ["قطاع زاخو", "قطاع سميل", "قطاع عقرة", "قطاع آميدي"],
+        sectors: ["قطاع زاخو الصحي", "قطاع سميل الصحي", "قطاع عقرة الصحي", "قطاع آميدي الصحي"],
         hospitals: [
-          { name: "مستشفى آزادي التعليمي", type: "تعليمي", beds: 400, units: ["صالات عمليات", "ردهات عامة وتخصصية", "المفرز والطوارئ", "الأشعة والمختبر"] }
+          {
+            name: "مستشفى آزادي التعليمي",
+            kind: "مستشفى تعليمي عام",
+            beds: 400,
+            departments: [
+              "1. المفرز الطبي والطوارئ",
+              "2. صالات العمليات الكبرى",
+              "3. صالات العمليات الصغرى والناظور",
+              "4. الردهات الجراحية والباطنية",
+              "5. الجناح العام والخاص",
+              "6. العناية المركزة (ICU)",
+              "7. الأشعة والمفراس والسونار",
+              "8. المختبر ومصرف الدم"
+            ]
+          },
+          {
+            name: "مستشفى التوليد والنسائية في دهوك",
+            kind: "مستشفى تخصصي للتوليد والنسائية",
+            beds: 220,
+            departments: [
+              "1. مفرز التوليد والطوارئ النسائية",
+              "2. صالات العمليات القيصرية والنسائية",
+              "3. ردهات النسائية والتوليد",
+              "4. الجناح العام",
+              "5. عناية الخدج (NICU) والسونار والمختبر"
+            ]
+          }
+        ]
+      },
+      {
+        name: "كركوك",
+        directorates: ["دائرة صحة كركوك"],
+        sectors: ["قطاع الدبس الصحي", "قطاع داقوق الصحي", "قطاع الحويجة الصحي", "قطاع كركوك الأول"],
+        hospitals: [
+          {
+            name: "مستشفى آزادي التعليمي في كركوك",
+            kind: "مستشفى تعليمي عام",
+            beds: 380,
+            departments: [
+              "1. المفرز الطبي والطوارئ",
+              "2. صالات العمليات الكبرى",
+              "3. صالات العمليات الصغرى والناظور",
+              "4. الردهات الجراحية والباطنية",
+              "5. الجناح العام والخاص",
+              "6. العناية المركزة (ICU)",
+              "7. الأشعة والمفراس والسونار",
+              "8. المختبر ومصرف الدم"
+            ]
+          },
+          {
+            name: "المستشفى الجمهوري (كركوك العام)",
+            kind: "مستشفى عام مركزي",
+            beds: 400,
+            departments: [
+              "1. المفرز الطبي والطوارئ",
+              "2. صالات العمليات الكبرى (عامة، كسور، بولية، ENT)",
+              "3. صالات العمليات الصغرى",
+              "4. الردهات الجراحية والباطنية",
+              "5. الجناح العام",
+              "6. العناية المركزة",
+              "7. الأشعة والمفراس والسونار",
+              "8. المختبر ومصرف الدم"
+            ]
+          },
+          {
+            name: "مستشفى النسائية والتوليد في كركوك",
+            kind: "مستشفى تخصصي للنسائية والتوليد",
+            beds: 220,
+            departments: [
+              "1. مفرز التوليد والطوارئ النسائية",
+              "2. صالات العمليات القيصرية والنسائية",
+              "3. ردهات النسائية والتوليد",
+              "4. الجناح العام",
+              "5. عناية الخدج (NICU) والسونار والمختبر"
+            ]
+          }
         ]
       },
       {
         name: "الأنبار",
         directorates: ["دائرة صحة الأنبار"],
-        sectors: ["قطاع الفلوجة", "قطاع الرمادي", "قطاع هيت", "قطاع حديثة"],
+        sectors: ["قطاع الفلوجة الصحي", "قطاع الرمادي الصحي", "قطاع هيت الصحي", "قطاع حديثة الصحي"],
         hospitals: [
-          { name: "مستشفى الرمادي التعليمي", type: "تعليمي", beds: 300, units: ["صالات عمليات", "ردهات جراحة وباطنية", "المفرز والطوارئ", "الأشعة والمختبر"] }
+          {
+            name: "مستشفى الرمادي التعليمي",
+            kind: "مستشفى تعليمي عام",
+            beds: 320,
+            departments: [
+              "1. المفرز الطبي والطوارئ",
+              "2. صالات العمليات الكبرى والناظور",
+              "3. صالات العمليات الصغرى",
+              "4. الردهات الجراحية والباطنية",
+              "5. الجناح العام والخاص",
+              "6. العناية المركزة والأشعة والمختبر"
+            ]
+          },
+          {
+            name: "مستشفى النسائية والتوليد في الأنبار",
+            kind: "مستشفى تخصصي للتوليد والنسائية",
+            beds: 180,
+            departments: [
+              "1. مفرز التوليد والطوارئ",
+              "2. صالات العمليات القيصرية",
+              "3. ردهات النسائية والتوليد",
+              "4. الجناح العام وعناية الخدج والسونار"
+            ]
+          }
         ]
       },
       {
         name: "النجف الأشرف",
         directorates: ["دائرة صحة النجف الأشرف"],
-        sectors: ["قطاع الكوفة", "قطاع المناذرة", "قطاع الحيدرية"],
+        sectors: ["قطاع الكوفة الصحي", "قطاع المناذرة الصحي", "قطاع الحيدرية الصحي"],
         hospitals: [
-          { name: "مستشفى الصدر التعليمي", type: "تعليمي", beds: 450, units: ["صالات عمليات", "ردهات تخصصية", "المفرز والطوارئ", "الأشعة والمختبر"] }
+          {
+            name: "مستشفى الصدر التعليمي",
+            kind: "مستشفى تعليمي عام",
+            beds: 450,
+            departments: [
+              "1. المفرز الطبي والطوارئ",
+              "2. صالات العمليات الكبرى والناظور",
+              "3. صالات العمليات الصغرى",
+              "4. الردهات الجراحية والباطنية",
+              "5. الجناح العام والخاص",
+              "6. العناية المركزة والأشعة والمختبر"
+            ]
+          },
+          {
+            name: "مستشفى الزهراء (ع) للنسائية والتوليد",
+            kind: "مستشفى تخصصي للنسائية والتوليد",
+            beds: 240,
+            departments: [
+              "1. مفرز التوليد والطوارئ",
+              "2. صالات العمليات القيصرية والنسائية",
+              "3. ردهات النسائية والتوليد",
+              "4. الجناح العام وعناية الخدج والسونار"
+            ]
+          }
         ]
       },
       {
         name: "كربلاء المقدسة",
         directorates: ["دائرة صحة كربلاء المقدسة"],
-        sectors: ["قطاع الهندية", "قطاع الحر", "قطاع عين التمر"],
+        sectors: ["قطاع الهندية الصحي", "قطاع الحر الصحي", "قطاع عين التمر الصحي"],
         hospitals: [
-          { name: "مستشفى الحسين (ع) التعليمي", type: "تعليمي", beds: 450, units: ["صالات عمليات", "ردهات عامة وتخصصية", "المفرز والطوارئ", "الأشعة والمختبر"] }
+          {
+            name: "مستشفى الحسين (ع) التعليمي",
+            kind: "مستشفى تعليمي عام",
+            beds: 450,
+            departments: [
+              "1. المفرز الطبي والطوارئ",
+              "2. صالات العمليات الكبرى والناظور",
+              "3. صالات العمليات الصغرى",
+              "4. الردهات الجراحية والباطنية",
+              "5. الجناح العام والخاص",
+              "6. العناية المركزة والأشعة والمختبر"
+            ]
+          },
+          {
+            name: "مستشفى النسائية والتوليد في كربلاء",
+            kind: "مستشفى تخصصي للتوليد والنسائية",
+            beds: 220,
+            departments: [
+              "1. مفرز التوليد والطوارئ",
+              "2. صالات العمليات القيصرية",
+              "3. ردهات النسائية والتوليد",
+              "4. الجناح العام وعناية الخدج والسونار"
+            ]
+          }
         ]
       },
       {
         name: "بابل",
         directorates: ["دائرة صحة بابل"],
-        sectors: ["قطاع الحلة", "قطاع المحاويل", "قطاع الهاشمية", "قطاع المسيب"],
+        sectors: ["قطاع الحلة الصحي", "قطاع المحاويل الصحي", "قطاع الهاشمية الصحي", "قطاع المسيب الصحي"],
         hospitals: [
-          { name: "مستشفى مرجان التعليمي", type: "تعليمي", beds: 400, units: ["صالات عمليات", "ردهات عامة", "المفرز والطوارئ", "الأشعة والمختبر"] }
+          {
+            name: "مستشفى مرجان التعليمي",
+            kind: "مستشفى تعليمي عام",
+            beds: 420,
+            departments: [
+              "1. المفرز الطبي والطوارئ",
+              "2. صالات العمليات الكبرى والناظور",
+              "3. صالات العمليات الصغرى",
+              "4. الردهات الجراحية والباطنية",
+              "5. الجناح العام والخاص",
+              "6. العناية المركزة والأشعة والمختبر"
+            ]
+          },
+          {
+            name: "مستشفى بابل للنسائية والأطفال / التوليد",
+            kind: "مستشفى تخصصي",
+            beds: 230,
+            departments: [
+              "1. مفرز التوليد والطوارئ",
+              "2. صالات العمليات القيصرية والنسائية",
+              "3. ردهات النسائية والتوليد والأطفال",
+              "4. الجناح العام وعناية الخدج والسونار"
+            ]
+          }
         ]
       },
       {
         name: "ديالى",
         directorates: ["دائرة صحة ديالى"],
-        sectors: ["قطاع بعقوبة", "قطاع المقدادية", "قطاع الخالص", "قطاع خانقين"],
+        sectors: ["قطاع بعقوبة الصحي", "قطاع المقدادية الصحي", "قطاع الخالص الصحي", "قطاع خانقين الصحي"],
         hospitals: [
-          { name: "مستشفى بعقوبة التعليمي", type: "تعليمي", beds: 350, units: ["صالات عمليات", "ردهات عامة", "المفرز والطوارئ", "الأشعة والمختبر"] }
+          {
+            name: "مستشفى بعقوبة التعليمي",
+            kind: "مستشفى تعليمي عام",
+            beds: 350,
+            departments: [
+              "1. المفرز الطبي والطوارئ",
+              "2. صالات العمليات الكبرى والناظور",
+              "3. صالات العمليات الصغرى",
+              "4. الردهات الجراحية والباطنية",
+              "5. الجناح العام والخاص",
+              "6. العناية المركزة والأشعة والمختبر"
+            ]
+          },
+          {
+            name: "مستشفى البتول للنسائية والتوليد",
+            kind: "مستشفى تخصصي للتوليد والنسائية",
+            beds: 180,
+            departments: [
+              "1. مفرز التوليد والطوارئ",
+              "2. صالات العمليات القيصرية",
+              "3. ردهات النسائية والتوليد",
+              "4. الجناح العام وعناية الخدج والسونار"
+            ]
+          }
         ]
       },
       {
         name: "ذي قار",
         directorates: ["دائرة صحة ذي قار"],
-        sectors: ["قطاع الناصرية", "قطاع سوق الشيوخ", "قطاع الرفاعي", "قطاع الشطرة"],
+        sectors: ["قطاع الناصرية الصحي", "قطاع سوق الشيوخ الصحي", "قطاع الرفاعي الصحي", "قطاع الشطرة الصحي"],
         hospitals: [
-          { name: "مستشفى الحسين التعليمي بالناصرية", type: "تعليمي", beds: 400, units: ["صالات عمليات", "ردهات عامة", "المفرز والطوارئ", "الأشعة والمختبر"] }
+          {
+            name: "مستشفى الحسين التعليمي بالناصرية",
+            kind: "مستشفى تعليمي عام",
+            beds: 420,
+            departments: [
+              "1. المفرز الطبي والطوارئ",
+              "2. صالات العمليات الكبرى والناظور",
+              "3. صالات العمليات الصغرى",
+              "4. الردهات الجراحية والباطنية",
+              "5. الجناح العام والخاص",
+              "6. العناية المركزة والأشعة والمختبر"
+            ]
+          },
+          {
+            name: "مستشفى بنت الهدى للنسائية والتوليد",
+            kind: "مستشفى تخصصي للتوليد والنسائية",
+            beds: 220,
+            departments: [
+              "1. مفرز التوليد والطوارئ",
+              "2. صالات العمليات القيصرية والنسائية",
+              "3. ردهات النسائية والتوليد",
+              "4. الجناح العام وعناية الخدج والسونار"
+            ]
+          }
         ]
       },
       {
         name: "ميسان",
         directorates: ["دائرة صحة ميسان"],
-        sectors: ["قطاع العمارة", "قطاع المجر الكبير", "قطاع علي الغربي"],
+        sectors: ["قطاع العمارة الصحي", "قطاع المجر الكبير الصحي", "قطاع علي الغربي الصحي"],
         hospitals: [
-          { name: "مستشفى الصدر التعليمي بالعمارة", type: "تعليمي", beds: 350, units: ["صالات عمليات", "ردهات عامة", "المفرز والطوارئ", "الأشعة والمختبر"] }
+          {
+            name: "مستشفى الصدر التعليمي بالعمارة",
+            kind: "مستشفى تعليمي عام",
+            beds: 350,
+            departments: [
+              "1. المفرز الطبي والطوارئ",
+              "2. صالات العمليات الكبرى والناظور",
+              "3. صالات العمليات الصغرى",
+              "4. الردهات الجراحية والباطنية",
+              "5. الجناح العام والخاص",
+              "6. العناية المركزة والأشعة والمختبر"
+            ]
+          },
+          {
+            name: "مستشفى النسائية والتوليد في ميسان",
+            kind: "مستشفى تخصصي للتوليد والنسائية",
+            beds: 180,
+            departments: [
+              "1. مفرز التوليد والطوارئ",
+              "2. صالات العمليات القيصرية",
+              "3. ردهات النسائية والتوليد",
+              "4. الجناح العام وعناية الخدج والسونار"
+            ]
+          }
         ]
       },
       {
         name: "المثنى",
         directorates: ["دائرة صحة المثنى"],
-        sectors: ["قطاع السماوة", "قطاع الرميثة", "قطاع الخضر"],
+        sectors: ["قطاع السماوة الصحي", "قطاع الرميثة الصحي", "قطاع الخضر الصحي"],
         hospitals: [
-          { name: "مستشفى الحسين التعليمي بالسماوة", type: "تعليمي", beds: 300, units: ["صالات عمليات", "ردهات عامة", "المفرز والطوارئ", "الأشعة والمختبر"] }
+          {
+            name: "مستشفى الحسين التعليمي بالسماوة",
+            kind: "مستشفى تعليمي عام",
+            beds: 300,
+            departments: [
+              "1. المفرز الطبي والطوارئ",
+              "2. صالات العمليات الكبرى والناظور",
+              "3. صالات العمليات الصغرى",
+              "4. الردهات الجراحية والباطنية",
+              "5. الجناح العام والخاص",
+              "6. العناية المركزة والأشعة والمختبر"
+            ]
+          },
+          {
+            name: "مستشفى النسائية والتوليد في المثنى",
+            kind: "مستشفى تخصصي للتوليد والنسائية",
+            beds: 150,
+            departments: [
+              "1. مفرز التوليد والطوارئ",
+              "2. صالات العمليات القيصرية",
+              "3. ردهات النسائية والتوليد",
+              "4. الجناح العام وعناية الخدج والسونار"
+            ]
+          }
         ]
       },
       {
         name: "القادسية",
         directorates: ["دائرة صحة القادسية"],
-        sectors: ["قطاع الديوانية", "قطاع الشامية", "قطاع عفك"],
+        sectors: ["قطاع الديوانية الصحي", "قطاع الشامية الصحي", "قطاع عفك الصحي"],
         hospitals: [
-          { name: "مستشفى الديوانية التعليمي", type: "تعليمي", beds: 350, units: ["صالات عمليات", "ردهات عامة", "المفرز والطوارئ", "الأشعة والمختبر"] }
+          {
+            name: "مستشفى الديوانية التعليمي",
+            kind: "مستشفى تعليمي عام",
+            beds: 360,
+            departments: [
+              "1. المفرز الطبي والطوارئ",
+              "2. صالات العمليات الكبرى والناظور",
+              "3. صالات العمليات الصغرى",
+              "4. الردهات الجراحية والباطنية",
+              "5. الجناح العام والخاص",
+              "6. العناية المركزة والأشعة والمختبر"
+            ]
+          },
+          {
+            name: "مستشفى النسائية والتوليد في الديوانية",
+            kind: "مستشفى تخصصي للتوليد والنسائية",
+            beds: 180,
+            departments: [
+              "1. مفرز التوليد والطوارئ",
+              "2. صالات العمليات القيصرية",
+              "3. ردهات النسائية والتوليد",
+              "4. الجناح العام وعناية الخدج والسونار"
+            ]
+          }
         ]
       },
       {
         name: "صلاح الدين",
         directorates: ["دائرة صحة صلاح الدين"],
-        sectors: ["قطاع تكريت", "قطاع سامراء", "قطاع بلد", "قطاع الدور"],
+        sectors: ["قطاع تكريت الصحي", "قطاع سامراء الصحي", "قطاع بلد الصحي", "قطاع الدور الصحي"],
         hospitals: [
-          { name: "مستشفى تكريت التعليمي", type: "تعليمي", beds: 300, units: ["صالات عمليات", "ردهات عامة", "المفرز والطوارئ", "الأشعة والمختبر"] }
+          {
+            name: "مستشفى تكريت التعليمي",
+            kind: "مستشفى تعليمي عام",
+            beds: 320,
+            departments: [
+              "1. المفرز الطبي والطوارئ",
+              "2. صالات العمليات الكبرى والناظور",
+              "3. صالات العمليات الصغرى",
+              "4. الردهات الجراحية والباطنية",
+              "5. الجناح العام والخاص",
+              "6. العناية المركزة والأشعة والمختبر"
+            ]
+          },
+          {
+            name: "مستشفى النسائية والتوليد في صلاح الدين",
+            kind: "مستشفى تخصصي للتوليد والنسائية",
+            beds: 160,
+            departments: [
+              "1. مفرز التوليد والطوارئ",
+              "2. صالات العمليات القيصرية",
+              "3. ردهات النسائية والتوليد",
+              "4. الجناح العام وعناية الخدج والسونار"
+            ]
+          }
         ]
       },
       {
         name: "واسط",
         directorates: ["دائرة صحة واسط"],
-        sectors: ["قطاع الكوت", "قطاع الحي", "قطاع النعمانية", "قطاع العزيزية"],
+        sectors: ["قطاع الكوت الصحي", "قطاع الحي الصحي", "قطاع النعمانية الصحي", "قطاع العزيزية الصحي"],
         hospitals: [
-          { name: "مستشفى الزهراء التعليمي بالكوت", type: "تعليمي", beds: 350, units: ["صالات عمليات", "ردهات عامة", "المفرز والطوارئ", "الأشعة والمختبر"] }
+          {
+            name: "مستشفى الزهراء التعليمي بالكوت",
+            kind: "مستشفى تعليمي عام",
+            beds: 360,
+            departments: [
+              "1. المفرز الطبي والطوارئ",
+              "2. صالات العمليات الكبرى والناظور",
+              "3. صالات العمليات الصغرى",
+              "4. الردهات الجراحية والباطنية",
+              "5. الجناح العام والخاص",
+              "6. العناية المركزة والأشعة والمختبر"
+            ]
+          },
+          {
+            name: "مستشفى البتول / التوليد في واسط",
+            kind: "مستشفى تخصصي للتوليد والنسائية",
+            beds: 180,
+            departments: [
+              "1. مفرز التوليد والطوارئ",
+              "2. صالات العمليات القيصرية",
+              "3. ردهات النسائية والتوليد",
+              "4. الجناح العام وعناية الخدج والسونار"
+            ]
+          }
         ]
       }
     ];
 
-    const SURGERIES = [
+    // =====================================================================
+    // 2. بيانات صالات العمليات بالتسلسل: العمليات، السيتات مع صور لكل أداة،
+    //    الخيوط، القسطرة والصوندات التخديرية، والأجهزة
+    // =====================================================================
+    const OR_DEPARTMENTS = [
       {
-        spec: "الجراحة العامة والناظور",
-        title: "استئصال المرارة بالناظور (Laparoscopic Cholecystectomy)",
-        patients: "مرضى حصى المرارة العرضية، التهاب المرارة المزمن، أو البوليبات الصفراوية المستقرة.",
-        devices: "برج ناظور HD/4K، كاميرا ومصدر ضوء، جهاز نفخ البطن CO2، شاشة طبية، جهاز كوي ثنائي/أحادي القطب، جهاز شفط وإرواء.",
-        kitName: "سيت الجراحة الناظورية (Laparoscopy Set) + سيت جراحة عامة احتياط",
-        tools: ["منظار بطني 10mm و5mm (Laparoscope)", "تروكار Trocars بقياسات 5mm و10mm", "ماسك مرارة Maryland & Grasper", "مقص ناظوري وكليبات Clips Applier (LT300/LT400)", "حقيبة إخراج Specimen Bag"],
-        steps: [
-          "التخدير العام ووضع المريض بوضعية الاستلقاء مع إمالة طفيفة لليسار وللأعلى (Reverse Trendelenburg).",
-          "إنشاء استرواح صفاقي بغاز CO2 وإدخال التروكار الرئيسي عند السرة وتروكارات العمل تحت الرؤية المباشرة.",
-          "كشف مثلث كالوت (Calot's Triangle)، تعريف القناة المرارية والشريان المراري بدقة، ووضع الكليبات ثم القطع.",
-          "فصل المرارة عن سرير الكبد وإخراجها عبر فتحة السرة، ثم التفريغ والتأكيد على عدم وجود نزف وخياطة المنافذ."
+        id: "major-gen",
+        name: "العمليات الكبرى والجراحة العامة والناظور (Major & Laparoscopy)",
+        patients: "استئصال المرارة بالناظور أو الفتح، إصلاح الفتوق (الإربي، السري، البطني)، استئصال الزائدة، استئصال أورام البطن والأمعاء، وجراحات الطوارئ البطنية الكبرى.",
+        surgeries: [
+          "استئصال المرارة بالناظور (Laparoscopic Cholecystectomy)",
+          "إصلاح الفتق الإربي والسري بالشبكة (Hernia Mesh Repair)",
+          "استئصال الزائدة الدودية (Appendectomy)",
+          "استئصال الأمعاء والقولون الكبرى (Colectomy / Bowel Resection)"
+        ],
+        sets: [
+          {
+            setName: "سيت الجراحة الكبرى (Major General Surgery Set)",
+            standard: "ستاندر عالمي ISO 7153 / معتمد في صالات العمليات الكبرى",
+            tools: [
+              { name: "مشرط جراحي (Scalpel Handle #3 & #4)", std: "ستاندرد ألماني/باكستاني معقم", kind: "scalpel" },
+              { name: "مقص ميتزنباوم ومايو (Metzenbaum & Mayo Scissors)", std: "ستاندرد تشريح وقص أنسجة/خيوط", kind: "scissors" },
+              { name: "ملاقط إرقاء كيلي وموسكيتو (Kelly & Mosquito Artery Forceps)", std: "ستاندرد إرقاء الأوعية", kind: "forceps" },
+              { name: "مباعدات ريتشاردسون ولانغينبيك (Richardson & Langenbeck Retractors)", std: "ستاندرد كشف المجال الجراحي", kind: "retractor" }
+            ]
+          },
+          {
+            setName: "سيت جراحة الناظور (Laparoscopy Set)",
+            standard: "ستاندرد عالمي Karl Storz / Olympus / Stryker",
+            tools: [
+              { name: "تروكار 10mm و5mm مع إبرة فيرس (Trocars & Veress Needle)", std: "ستاندرد دخول المنافذ والغاز", kind: "trocar" },
+              { name: "ماسك ميريلاند وغراسبير (Maryland & Grasper)", std: "ستاندرد تسليخ وإمساك الأنسجة", kind: "forceps" },
+              { name: "حامل كليبات التيتانيوم (Clip Applier LT300/LT400)", std: "ستاندرد إغلاق القنوات والأوعية", kind: "clip" }
+            ]
+          }
         ],
         sutures: [
-          { layer: "اللفافة (Fascia - 10mm)", material: "Vicryl 1 أو PDS 1", needle: "CT-1 Round Body" },
-          { layer: "تحت الجلد (Subcutaneous)", material: "Vicryl 2/0 أو 3/0", needle: "SH / UR-6" },
-          { layer: "الجلد (Skin)", material: "Monocryl 4/0 أو Nylon 3/0", needle: "Reverse Cutting" }
+          { layer: "اللفافة والصفاق (Fascia / Peritoneum)", suture: "Vicryl 1 أو PDS 1", needle: "CT-1 Round Body (دائرية)" },
+          { layer: "تحت الجلد (Subcutaneous)", suture: "Vicryl 2/0 أو 3/0", needle: "SH Round Body (دائرية)" },
+          { layer: "الجلد (Skin)", suture: "Monocryl 4/0 أو Prolene / Nylon 3/0", needle: "Reverse Cutting (قاطعة)" }
         ],
-        videoId: "4b6mH7nV3-0"
+        cathetersAndAnesthesia: [
+          "قسطرة فولي بولية (Foley Catheter 16-18 Fr) مع كيس تصريف مدرج لمراقبة الإدرار.",
+          "صوندة أنفية معدية (Nasogastric Tube - NG Tube) لتفريغ المعدة وتخفيف الانتفاخ.",
+          "أنبوب رغامي (Endotracheal Tube - ETT) أو قناع حنجري (Laryngeal Mask - LMA) للتخدير العام، أو إبرة تخدير نصفي/فوق الجافية (Spinal / Epidural) حسب الحالة.",
+          "قسطرة وريدية محيطية واسعة (Cannula 16G-18G) أو قسطرة وريدية مركزية (CVC) للعمليات الكبرى."
+        ],
+        devices: [
+          "جهاز التخدير (Anesthesia Workstation) مع فنتليتور ومبخرات الغازات المخدرة.",
+          "مونيتور مراقبة المريض (Patient Monitor: ECG, SpO2, NIBP/IBP, Capnography EtCO2).",
+          "جهاز الكي الكهربائي (Electrosurgery / Diathermy Unit).",
+          "برج الناظور (Laparoscopy Tower: Camera, Light Source, CO2 Insufflator, Monitor).",
+          "جهاز شفط جراحي (Suction Unit) ومنضدة عمليات وطاولة إضاءة جراحية (OR Lights)."
+        ]
+      },
+      {
+        id: "ent",
+        name: "عمليات الأنف والأذن والحنجرة (ENT Surgery)",
+        patients: "استئصال اللوزتين والناميات، تعديل الحاجز الأنفي، جراحات الجيوب الأنفية بالمنظار، وترقيع طبلة الأذن.",
+        surgeries: [
+          "استئصال اللوزتين والناميات (Tonsillectomy & Adenoidectomy)",
+          "تعديل الحاجز الأنفي (Septoplasty) وجراحة الجيوب بالمنظار (FESS)",
+          "ترقيع غشاء الطبل (Tympanoplasty)"
+        ],
+        sets: [
+          {
+            setName: "سيت اللوزتين والناميات والأنف (ENT Set)",
+            standard: "ستاندر عالمي ENT / معتمد في المستشفيات",
+            tools: [
+              { name: "فاتح الفم بويل ديفيس (Boyle-Davis Mouth Gag)", std: "ستاندرد تثبيت الفم وكشف البلعوم", kind: "retractor" },
+              { name: "مكشطة الناميات ومسلخ اللوزة (Adenoid Curette & Tonsil Dissector)", std: "ستاندرد التشريح الدقيق", kind: "forceps" },
+              { name: "مقصات وملاقط أنف وأذن دقيقة (ENT Micro Scissors & Forceps)", std: "ستاندرد العمل الدقيق", kind: "scissors" }
+            ]
+          }
+        ],
+        sutures: [
+          { layer: "الغشاء المخاطي والبلعوم", suture: "Vicryl 3/0 أو Vicryl Rapide 3/0", needle: "SH / UR-6" },
+          { layer: "الجلد الخارجي (إن وجد)", suture: "Prolene / Nylon 5/0", needle: "Reverse Cutting" }
+        ],
+        cathetersAndAnesthesia: [
+          "أنبوب رغامي (ETT) خاص بمجرى الهواء مع تثبيت محكم لمنع تسرب الدم أو السوائل.",
+          "قنيات شفط فموية وأنفية (Oral & Nasal Suction Tubes).",
+          "قسطرة وريدية محيطية (IV Cannula) للسوائل والأدوية."
+        ],
+        devices: [
+          "جهاز التخدير ومونيتور العلامات الحيوية.",
+          "جهاز كوي ثنائي القطب (Bipolar Diathermy) لتقليل الأضرار الحرارية المجاورة.",
+          "جهاز شفط (Suction) ومصدر إضاءة جراحية / مجهر أو منظار ENT."
+        ]
+      },
+      {
+        id: "urology",
+        name: "عمليات المسالك البولية (Urology Surgery)",
+        patients: "تفتيت حصى الكلى والحالب والمثانة، تضخم البروستات، أورام المثانة والكلية، وتشوهات المجاري البولية.",
+        surgeries: [
+          "تنظير الحالب وتفتيت الحصى (Ureteroscopy & Lithotripsy)",
+          "استئصال البروستات عبر الإحليل (TURP) أو المفتوح",
+          "جراحات الكلى والمثانة والخصية"
+        ],
+        sets: [
+          {
+            setName: "سيت المسالك البولية والمناظير البولية (Urology & Endo-Urology Set)",
+            standard: "ستاندر عالمي / مراكز المسالك والكلى",
+            tools: [
+              { name: "منظار المثانة والحالب (Cystoscope & Ureteroscope)", std: "ستاندرد التنظير البولي", kind: "trocar" },
+              { name: "سلة التقاط الحصى وسلك مرشد (Stone Basket & Guidewire)", std: "ستاندرد استخراج الحصى", kind: "forceps" },
+              { name: "مقصات وملاقط جراحة بولية (Urology Scissors & Clamps)", std: "ستاندرد الجراحة البولية", kind: "scissors" }
+            ]
+          }
+        ],
+        sutures: [
+          { layer: "المثانة والحالب والأنسجة البولية", suture: "Vicryl 3/0 أو 4/0 أو PDS 4/0", needle: "RB-1 / SH Round Body" },
+          { layer: "اللفافة والجلد (في الجراحة المفتوحة)", suture: "Vicryl 1 / Prolene 3/0", needle: "CT-1 / Cutting" }
+        ],
+        cathetersAndAnesthesia: [
+          "قسطرة فولي بولية (Foley Catheter) ثنائية أو ثلاثية القنوات (Three-Way Irrigation Catheter).",
+          "دعامة حالبية داخلية (Double-J Stent) أو قسطرة حالبية (Ureteral Catheter).",
+          "تخدير نصفي (Spinal) أو عام (ETT / LMA) مع خط وريدي للسوائل والإرواء."
+        ],
+        devices: [
+          "برج المناظير البولية مع جهاز إرواء بالسوائل (Irrigation Pump) وجهاز تفتيت الحصى.",
+          "جهاز أشعة C-Arm لمتابعة الأسلاك والدعامات والحصى.",
+          "جهاز التخدير، مونيتور المريض، وجهاز الكي الكهربائي."
+        ]
+      },
+      {
+        id: "obgyn",
+        name: "عمليات النسائية والتوليد (Obstetrics & Gynecology)",
+        patients: "العمليات القيصرية، استئصال الرحم، أكياس المبايض، الحمل خارج الرحم، وإصلاحات عنق الرحم وقاع الحوض.",
+        surgeries: [
+          "العملية القيصرية (Cesarean Section)",
+          "استئصال الرحم البطني أو المهبلي (Hysterectomy)",
+          "استئصال أكياس المبيض أو علاج الحمل خارج الرحم"
+        ],
+        sets: [
+          {
+            setName: "سيت النسائية والقيصرية (Ob-Gyn & C-Section Set)",
+            standard: "ستاندر عالمي / صالات التوليد والنسائية",
+            tools: [
+              { name: "رفاصة مثانة دوين ومباعد بطني (Doyen Retractor)", std: "ستاندرد حماية المثانة وكشف الحوض", kind: "retractor" },
+              { name: "ملاقط رحم غرين أرميتاج (Green Armytage Forceps)", std: "ستاندرد إمساك حواف الرحم", kind: "forceps" },
+              { name: "مقصات ومشارط وحامل إبر (Scissors, Scalpel & Needle Holder)", std: "ستاندرد الجراحة النسائية", kind: "scissors" }
+            ]
+          }
+        ],
+        sutures: [
+          { layer: "عضلة وجدار الرحم (Uterus)", suture: "Vicryl 1", needle: "CT-1 Heavy Round" },
+          { layer: "غمد المستقيمة واللفافة (Fascia)", suture: "Vicryl 1 أو PDS 1", needle: "CT-1 Round" },
+          { layer: "الجلد (Skin)", suture: "Monocryl 3/0 أو Prolene 3/0", needle: "Cutting" }
+        ],
+        cathetersAndAnesthesia: [
+          "قسطرة فولي بولية (Foley Catheter 16 Fr) لتفريغ المثانة وحمايتها قبل وأثناء العملية.",
+          "تخدير نصفي (Spinal Anesthesia) غالباً في القيصرية أو تخدير عام (ETT) عند الحاجة، مع قنيات شفط لحديثي الولادة.",
+          "قسطرة وريدية واسعة (16G-18G) جاهزة للسوائل أو نقل الدم."
+        ],
+        devices: [
+          "جهاز التخدير ومونيتور المريض وحهاز الكي الكهربائي والشفط.",
+          "مدفئة/حاضنة إنعاش حديثي الولادة (Infant Resuscitation Warmer) داخل الصالة.",
+          "إضاءة جراحية ومنضدة عمليات قابلة للتحكم."
+        ]
+      },
+      {
+        id: "ortho",
+        name: "عمليات الكسور والعظام (Orthopedic & Trauma)",
+        patients: "كسور الأطراف العلوية والسفلية، كسور الحوض والترقوة، تثبيت المفاصل والكسور بالصفائح أو الأسياخ أو المثبت الخارجي.",
+        surgeries: [
+          "رد وتثبيت الكسور بالصفائح والبراغي (ORIF)",
+          "التثبيت الخارجي للكسور المفتوحة (External Fixation)",
+          "رد الخلع وتنظيف وتثبيت الكسور"
+        ],
+        sets: [
+          {
+            setName: "سيت العظام والكسور AO (Orthopedic Bone & Plating Set)",
+            standard: "ستاندر عالمي AO / جراحة العظام والكسور",
+            tools: [
+              { name: "ملاقط رد العظم ورافعة السمحاق (Bone Clamps & Elevator)", std: "ستاندرد رد الكسور", kind: "forceps" },
+              { name: "قواضم ومطارق عظمية (Bone Rongeur, Mallet & Osteotome)", std: "ستاندرد تشكيل العظم", kind: "scalpel" },
+              { name: "صفائح وبراغي ومقياس عمق (Plates, Screws & Depth Gauge)", std: "ستاندرد التثبيت الداخلي", kind: "clip" }
+            ]
+          }
+        ],
+        sutures: [
+          { layer: "اللفافة والعضلات (Fascia / Muscle)", suture: "Vicryl 1 أو 0", needle: "CT-1 Round" },
+          { layer: "تحت الجلد (Subcutaneous)", suture: "Vicryl 2/0", needle: "SH Round" },
+          { layer: "الجلد (Skin)", suture: "Prolene / Nylon 2/0 أو 3/0 أو Skin Stapler", needle: "Cutting" }
+        ],
+        cathetersAndAnesthesia: [
+          "تخدير عام (ETT / LMA) أو تخدير ناحي/نصفي (Spinal / Nerve Block).",
+          "عاصبة جراحية (Tourniquet Cuff) للأطراف عند الحاجة لتقليل النزف.",
+          "قسطرة فولي بولية (Foley Catheter) في كسور الحوض أو العمليات الطويلة."
+        ],
+        devices: [
+          "جهاز أشعة متنقل (C-Arm Fluoroscopy) للتحقق الفوري من رد الكسر وتثبيت البراغي.",
+          "دريل ومنشار عظمي جراحي (Orthopedic Drill & Saw) مع بطاريات أو هواء مضغوط.",
+          "جهاز التخدير، مونيتور المريض، جهاز الكي، والشفط."
+        ]
+      },
+      {
+        id: "neuro",
+        name: "عمليات الجملة العصبية (Neurosurgery)",
+        patients: "أورام الدماغ، النزف داخل القحف، إصابات الرأس الضاغطة، وانزلاقات الفقرات وضغط الحبل الشوكي.",
+        surgeries: [
+          "فتح القحف وإزالة ورم أو ورم دموي (Craniotomy)",
+          "إزالة ضغط الفقرات والعمود الفقري (Laminectomy / Spine)",
+          "تحويل السائل الدماغي الشوكي (VP Shunt)"
+        ],
+        sets: [
+          {
+            setName: "سيت الجراحة العصبية (Neurosurgery Craniotomy & Spine Set)",
+            standard: "ستاندر عالمي / جراحة الجملة العصبية",
+            tools: [
+              { name: "ثاقب ومثقاب جمجمة (Perforator & Craniotome)", std: "ستاندرد فتح القحف بأمان", kind: "trocar" },
+              { name: "ملاقط كيريسون ومشابك راني (Kerrison Rongeur & Raney Clips)", std: "ستاندرد العظام العصبية والإرقاء", kind: "clip" },
+              { name: "ملاقط كوي ثنائي القطب ومباعدات دقيقة (Bipolar & Brain Spatula)", std: "ستاندرد الأنسجة العصبية", kind: "forceps" }
+            ]
+          }
+        ],
+        sutures: [
+          { layer: "الأم الجافية (Dura Mater)", suture: "Vicryl 4/0 أو Silk 4/0", needle: "RB-1 Round" },
+          { layer: "السمحاق واللفافة (Galea / Fascia)", suture: "Vicryl 2/0 أو 3/0", needle: "SH Round" },
+          { layer: "فروة الرأس (Scalp)", suture: "Nylon / Prolene 3/0 أو Staples", needle: "Cutting" }
+        ],
+        cathetersAndAnesthesia: [
+          "أنبوب رغامي (ETT) بتثبيت دقيق ومراقبة تنفسية مستمرة (EtCO2).",
+          "قسطرة فولي بولية (Foley Catheter) لمراقبة السوائل والإدرار بدقة.",
+          "قسطرة وريدية مركزية (CVC) ومراقبة ضغط شرياني (Arterial Line) عند الحاجة."
+        ],
+        devices: [
+          "مجهر جراحي عصبي (Operating Microscope) ومثقاب عالي السرعة (High-Speed Drill).",
+          "جهاز الكي ثنائي القطب (Bipolar Electrosurgery) وجهاز شفط دقيق.",
+          "جهاز التخدير، مونيتور متقدم، ومثبت رأس جراحي (Mayfield/Skull Clamp)."
+        ]
+      },
+      {
+        id: "plastic",
+        name: "العمليات التجميلية والحروق (Plastic & Burns)",
+        patients: "ترقيع الجلد للحروق العميقة، إصلاح الندبات والتشوهات، الجروح الوجهية الدقيقة، وترميم الأنسجة.",
+        surgeries: [
+          "إنضار وترقيع الجلد (Debridement & Skin Grafting)",
+          "إصلاح الجروح والندبات التجميلية (Scar Revision / Laceration Repair)",
+          "نقل السدائل الجلدية (Flap Reconstruction)"
+        ],
+        sets: [
+          {
+            setName: "سيت التجميل والترقيع الجلدي (Plastic & Skin Graft Set)",
+            standard: "ستاندر عالمي / جراحة التجميل والحروق",
+            tools: [
+              { name: "جهاز أخذ الرقع الجلدية (Dermatome)", std: "ستاندرد أخذ طبقة جلد متجانسة", kind: "scalpel" },
+              { name: "ملاقط أدسون الدقيقة (Adson Tissue Forceps)", std: "ستاندرد التعامل اللطيف مع الجلد", kind: "forceps" },
+              { name: "مقصات تجميل دقيقة وحامل إبر (Iris Scissors & Needle Holder)", std: "ستاندرد الخياطة الدقيقة", kind: "scissors" }
+            ]
+          }
+        ],
+        sutures: [
+          { layer: "تحت الجلد التجميلي (Subdermal)", suture: "Monocryl 4/0 أو 5/0 أو Vicryl 4/0", needle: "RB-1 / PS-2" },
+          { layer: "الجلد الوجهي والدقيق", suture: "Prolene / Nylon 5/0 أو 6/0", needle: "Reverse Cutting Micro" }
+        ],
+        cathetersAndAnesthesia: [
+          "تخدير عام (ETT / LMA) أو موضعي/ناحي حسب مساحة الحرق أو الجرح.",
+          "قسطرة فولي بولية (Foley Catheter) في الحروق الواسعة لمراقبة الإماهة والسوائل.",
+          "قسطرة وريدية مناسبة لتعويض السوائل والمحاليل."
+        ],
+        devices: [
+          "جهاز ديرماتوم (Dermatome) وممدد رقع جلدية (Mesh Graft).",
+          "جهاز تدفئة المريض (Patient Warmer) لمنع هبوط الحرارة أثناء الحروق.",
+          "جهاز التخدير، مونيتور، جهاز الكي، والشفط."
+        ]
+      },
+      {
+        id: "cardio",
+        name: "عمليات القلب والصدر والأوعية (Cardiothoracic & Vascular)",
+        patients: "إصابات الصدر، تفريغ السوائل أو الهواء من الجنب، جراحات الأوعية الدموية، وجراحات القلب والصدر التخصصية.",
+        surgeries: [
+          "وضع أنبوب الصدر (Chest Tube / Thoracostomy)",
+          "ترميم الأوعية الدموية (Vascular Repair / Bypass)",
+          "فتح الصدر أو القص (Thoracotomy / Sternotomy)"
+        ],
+        sets: [
+          {
+            setName: "سيت الصدر والأوعية (Thoracic & Vascular Set)",
+            standard: "ستاندر عالمي / جراحة الصدر والأوعية",
+            tools: [
+              { name: "مباعد الصدر فينوشيتو (Finochietto Rib Spreader)", std: "ستاندرد كشف جوف الصدر", kind: "retractor" },
+              { name: "ملاقط الأوعية ديباكي وساتنسكي (DeBakey & Satinsky Clamps)", std: "ستاندرد إمساك الأوعية دون رض", kind: "forceps" },
+              { name: "مقصات ومشارط جراحة الصدر والأوعية", std: "ستاندرد التشريح الوعائي والصدري", kind: "scissors" }
+            ]
+          }
+        ],
+        sutures: [
+          { layer: "الأوعية الدموية (Vascular)", suture: "Prolene 5/0 أو 6/0", needle: "Double-Armed Round (مزدوجة)" },
+          { layer: "القص والعضلات والجلد", suture: "Steel Wire / Vicryl 1 / Prolene 3/0", needle: "Cutting / Round" }
+        ],
+        cathetersAndAnesthesia: [
+          "صوندة الصدر (Chest Tube / Intercostal Drain) موصولة بنظام تصريف مائي مغلق (Underwater Seal).",
+          "أنبوب رغامي (ETT) أو أنبوب مزدوج التجويف (Double-Lumen Tube) في جراحات الرئة.",
+          "قسطرة وريدية مركزية (CVC)، قسطرة شريانية (Arterial Line)، وقسطرة فولي (Foley Catheter)."
+        ],
+        devices: [
+          "جهاز التخدير ومونيتور متعدد القنوات (ECG, Invasive BP, SpO2, EtCO2).",
+          "جهاز شفط عالي الكفاءة للصدر والسوائل وجهاز كوي كهربائي.",
+          "جهاز الصدمات الكهربائية (Defibrillator) ومنظومة الإنعاش."
+        ]
+      }
+    ];
+
+    // =====================================================================
+    // 3. بيانات قسم فيديوهات أنواع العمليات التعليمية للطلاب والدراسات
+    // =====================================================================
+    const EDUCATIONAL_VIDEOS = [
+      {
+        spec: "الجراحة العامة والناظور",
+        surgeryTitle: "استئصال المرارة بالناظور (Laparoscopic Cholecystectomy)",
+        videoId: "4b6mH7nV3-0",
+        studySteps: [
+          "الخطوة 1 — التحضير والتعقيم والوضعية: مراجعة السونار، التخدير العام، تعقيم البطن، ووضع منافذ التروكار بدقة.",
+          "الخطوة 2 — التشريح والرؤية الحرجة للأمان: كشف مثلث كالوت والتأكد من القناة المرارية والشريان المراري قبل وضع الكليبات.",
+          "الخطوة 3 — الأدوات والخيوط: استخدام سيت الناظور والكليبات، وخياطة اللفافة السرية بـ Vicryl 1 والجلد بـ Monocryl 4/0 أو Nylon 3/0.",
+          "الخطوة 4 — تنبيهات الطلاب والدراسات: تجنب الكي العشوائي قرب القناة الصفراوية الرئيسية وفحص سرير الكبد قبل الإخراج."
+        ]
       },
       {
         spec: "الجراحة العامة والناظور",
-        title: "إصلاح الفتق الإربي (Inguinal Hernia Repair)",
-        patients: "مرضى الفتق الإربي المباشر أو غير المباشر القابل للرد أو المخطط له جراحياً.",
-        devices: "جهاز كوي كهربائي (Diathermy)، إضاءة جراحية عالية، جهاز شفط، ومعدات التخدير النصفي أو العام.",
-        kitName: "سيت الجراحة العامة الصغرى/المتوسطة (General Minor/Major Set)",
-        tools: ["مشرط جراحي Scalpel #15 و#23", "مقصات Metzenbaum وMayo", "ملاقط شريانية Artery Forceps (Kelly / Mosquito)", "مباعد Farabeuf وRichardson", "شبكة فتق جراحية Mesh (Polypropylene)"],
-        steps: [
-          "التعقيم والتخدير (نصفي أو عام) وعمل شق جراحي إربي موازٍ للرباط الإربي.",
-          "شق لفافة العضلة المائلة الخارجية وكشف الحبل المنوي وكيس الفتق.",
-          "رد محتويات كيس الفتق وربطه أو استئصاله حسب النوع، ثم تثبيت شبكة البولي بروبيلين (Lichtenstein Mesh).",
-          "إغلاق لفافة المائلة الخارجية وتحت الجلد والجلد بانتظام."
-        ],
-        sutures: [
-          { layer: "تثبيت الشبكة / اللفافة", material: "Prolene 2/0 أو 0", needle: "SH / CT-1" },
-          { layer: "تحت الجلد", material: "Vicryl 3/0", needle: "SH" },
-          { layer: "الجلد", material: "Monocryl 4/0 Subcuticular أو Nylon 3/0", needle: "Cutting" }
-        ],
-        videoId: "7p9wQ2xK8mE"
+        surgeryTitle: "إصلاح الفتق الإربي بالشبكة (Inguinal Hernia Repair)",
+        videoId: "7p9wQ2xK8mE",
+        studySteps: [
+          "الخطوة 1 — التحضير والتشريح: تحديد الرباط الإربي، فتح لفافة المائلة الخارجية، وحماية الأعصاب الإربية.",
+          "الخطوة 2 — التعامل مع الكيس والشبكة: رد أو ربط كيس الفتق ثم تثبيت شبكة البولي بروبيلين بمساحة كافية فوق العانة والرباط.",
+          "الخطوة 3 — الأدوات والخيوط: سيت الجراحة العامة، تثبيت الشبكة بـ Prolene 2/0، وإغلاق اللفافة والجلد.",
+          "الخطوة 4 — تنبيهات الطلاب والدراسات: الانتباه لمسار الحبل المنوي والأوعية الشرسوفية السفلية لتفادي النكس أو الألم المزمن."
+        ]
       },
       {
         spec: "النسائية والتوليد",
-        title: "العملية القيصرية (Cesarean Section)",
-        patients: "حالات تعسر الولادة، سوء وضع الجنين، المشيمة المنزاحة، أو وجود قيصرية سابقة تستدعي التداخل.",
-        devices: "جهاز شفط (Suction) للوليد والأم، حاضنة/مدفئة رضيع (Infant Warmer)، مونيتور علامات حيوية، كوي كهربائي.",
-        kitName: "سيت القيصرية (C-Section Set)",
-        tools: ["مشرط جراحي Scalpel", "مباعد بطني ذاتي أو رفاصة مثانة Bladder Blade", "ملقطا مشيمة Ring/Sponge Forceps", "ملقطا رحم Green Armytage", "مقص خيوط وملاقط جراحية"],
-        steps: [
-          "التخدير النصفي أو العام ووضع قسطرة بولية وفتح البطن (Pfannenstiel أو خط وسط).",
-          "فتح الجزء السفلي للرحم بعناية وشفط السائل الأمنيوسي واستخراج الجنين وتسليمه لفريق الخدج.",
-          "إخراج المشيمة وتنظيف تجويف الرحم والتأكد من انقباض الرحم وإيقاف النزف.",
-          "خياطة جدار الرحم، البريتوان، العضلات، اللفافة، تحت الجلد، والجلد."
-        ],
-        sutures: [
-          { layer: "جدار الرحم (Uterus)", material: "Vicryl 1", needle: "CT-1 Heavy Round" },
-          { layer: "لفافة المستقيم (Rectus Sheath)", material: "Vicryl 1 أو PDS 1", needle: "CT-1" },
-          { layer: "الجلد", material: "Monocryl 3/0 أو Prolene 3/0", needle: "Cutting" }
-        ],
-        videoId: "z7kM5pL1vN4"
+        surgeryTitle: "العملية القيصرية (Cesarean Section)",
+        videoId: "z7kM5pL1vN4",
+        studySteps: [
+          "الخطوة 1 — التحضير والفتح: تفريغ المثانة بقسطرة فولي، التخدير النصفي/العام، وفتح طبقات البطن والرحم.",
+          "الخطوة 2 — استخراج الوليد والمشيمة: إخراج الجنين بلطف وتجهيز فريق الخدج، ثم إخراج المشيمة وتفقد تجويف الرحم.",
+          "الخطوة 3 — الأدوات والخيوط: سيت القيصرية ورفاصة دوين، خياطة الرحم واللفافة بـ Vicryl 1 والجلد بـ Monocryl/Prolene 3/0.",
+          "الخطوة 4 — تنبيهات الطلاب والدراسات: مراقبة انقباض الرحم والسيطرة الفورية على النزف وحماية المثانة والحالبين."
+        ]
       },
       {
         spec: "الكسور والعظام",
-        title: "رد وتثبيت الكسور بالصفائح والبراغي (ORIF)",
-        patients: "مرضى كسور العظام الطويلة أو المفاصل المزاحة التي تتطلب ردّاً مفتوحاً وتثبيتاً داخلياً.",
-        devices: "جهاز أشعة متنقل C-Arm، دريل جراحي عظمي (Bone Drill / Saw)، طاولة عمليات عظمية، جهاز كوي.",
-        kitName: "سيت العظام والكسور (Ortho / Bone Set + Plating & Screw Tray)",
-        tools: ["ملاقط رد الكسور Bone Reduction Clamps", "رافعة سمحاق Periosteal Elevator", "مقياس عمق Depth Gauge ومثقب Taps", "صفائح وبراغي عظمية Plates & Screws", "مطرقة عظمية Bone Mallet وOsteotome"],
-        steps: [
-          "التخدير العام أو المناطقي وتأكيد موقع الكسر تحت جهاز C-Arm.",
-          "الوصول الجراحي لمكان الكسر مع الحفاظ على التروية الدموية والسمحاق قدر الإمكان.",
-          "رد الكسر تشريحياً وتثبيته مؤقتاً ثم وضع الصفيحة المناسبة وتثبيتها بالبراغي بعد قياس العمق.",
-          "التحقق النهائي بالأشعة من استقامة العظم وطول البراغي ثم الإغلاق الطبقي."
-        ],
-        sutures: [
-          { layer: "اللفافة العضلية (Fascia)", material: "Vicryl 1 أو 0", needle: "CT-1" },
-          { layer: "تحت الجلد", material: "Vicryl 2/0", needle: "SH" },
-          { layer: "الجلد", material: "Nylon أو Staples 3/0", needle: "Cutting" }
-        ],
-        videoId: "3f8gH2jK9lM"
+        surgeryTitle: "تثبيت الكسور بالصفائح والبراغي (ORIF)",
+        videoId: "3f8gH2jK9lM",
+        studySteps: [
+          "الخطوة 1 — التقييم والأشعة: مراجعة صور الكسر وتجهيز جهاز C-Arm ومثقاب العظام وأطقم الصفائح والبراغي.",
+          "الخطوة 2 — الرد والتثبيت: رد الكسر تشريحياً، تثبيته مؤقتاً، حفر الثقوب، قياس العمق، واختيار طول البراغي المناسب.",
+          "الخطوة 3 — الأدوات والخيوط: سيت العظام AO، خياطة اللفافة بـ Vicryl 1/0 والجلد بـ Prolene/Nylon أو Stapler.",
+          "الخطوة 4 — تنبيهات الطلاب والدراسات: الحفاظ على تروية السمحاق وتفادي اختراق المفصل أو إصابة الأعصاب المجاورة."
+        ]
       },
       {
         spec: "الأنف والأذن والحنجرة (ENT)",
-        title: "استئصال اللوزتين (Tonsillectomy)",
-        patients: "مرضى التهاب اللوزتين المتكرر المزمن أو تضخم اللوزتين المسبب لانقطاع النفس الانسدادي أثناء النوم.",
-        devices: "جهاز كوي كهربائي (Bipolar/Monopolar)، جهاز شفط فموي مع قنيات شفط معدنية، إضاءة رأسية أو كشاف جراحي.",
-        kitName: "سيت اللوزتين والغدانيات (Tonsillectomy Set)",
-        tools: ["موسع فم Boyle-Davis Mouth Gag", "ماسك لوزة Tonsil Holding Forceps", "مسلخ ومقص لوزة Tonsil Dissector & Scissors", "قنية شفط معدنية Suction Tube"],
-        steps: [
-          "التخدير العام مع أنبوب رغامي ووضع المريض بوضعية Rose وتركيب موسع الفم Boyle-Davis.",
-          "شد اللوزة نحو الوسط وتحديد الكبسولة وتشريحها من القطب العلوي نحو الأسفل.",
-          "فصل اللوزة بالكامل وإيقاف النزف بالكوي أو الربط (Hemostasis).",
-          "فحص البلعوم والشفط الجيد والتأكد من جفاف مكان اللوزتين قبل الإفاقة."
-        ],
-        sutures: [
-          { layer: "إيقاف نزف سرير اللوزة (عند الحاجة)", material: "Vicryl 2/0 أو 3/0", needle: "UR-6 / SH" }
-        ],
-        videoId: "6n8mB4vC2xZ"
+        surgeryTitle: "استئصال اللوزتين (Tonsillectomy)",
+        videoId: "6n8mB4vC2xZ",
+        studySteps: [
+          "الخطوة 1 — تأمين مجرى الهواء: الأنبوب الرغامي، وضعية الرأس، وتركيب موسع الفم Boyle-Davis دون ضغط على الأسنان أو الشفاه.",
+          "الخطوة 2 — التشريح والإرقاء: تحديد محفظة اللوزة، تسليخها بدقة، وإيقاف النزف بالكوي ثنائي القطب أو الربط.",
+          "الخطوة 3 — الأدوات والخيوط: سيت اللوزتين والشفط، واستخدام Vicryl 2/0 أو 3/0 عند الحاجة للخياطة.",
+          "الخطوة 4 — تنبيهات الطلاب والدراسات: فحص البلعوم جيداً قبل الإفاقة ومراقبة أي نزف أولي أو ثانوي بعد العملية."
+        ]
       },
       {
         spec: "المسالك البولية",
-        title: "تنظير الحالب وتفتيت الحصى (URS & Lithotripsy)",
-        patients: "مرضى حصى الحالب التي لا تستجيب للعلاج الدوائي أو المسببة لانسداد كلوي أو ألم قولوني معند.",
-        devices: "ناظور حالب (Ureteroscope)، جهاز تفتيت بالليزر أو هوائي (Laser/Pneumatic Lithotriptor)، شاشة ناظور، C-Arm عند الحاجة.",
-        kitName: "سيت المسالك البولية والناظور البولي (Urology / Endo-Urology Set)",
-        tools: ["منظار حالب مرن أو شبه صلب", "سلك مرشد Guidewire وسلة التقاط Stone Basket", "قسطرة حالبية أو دعامة JJ Stent", "قسطرة فولي Foley Catheter"],
-        steps: [
-          "التخدير النصفي أو العام ووضع المريض بوضعية Lithotomy وتعقيم المنطقة.",
-          "إدخال سلك مرشد إلى المثانة ثم الحالب وتمرير منظار الحالب للوصول إلى الحصاة.",
-          "تفتيت الحصاة بالليزر أو الجهاز الهوائي واستخراج القطع المناسبة بالسلة.",
-          "وضع دعامة JJ Stent أو قسطرة بولية حسب تقييم الجراح والتأكد من سالكية مجرى البول."
-        ],
-        sutures: [
-          { layer: "لا يوجد شق جلدي خارجي عادة (إجراء تنظيري)", material: "يُستخدم خيط لتثبيت القسطرة إذا لزم", needle: "Silk 2/0" }
-        ],
-        videoId: "9k5jH7gF4dS"
+        surgeryTitle: "تنظير الحالب وتفتيت الحصى (URS & Lithotripsy)",
+        videoId: "9k5jH7gF4dS",
+        studySteps: [
+          "الخطوة 1 — التحضير والتنظير: وضعية Lithotomy، التعقيم، وإدخال سلك مرشد ثم منظار الحالب تحت الرؤية.",
+          "الخطوة 2 — التفتيت والإخراج: تفتيت الحصاة بالليزر أو الجهاز الهوائي والتقاط الشظايا المناسبة بالسلة.",
+          "الخطوة 3 — الأدوات والخيوط: سيت المسالك والمناظير، قسطرة فولي أو دعامة JJ Stent عند الحاجة.",
+          "الخطوة 4 — تنبيهات الطلاب والدراسات: تجنب شد المنظار أو السلة بقوة لتفادي أذية أو انقطاع الحالب وضمان التصريف."
+        ]
       },
       {
         spec: "الجراحة العصبية",
-        title: "فتح القحف وإزالة ورم أو ورم دموي (Craniotomy)",
-        patients: "مرضى الأورام الدماغية، النزف داخل القحف/فوق الجافية، أو إصابات الرأس الضاغطة.",
-        devices: "مثقاب جمجمة عالي السرعة (Craniotome / High-Speed Drill)، مجهر جراحي عصبي، جهاز ملاحة عصبية، جهاز كوي ثنائي القطب Bipolar.",
-        kitName: "سيت الجراحة العصبية (Neurosurgery Craniotomy Set)",
-        tools: ["مثقاب وثاقب جمجمة Perforator & Craniotome", "ملاقط كيريسون Kerrison Rongeurs", "ملقط كوي ثنائي القطب Bipolar Forceps", "مباعدات دماغية Brain Spatulas ومشابك Raney Clips"],
-        steps: [
-          "التخدير العام وتثبيت الرأس وتخطيط شق فروة الرأس حسب موقع الآفة.",
-          "رفع شريحة العظم (Bone Flap) وفتح الأم الجافية (Dura) تحت التكبير/المجهر.",
-          "استئصال الورم أو تفريغ النزف بدقة عالية وحماية الأنسجة والأوعية الدماغية المجاورة.",
-          "إغلاق الأم الجافية بإحكام، إعادة تثبيت العظم، وإغلاق فروة الرأس بطبقاتها."
-        ],
-        sutures: [
-          { layer: "الأم الجافية (Dura Mater)", material: "Vicryl 4/0 أو Silk 4/0 أو Gore-Tex", needle: "RB-1" },
-          { layer: "السمحاق / العضلة (Galea)", material: "Vicryl 2/0 أو 3/0", needle: "SH" },
-          { layer: "فروة الرأس (Scalp)", material: "Nylon 3/0 أو Staples", needle: "Cutting" }
-        ],
-        videoId: "2w4eR6tY8uI"
+        surgeryTitle: "فتح القحف وإزالة ورم أو ورم دموي (Craniotomy)",
+        videoId: "2w4eR6tY8uI",
+        studySteps: [
+          "الخطوة 1 — التحضير وتثبيت الرأس: تحديد موقع الآفة، التخطيط الجراحي، وتجهيز مثقاب الجمجمة والمجهر أو التكبير.",
+          "الخطوة 2 — فتح العظم والأم الجافية: رفع السديلة العظمية وفتح الأم الجافية وإزالة الآفة مع إرقاء دقيق.",
+          "الخطوة 3 — الأدوات والخيوط: سيت الجراحة العصبية وBipolar، إغلاق الأم الجافية بـ Vicryl/Silk 4/0 وفروة الرأس بـ Nylon 3/0.",
+          "الخطوة 4 — تنبيهات الطلاب والدراسات: مراقبة الضغط داخل القحف وحماية الأوردة الجسرية والأنسجة الدماغية السليمة."
+        ]
       },
       {
         spec: "التجميل والحروق",
-        title: "إنضار وترقيع الجلد للحروق (Debridement & Skin Grafting)",
-        patients: "مرضى الحروق العميقة من الدرجة الثانية المتقدمة أو الثالثة بعد استقرار الحالة العامة.",
-        devices: "جهاز أخذ رقعة جلدية كهربائي/هوائي (Dermatome)، ممدد رقعة Mesh Graft Carrier، جهاز كوي، مدفئة مريض.",
-        kitName: "سيت التجميل والترقيع الجلدي (Plastic & Skin Graft Set)",
-        tools: ["جهاز ديرماتوم Dermatome بشفرات معقمة", "ملاقط جلدية دقيقة Adson Forceps (بدون أسنان للرقعة)", "مقصات تجميل دقيقة Iris / Metzenbaum", "أداة تمديد الرقعة Mesh Graft"],
-        steps: [
-          "التخدير العام والتعقيم وإزالة الأنسجة الميتة/المتأثرة (Eschar Excision/Debridement) وإيقاف النزف.",
-          "أخذ رقعة جلدية رقيقة (Split-Thickness Skin Graft) من المنطقة المانحة (عادة الفخذ).",
-          "تمديد الرقعة وتثبيتها على سرير الجرح النظيف وتغطيتها بشاش مدهون وضماد ضاغط.",
-          "تضميد المنطقة المانحة بعناية وتعليمات المتابعة والضماد."
-        ],
-        sutures: [
-          { layer: "تثبيت الرقعة الجلدية", material: "Vicryl Rapide 4/0 أو Chromic 4/0 أو Staples", needle: "Cutting" }
-        ],
-        videoId: "5t7yU9iO1pA"
+        surgeryTitle: "إنضار وترقيع الجلد للحروق (Debridement & Skin Grafting)",
+        videoId: "5t7yU9iO1pA",
+        studySteps: [
+          "الخطوة 1 — تجهيز سرير الجرح: إزالة الأنسجة الميتة حتى الوصول إلى نسيج حي قابل لاستقبال الرقعة.",
+          "الخطوة 2 — أخذ وتثبيت الرقعة: أخذ رقعة جلدية رقيقة بجهاز Dermatome وتثبيتها على الجرح بانتظام.",
+          "الخطوة 3 — الأدوات والخيوط: سيت التجميل والترقيع، خيوط Vicryl Rapide أو Prolene/Nylon دقيقة حسب الموضع.",
+          "الخطوة 4 — تنبيهات الطلاب والدراسات: الحفاظ على دفء المريض ومنع تجمع السوائل أو الدم تحت الرقعة لضمان نجاحها."
+        ]
       }
     ];
 
-    const WARDS = [
+    // =====================================================================
+    // 4. بيانات الردهات والمفرز الطبي والأشعة
+    // =====================================================================
+    const WARDS_DATA = [
       {
         title: "المفرز الطبي والطوارئ (Triage & Emergency)",
-        patients: "جميع الحالات الإسعافية والطارئة الوافدة: إصابات الحوادث، الجلطات القلبية والدماغية، ضيق التنفس الحاد، التسمم، والنزوف.",
-        devices: "أسرّة طوارئ متحركة، أجهزة مراقبة العلامات الحيوية (ECG/SpO2/NIBP)، جهاز صدمات كهربائية (Defibrillator)، أجهزة أكسجين وشفط، جهاز سونار سريع (POCUS).",
-        protocol: "تصنيف سريع: الأحمر (حالة مهددة للحياة تتدخل فوراً)، الأصفر (حالة مستقرة نسبياً تحتاج متابعة قريبة)، الأخضر (حالات باردة/بسيطة)."
+        patients: "جميع الحالات الطارئة والإسعافية: الحوادث والكسور، الجلطات القلبية والدماغية، ضيق التنفس الحاد، الحروق، والتسمم.",
+        devices: "أسرّة طوارئ، مونيتور العلامات الحيوية، جهاز صدمات كهربائية (Defibrillator)، أجهزة أكسجين وشفط، سونار سريع (POCUS).",
+        note: "تصنيف الفرز: الأحمر (حرج فوري)، الأصفر (عاجل متابعة قريبة)، الأخضر (بسيط/بارد)."
       },
       {
-        title: "ردهات الجراحة العامة والتخصصية",
-        patients: "المرضى المحضرون للعمليات الجراحية أو المتعافون بعد العمليات (جراحة عامة، كسور، بولية، نسائية، ENT).",
-        devices: "أسرّة طبية متعددة الوضعيات، مضخات تسريب وريدي (Infusion Pumps)، نقاط أكسجين وشفط، أجهزة قياس سكر وحرارة وضغط."
+        title: "الردهات الجراحية والباطنية والجناح العام والخاص",
+        patients: "مرضى ما قبل وبعد العمليات، الحالات الباطنية والقلبية والكلوية، ومرضى الجناح العام والخاص.",
+        devices: "أسرّة طبية، مضخات تسريب وريدي (Infusion Pumps)، نقاط أكسجين وشفط، أجهزة قياس السكر والضغط والحرارة."
       },
       {
-        title: "ردهات الباطنية والقلبية والعناية المركزة (ICU / CCU)",
-        patients: "الحالات الباطنية المزمنة والحادة، أمراض القلب والسكري والكلى، وحالات الفشل التنفسي أو ما بعد العمليات الكبرى الحرجة.",
-        devices: "أجهزة تنفس اصطناعي (Ventilators)، شاشات مراقبة مركزية، محاقن ومضخات دوائية دقيقة، أجهزة غسيل كلوي عند الحاجة."
+        title: "وحدات العناية المركزة (ICU / CCU / NICU)",
+        patients: "حالات الفشل التنفسي، ما بعد العمليات الكبرى الحرجة، الجلطات القلبية الحادة، والأطفال الخدج وحديثو الولادة.",
+        devices: "أجهزة تنفس اصطناعي (Ventilators)، مونيتور مركزي، محاقن ومضخات دوائية دقيقة، وحاضنات خدج."
       },
       {
-        title: "الأشعة والسونار والمفراس والمختبر",
-        patients: "مرضى الطوارئ والردهات والعيادات الاستشارية لإجراء الفحوصات الشعاعية والمخبرية التشخيصية.",
-        devices: "جهاز أشعة سينية X-Ray، جهاز سونار ودوبلر، جهاز مفراس (CT Scan)، رنين مغناطيسي (MRI في المراكز)، وأجهزة تحليلات دم وكيمياء."
+        title: "الأشعة والسونار والمفراس والرنين والمختبر ومصرف الدم",
+        patients: "مرضى الطوارئ والردهات والعيادات الاستشارية لإجراء الفحوصات الشعاعية والمخبرية وتوفير وحدات الدم.",
+        devices: "أشعة سينية X-Ray، سونار ودوبلر، مفراس حلزوني CT Scan، رنين مغناطيسي MRI، وأجهزة التحليلات ومصرف الدم."
       }
     ];
 
-    // تحميل المستشفيات المضافة من المستخدم إن وجدت
-    const savedExtra = JSON.parse(localStorage.getItem("iraq_extra_hospitals") || "[]");
-    savedExtra.forEach(item => {
-      const gov = GOVERNORATES.find(g => g.name === item.gov);
-      if (gov) {
-        gov.hospitals.push({
-          name: item.name,
-          type: item.type || "عام",
-          beds: Number(item.beds) || 100,
-          units: item.units || ["صالات عمليات", "ردهات عامة", "المفرز الطبي", "الأشعة والمختبر"]
+    // تحميل المستشفيات المضافة من المستخدم محلياً
+    (function loadSavedHospitals() {
+      try {
+        const extra = JSON.parse(localStorage.getItem("iraq_guide_extra_hospitals_v3") || "[]");
+        extra.forEach(item => {
+          const gov = GOVERNORATES.find(g => g.name === item.gov);
+          if (gov) {
+            gov.hospitals.push({
+              name: item.name,
+              kind: item.kind || "مستشفى عام",
+              beds: Number(item.beds) || 120,
+              departments: item.departments || [
+                "1. المفرز الطبي والطوارئ",
+                "2. صالات العمليات الكبرى",
+                "3. صالات العمليات الصغرى",
+                "4. الردهات الجراحية والباطنية",
+                "5. الجناح العام والخاص",
+                "6. الأشعة والمختبر"
+              ]
+            });
+          }
         });
+      } catch (e) {
+        console.error(e);
       }
-    });
+    })();
 
-    // رسم مخطط SVG للسيت الجراحي قابل للتكبير
-    function renderKitSVG(title, tools) {
-      const itemsText = tools.slice(0, 4).map((t, idx) =>
-        `<text x="20" y="${78 + idx * 24}" fill="#e2e8f0" font-size="13" font-family="Tahoma, Arial">${idx + 1}. ${escapeHtml(t)}</text>`
-      ).join("");
-      return `
-        <svg viewBox="0 0 600 185" width="100%" xmlns="http://www.w3.org/2000/svg">
-          <rect x="4" y="4" width="592" height="177" rx="12" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5"/>
-          <text x="580" y="30" text-anchor="end" fill="#38bdf8" font-size="14" font-weight="bold" font-family="Tahoma, Arial">مخطط الست الجراحي: ${escapeHtml(title)}</text>
-          <line x1="20" y1="44" x2="580" y2="44" stroke="#334155" stroke-width="1"/>
-          ${itemsText}
-          <circle cx="515" cy="95" r="24" fill="none" stroke="#14b8a6" stroke-width="2.5"/>
-          <line x1="532" y1="112" x2="568" y2="148" stroke="#14b8a6" stroke-width="3" stroke-linecap="round"/>
-          <line x1="568" y1="112" x2="532" y2="148" stroke="#14b8a6" stroke-width="3" stroke-linecap="round"/>
-        </svg>
-      `;
-    }
-
-    function escapeHtml(str) {
+    // =====================================================================
+    // 5. دوال الرسم التوضيحي (SVG) للأدوات والسيتات والتهريب الآمن للنصوص
+    // =====================================================================
+    function esc(str) {
       return String(str)
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;");
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
     }
 
-    // تعبئة القوائم المنسدلة
+    function renderToolSvg(kind, label) {
+      const icons = {
+        scalpel: `<rect x="40" y="52" width="130" height="10" rx="4" fill="#94a3b8"/><polygon points="170,50 205,57 170,64" fill="#e2e8f0"/>`,
+        scissors: `<circle cx="52" cy="42" r="13" fill="none" stroke="#38bdf8" stroke-width="4"/><circle cx="52" cy="74" r="13" fill="none" stroke="#38bdf8" stroke-width="4"/><line x1="64" y1="48" x2="195" y2="66" stroke="#e2e8f0" stroke-width="4"/><line x1="64" y1="68" x2="195" y2="50" stroke="#94a3b8" stroke-width="4"/>`,
+        forceps: `<circle cx="48" cy="40" r="12" fill="none" stroke="#14b8a6" stroke-width="4"/><circle cx="48" cy="76" r="12" fill="none" stroke="#14b8a6" stroke-width="4"/><line x1="60" y1="46" x2="205" y2="58" stroke="#e2e8f0" stroke-width="4"/><line x1="60" y1="70" x2="205" y2="58" stroke="#cbd5e1" stroke-width="4"/>`,
+        retractor: `<path d="M45,35 L165,35 L165,78 L135,78" fill="none" stroke="#fbbf24" stroke-width="7" stroke-linecap="round"/><rect x="30" y="28" width="22" height="14" rx="4" fill="#0d9488"/>`,
+        trocar: `<rect x="35" y="45" width="38" height="24" rx="5" fill="#0284c7"/><rect x="73" y="52" width="125" height="10" rx="3" fill="#cbd5e1"/><polygon points="198,51 215,57 198,63" fill="#f8fafc"/>`,
+        clip: `<rect x="35" y="46" width="120" height="18" rx="5" fill="#14b8a6"/><line x1="155" y1="55" x2="210" y2="55" stroke="#e2e8f0" stroke-width="5"/><circle cx="212" cy="55" r="7" fill="none" stroke="#fbbf24" stroke-width="3"/>`
+      };
+      const graphic = icons[kind] || icons.forceps;
+      return `
+        <svg viewBox="0 0 245 122" width="100%" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="241" height="118" rx="10" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+          ${graphic}
+          <text x="122" y="108" text-anchor="middle" fill="#cbd5e1" font-size="9.5" font-family="Tahoma, Arial">${esc(label)}</text>
+        </svg>
+      `;
+    }
+
+    function renderSetBannerSvg(setName, tools) {
+      const listSvg = tools.slice(0, 4).map((t, i) =>
+        `<text x="20" y="${66 + i * 21}" fill="#e2e8f0" font-size="12" font-family="Tahoma, Arial">${i + 1}. ${esc(t.name)} (${esc(t.std)})</text>`
+      ).join("");
+      return `
+        <svg viewBox="0 0 620 155" width="100%" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="616" height="151" rx="12" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5"/>
+          <text x="600" y="26" text-anchor="end" fill="#38bdf8" font-size="13.5" font-weight="bold" font-family="Tahoma, Arial">سيت جراحي قياسي: ${esc(setName)}</text>
+          <line x1="18" y1="38" x2="602" y2="38" stroke="#334155" stroke-width="1"/>
+          ${listSvg}
+        </svg>
+      `;
+    }
+
+    // =====================================================================
+    // 6. تهيئة القوائم والشريط السريع للمحافظات الـ 18
+    // =====================================================================
     const govSelect = document.getElementById("govSelect");
-    GOVERNORATES.forEach(g => {
-      const opt = document.createElement("option");
-      opt.value = g.name;
-      opt.textContent = g.name;
-      govSelect.appendChild(opt);
-    });
+    const govQuickStrip = document.getElementById("govQuickStrip");
 
-    const specSelect = document.getElementById("specSelect");
-    const specs = [...new Set(SURGERIES.map(s => s.spec))];
-    specs.forEach(sp => {
-      const opt = document.createElement("option");
-      opt.value = sp;
-      opt.textContent = sp;
-      specSelect.appendChild(opt);
-    });
+    function initGovernorateControls() {
+      govSelect.innerHTML = `<option value="ALL">جميع المحافظات (18 محافظة)</option>`;
+      govQuickStrip.innerHTML = `<button type="button" class="gov-pill active" data-gov="ALL">الكل (18)</button>`;
 
-    function renderGovs() {
-      const q = document.getElementById("searchInput").value.trim().toLowerCase();
+      GOVERNORATES.forEach((g, idx) => {
+        const opt = document.createElement("option");
+        opt.value = g.name;
+        opt.textContent = `${idx + 1}. ${g.name}`;
+        govSelect.appendChild(opt);
+
+        const pill = document.createElement("button");
+        pill.type = "button";
+        pill.className = "gov-pill";
+        pill.dataset.gov = g.name;
+        pill.textContent = `${idx + 1}. ${g.name}`;
+        pill.addEventListener("click", () => {
+          govSelect.value = g.name;
+          syncGovPills(g.name);
+          renderGovernorates();
+        });
+        govQuickStrip.appendChild(pill);
+      });
+    }
+
+    function syncGovPills(val) {
+      govQuickStrip.querySelectorAll(".gov-pill").forEach(p => {
+        p.classList.toggle("active", p.dataset.gov === val);
+      });
+    }
+
+    // =====================================================================
+    // 7. عرض المحافظات والقطاعات والمستشفيات بالتسلسل وعرض أقسام المستشفى
+    // =====================================================================
+    function renderGovernorates() {
       const selectedGov = govSelect.value;
+      const q = document.getElementById("govSearch").value.trim().toLowerCase();
       const container = document.getElementById("govsContainer");
       container.innerHTML = "";
 
-      const filtered = GOVERNORATES.filter(g => {
+      const list = GOVERNORATES.filter(g => {
         if (selectedGov !== "ALL" && g.name !== selectedGov) return false;
         if (!q) return true;
         const blob = [
           g.name,
           ...g.directorates,
           ...g.sectors,
-          ...g.hospitals.flatMap(h => [h.name, h.type, ...h.units])
+          ...g.hospitals.flatMap(h => [h.name, h.kind, ...h.departments])
         ].join(" ").toLowerCase();
         return blob.includes(q);
       });
 
-      filtered.forEach(g => {
+      list.forEach((g, gIdx) => {
         const card = document.createElement("div");
         card.className = "card";
         card.innerHTML = `
-          <h3>محافظة ${escapeHtml(g.name)}</h3>
-          <div><strong>دوائر الصحة:</strong> ${g.directorates.map(d => `<span class="chip">${escapeHtml(d)}</span>`).join(" ")}</div>
-          <h4>القطاعات الصحية في الأقضية والنواحي</h4>
-          <div class="chips">${g.sectors.map(s => `<span class="chip">${escapeHtml(s)}</span>`).join("")}</div>
-          <h4>المستشفيات والوحدات</h4>
-          ${g.hospitals.map(h => `
-            <div style="border-top:1px dashed var(--border); padding-top:8px; margin-top:8px;">
-              <strong>${escapeHtml(h.name)}</strong> <span class="chip">${escapeHtml(h.type)} • ${h.beds} سرير</span>
-              <ul>${h.units.map(u => `<li>${escapeHtml(u)}</li>`).join("")}</ul>
-            </div>
-          `).join("")}
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+            <h3>${gIdx + 1}. محافظة ${esc(g.name)}</h3>
+            <span class="chip chip-blue">${g.hospitals.length} مستشفيات • ${g.sectors.length} قطاعات</span>
+          </div>
+          <div class="muted">${g.directorates.map(d => esc(d)).join(" • ")}</div>
+
+          <h4>القطاعات الصحية بالتسلسل</h4>
+          <div class="chips">
+            ${g.sectors.map((s, sIdx) => `<span class="chip">${sIdx + 1}- ${esc(s)}</span>`).join("")}
+          </div>
+
+          <h4>المستشفيات في المحافظة بالتسلسل (اضغط على أي مستشفى لعرض أقسامه بالكامل)</h4>
+          <ol class="seq-list">
+            ${g.hospitals.map((h, hIdx) => `
+              <li class="seq-item" data-gname="${esc(g.name)}" data-hidx="${hIdx}">
+                <span class="seq-title">${esc(h.name)} <span class="muted">(${esc(h.kind)} • ${h.beds} سرير)</span></span>
+                <span class="btn-outline">عرض الأقسام</span>
+              </li>
+            `).join("")}
+          </ol>
         `;
         container.appendChild(card);
       });
+
+      container.querySelectorAll(".seq-item").forEach(item => {
+        item.addEventListener("click", () => {
+          const g = GOVERNORATES.find(x => x.name === item.dataset.gname);
+          const h = g?.hospitals[Number(item.dataset.hidx)];
+          if (!g || !h) return;
+
+          document.getElementById("hospitalDetailBanner").innerHTML = `
+            <div class="card" style="margin-bottom:14px; border-color:var(--accent);">
+              <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+                <div>
+                  <span class="chip chip-blue">محافظة ${esc(g.name)}</span>
+                  <h3 style="margin-top:6px;">${esc(h.name)} — جميع الأقسام بالتسلسل</h3>
+                  <div class="muted">${esc(h.kind)} • السعة: ${h.beds} سرير</div>
+                </div>
+                <button type="button" class="btn-outline" id="clearHospBanner">إخفاء التفاصيل</button>
+              </div>
+              <div class="chips" style="margin-top:10px;">
+                ${h.departments.map(dep => `<span class="chip">${esc(dep)}</span>`).join("")}
+              </div>
+              <div class="ok-box">
+                للاطلاع على تفاصيل العمليات الكبرى، السيتات، الخيوط، القسطرة، صوندات التخدير، والأجهزة: افتح تبويب <strong>"صالات العمليات والسيتات والخيوط والأجهزة"</strong>.
+              </div>
+            </div>
+          `;
+          document.getElementById("clearHospBanner")?.addEventListener("click", () => {
+            document.getElementById("hospitalDetailBanner").innerHTML = "";
+          });
+          document.getElementById("hospitalDetailBanner").scrollIntoView({ behavior: "smooth", block: "nearest" });
+        });
+      });
     }
 
-    function renderSurgeries() {
-      const selectedSpec = specSelect.value;
-      const q = document.getElementById("surgerySearch").value.trim().toLowerCase();
-      const container = document.getElementById("surgeriesContainer");
+    // =====================================================================
+    // 8. عرض صالات العمليات والتخصصات والسيتات والخيوط والقسطرة والأجهزة
+    // =====================================================================
+    const orSpecSelect = document.getElementById("orSpecSelect");
+    const videoSpecSelect = document.getElementById("videoSpecSelect");
+
+    function initOrAndVideoFilters() {
+      OR_DEPARTMENTS.forEach(dep => {
+        const o1 = document.createElement("option");
+        o1.value = dep.id;
+        o1.textContent = dep.name;
+        orSpecSelect.appendChild(o1);
+
+        const o2 = document.createElement("option");
+        o2.value = dep.name;
+        o2.textContent = dep.name;
+        videoSpecSelect.appendChild(o2);
+      });
+    }
+
+    function renderOrDepartments() {
+      const selId = orSpecSelect.value;
+      const q = document.getElementById("orSearch").value.trim().toLowerCase();
+      const container = document.getElementById("orContainer");
       container.innerHTML = "";
 
-      const list = SURGERIES.filter(s => {
-        if (selectedSpec !== "ALL" && s.spec !== selectedSpec) return false;
+      const list = OR_DEPARTMENTS.filter(dep => {
+        if (selId !== "ALL" && dep.id !== selId) return false;
         if (!q) return true;
         const blob = [
-          s.spec, s.title, s.patients, s.devices, s.kitName,
-          ...s.tools, ...s.steps, ...s.sutures.map(x => `${x.layer} ${x.material} ${x.needle}`)
+          dep.name, dep.patients,
+          ...dep.surgeries,
+          ...dep.sets.flatMap(s => [s.setName, s.standard, ...s.tools.map(t => `${t.name} ${t.std}`)]),
+          ...dep.sutures.map(x => `${x.layer} ${x.suture} ${x.needle}`),
+          ...dep.cathetersAndAnesthesia,
+          ...dep.devices
         ].join(" ").toLowerCase();
         return blob.includes(q);
       });
 
-      list.forEach((s, idx) => {
+      list.forEach(dep => {
         const card = document.createElement("div");
         card.className = "card";
-        const svgMarkup = renderKitSVG(s.kitName, s.tools);
         card.innerHTML = `
-          <span class="chip">${escapeHtml(s.spec)}</span>
-          <h3 style="margin-top:8px;">${escapeHtml(s.title)}</h3>
-          <p><strong>أنواع المرضى:</strong> ${escapeHtml(s.patients)}</p>
-          <p><strong>الأجهزة القياسية:</strong> ${escapeHtml(s.devices)}</p>
+          <h3>${esc(dep.name)}</h3>
+          <p><strong>أنواع المرضى المستلمين:</strong> ${esc(dep.patients)}</p>
 
-          <h4>الست الجراحي والأدوات (${escapeHtml(s.kitName)})</h4>
-          <div class="kit-svg-box" data-kit-idx="${idx}" title="اضغط لتكبير الست الجراحي">
-            ${svgMarkup}
-            <span>اضغط على الصورة لتكبير الست الجراحي وعرض تفاصيل الأدوات</span>
-          </div>
-          <ul>${s.tools.map(t => `<li>${escapeHtml(t)}</li>`).join("")}</ul>
+          <h4>1. أنواع العمليات الموجودة في القسم</h4>
+          <ol>${dep.surgeries.map(s => `<li>${esc(s)}</li>`).join("")}</ol>
 
-          <h4>خطوات العملية الجراحية القياسية</h4>
-          <ol style="margin:6px 0; padding-right:20px;">${s.steps.map(st => `<li>${escapeHtml(st)}</li>`).join("")}</ol>
+          <h4>2. السيتات الجراحية والأدوات (اضغط على السيت أو أي أداة للتكبير)</h4>
+          ${dep.sets.map((st, sIdx) => `
+            <div style="border-top:1px dashed var(--border); padding-top:8px; margin-top:8px;">
+              <strong>${esc(st.setName)}</strong> <span class="muted">(${esc(st.standard)})</span>
+              <div class="set-preview" data-dep="${esc(dep.id)}" data-sidx="${sIdx}">
+                ${renderSetBannerSvg(st.setName, st.tools)}
+                <span>اضغط لتكبير صورة السيت الجراحي الكامل</span>
+              </div>
+              <div class="tool-grid">
+                ${st.tools.map((tool, tIdx) => `
+                  <div class="tool-card" data-dep="${esc(dep.id)}" data-sidx="${sIdx}" data-tidx="${tIdx}">
+                    ${renderToolSvg(tool.kind, tool.name)}
+                    <div class="tool-name">${esc(tool.name)}</div>
+                    <div class="tool-std">${esc(tool.std)} • اضغط للتكبير</div>
+                  </div>
+                `).join("")}
+              </div>
+            </div>
+          `).join("")}
 
-          <h4>الخيوط الجراحية حسب الطبقات</h4>
+          <h4>3. أنواع الخيوط الجراحية</h4>
           <table>
             <thead>
-              <tr><th>الطبقة</th><th>نوع الخيط</th><th>الإبرة</th></tr>
+              <tr><th>الطبقة</th><th>نوع الخيط والقياس</th><th>الإبرة</th></tr>
             </thead>
             <tbody>
-              ${s.sutures.map(su => `
+              ${dep.sutures.map(su => `
                 <tr>
-                  <td>${escapeHtml(su.layer)}</td>
-                  <td>${escapeHtml(su.material)}</td>
-                  <td>${escapeHtml(su.needle)}</td>
+                  <td>${esc(su.layer)}</td>
+                  <td>${esc(su.suture)}</td>
+                  <td>${esc(su.needle)}</td>
                 </tr>
               `).join("")}
             </tbody>
           </table>
 
-          <h4>فيديو تعليمي قياسي</h4>
-          <div class="video-box">
-            <iframe src="https://www.youtube.com/embed/${escapeURIComponent(s.videoId)}" title="${escapeHtml(s.title)}" allowfullscreen></iframe>
-          </div>
-          <div style="margin-top:8px;">
-            <a class="btn-outline" style="display:inline-block; text-decoration:none;" href="https://www.youtube.com/watch?v=${encodeURIComponent(s.videoId)}" target="_blank" rel="noopener">فتح على يوتيوب</a>
-          </div>
+          <h4>4. القسطرة وصوندات التخدير</h4>
+          <ul>${dep.cathetersAndAnesthesia.map(c => `<li>${esc(c)}</li>`).join("")}</ul>
+
+          <h4>5. أنواع الأجهزة في صالة العمليات</h4>
+          <ul>${dep.devices.map(d => `<li>${esc(d)}</li>`).join("")}</ul>
         `;
         container.appendChild(card);
       });
 
-      document.querySelectorAll(".kit-svg-box").forEach(box => {
-        box.addEventListener("click", () => {
-          const item = list[Number(box.dataset.kitIdx)];
+      // تكبير السيت الكامل
+      container.querySelectorAll(".set-preview").forEach(el => {
+        el.addEventListener("click", () => {
+          const dep = OR_DEPARTMENTS.find(d => d.id === el.dataset.dep);
+          const st = dep?.sets[Number(el.dataset.sidx)];
+          if (!st) return;
           openModal(`
-            <button class="close-btn" id="closeModalBtn">إغلاق</button>
-            <h3>${escapeHtml(item.title)} — ${escapeHtml(item.kitName)}</h3>
-            ${renderKitSVG(item.kitName, item.tools)}
-            <h4>قائمة الأدوات في السيت:</h4>
-            <ul>${item.tools.map(t => `<li>${escapeHtml(t)}</li>`).join("")}</ul>
+            <button type="button" class="close-btn" id="closeModalBtn">إغلاق</button>
+            <h3>${esc(st.setName)}</h3>
+            <p class="muted">${esc(st.standard)}</p>
+            ${renderSetBannerSvg(st.setName, st.tools)}
+            <h4>الأدوات المضمنة في السيت:</h4>
+            <ul>${st.tools.map(t => `<li><strong>${esc(t.name)}</strong> — ${esc(t.std)}</li>`).join("")}</ul>
+          `);
+        });
+      });
+
+      // تكبير أداة مفردة
+      container.querySelectorAll(".tool-card").forEach(el => {
+        el.addEventListener("click", () => {
+          const dep = OR_DEPARTMENTS.find(d => d.id === el.dataset.dep);
+          const st = dep?.sets[Number(el.dataset.sidx)];
+          const tool = st?.tools[Number(el.dataset.tidx)];
+          if (!tool) return;
+          openModal(`
+            <button type="button" class="close-btn" id="closeModalBtn">إغلاق</button>
+            <h3>${esc(tool.name)}</h3>
+            <p class="muted">ضمن: ${esc(st.setName)} • ${esc(tool.std)}</p>
+            <div style="max-width:480px; margin:12px auto;">
+              ${renderToolSvg(tool.kind, tool.name)}
+            </div>
           `);
         });
       });
     }
 
-    function renderWards() {
-      const container = document.getElementById("wardsContainer");
+    // =====================================================================
+    // 9. عرض قسم فيديوهات أنواع العمليات التعليمية للطلاب والدراسات
+    // =====================================================================
+    function renderEducationalVideos() {
+      const selSpec = videoSpecSelect.value;
+      const q = document.getElementById("videoSearch").value.trim().toLowerCase();
+      const container = document.getElementById("videosContainer");
       container.innerHTML = "";
-      WARDS.forEach(w => {
+
+      const list = EDUCATIONAL_VIDEOS.filter(v => {
+        if (selSpec !== "ALL" && v.spec !== selSpec) return false;
+        if (!q) return true;
+        const blob = [v.spec, v.surgeryTitle, ...v.studySteps].join(" ").toLowerCase();
+        return blob.includes(q);
+      });
+
+      list.forEach(v => {
         const card = document.createElement("div");
         card.className = "card";
         card.innerHTML = `
-          <h3>${escapeHtml(w.title)}</h3>
-          <p><strong>أنواع المرضى المستلمين:</strong> ${escapeHtml(w.patients)}</p>
-          <p><strong>الأجهزة والتجهيزات القياسية:</strong> ${escapeHtml(w.devices)}</p>
-          ${w.protocol ? `<div class="warn-box"><strong>آلية العمل:</strong> ${escapeHtml(w.protocol)}</div>` : ""}
+          <span class="chip chip-blue">${esc(v.spec)}</span>
+          <h3 style="margin-top:8px;">${esc(v.surgeryTitle)}</h3>
+
+          <div class="video-box">
+            <iframe src="https://www.youtube.com/embed/${encodeURIComponent(v.videoId)}" title="${esc(v.surgeryTitle)}" allowfullscreen></iframe>
+          </div>
+          <div style="margin-top:8px;">
+            <a class="btn-outline" style="display:inline-block; text-decoration:none;" href="https://www.youtube.com/watch?v=${encodeURIComponent(v.videoId)}" target="_blank" rel="noopener">مشاهدة الفيديو على يوتيوب</a>
+          </div>
+
+          <h4>خطوات تعليمية للطلاب والدراسات</h4>
+          <ol>${v.studySteps.map(st => `<li>${esc(st)}</li>`).join("")}</ol>
         `;
         container.appendChild(card);
       });
     }
 
+    // =====================================================================
+    // 10. عرض الردهات والمفرز الطبي والأشعة
+    // =====================================================================
+    function renderWards() {
+      const container = document.getElementById("wardsContainer");
+      container.innerHTML = "";
+      WARDS_DATA.forEach(w => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <h3>${esc(w.title)}</h3>
+          <p><strong>أنواع المرضى المستلمين:</strong> ${esc(w.patients)}</p>
+          <p><strong>الأجهزة والمعدات القياسية:</strong> ${esc(w.devices)}</p>
+          ${w.note ? `<div class="warn-box"><strong>آلية العمل:</strong> ${esc(w.note)}</div>` : ""}
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // =====================================================================
+    // 11. إدارة النوافذ والتبويبات والوضع الليلي وإضافة مستشفى
+    // =====================================================================
     function openModal(html) {
-      const modalBody = document.getElementById("modalBody");
-      modalBody.innerHTML = html;
+      const box = document.getElementById("modalBody");
+      box.innerHTML = html;
       document.getElementById("modalBox").classList.add("open");
       document.getElementById("closeModalBtn")?.addEventListener("click", closeModal);
     }
@@ -867,52 +2045,62 @@
     });
 
     document.getElementById("addHospBtn").addEventListener("click", () => {
-      const govOptions = GOVERNORATES.map(g => `<option value="${escapeHtml(g.name)}">${escapeHtml(g.name)}</option>`).join("");
+      const opts = GOVERNORATES.map(g => `<option value="${esc(g.name)}">${esc(g.name)}</option>`).join("");
       openModal(`
-        <button class="close-btn" id="closeModalBtn">إغلاق</button>
+        <button type="button" class="close-btn" id="closeModalBtn">إغلاق</button>
         <h3>إضافة مستشفى جديد</h3>
-        <form id="hospForm" class="form-grid">
-          <select name="gov" class="control">${govOptions}</select>
+        <form id="addHospForm" class="form-grid">
+          <select name="gov" class="control">${opts}</select>
           <input type="text" name="name" class="control" placeholder="اسم المستشفى" required />
-          <input type="text" name="type" class="control" placeholder="النوع (عام / تعليمي / تخصصي)" value="عام" />
-          <input type="number" name="beds" class="control" placeholder="عدد الأسرة" value="120" />
-          <input type="text" name="units" class="control" style="grid-column:1/-1" placeholder="الوحدات مفصولة بفاصلة (مثال: صالات عمليات، ردهات، مفرز، أشعة)" />
+          <input type="text" name="kind" class="control" placeholder="النوع (عام / تعليمي / تخصصي)" value="مستشفى عام" />
+          <input type="number" name="beds" class="control" placeholder="عدد الأسرة" value="150" />
+          <input type="text" name="deps" class="control" style="grid-column:1/-1" placeholder="الأقسام مفصولة بفاصلة" value="1. المفرز الطبي والطوارئ، 2. صالات العمليات الكبرى، 3. صالات العمليات الصغرى، 4. الردهات الجراحية والباطنية، 5. الجناح العام والخاص، 6. الأشعة والمختبر" />
           <div style="grid-column:1/-1">
             <button type="submit" class="btn-solid">حفظ المستشفى</button>
           </div>
         </form>
       `);
-      document.getElementById("hospForm").addEventListener("submit", e => {
+
+      document.getElementById("addHospForm").addEventListener("submit", e => {
         e.preventDefault();
         const fd = new FormData(e.target);
-        const newHosp = {
+        const rec = {
           gov: fd.get("gov"),
-          name: fd.get("name").trim(),
-          type: fd.get("type").trim() || "عام",
-          beds: Number(fd.get("beds")) || 100,
-          units: String(fd.get("units") || "صالات عمليات، ردهات عامة، المفرز الطبي، الأشعة والمختبر")
-            .split("،").join(",").split(",").map(x => x.trim()).filter(Boolean)
+          name: String(fd.get("name") || "").trim(),
+          kind: String(fd.get("kind") || "مستشفى عام").trim(),
+          beds: Number(fd.get("beds")) || 120,
+          departments: String(fd.get("deps") || "").split("،").join(",").split(",").map(x => x.trim()).filter(Boolean)
         };
-        const targetGov = GOVERNORATES.find(g => g.name === newHosp.gov);
-        if (targetGov && newHosp.name) {
-          targetGov.hospitals.push({ name: newHosp.name, type: newHosp.type, beds: newHosp.beds, units: newHosp.units });
-          const currentExtra = JSON.parse(localStorage.getItem("iraq_extra_hospitals") || "[]");
-          currentExtra.push(newHosp);
-          localStorage.setItem("iraq_extra_hospitals", JSON.stringify(currentExtra));
-          renderGovs();
+        const target = GOVERNORATES.find(g => g.name === rec.gov);
+        if (target && rec.name) {
+          target.hospitals.push({ name: rec.name, kind: rec.kind, beds: rec.beds, departments: rec.departments });
+          const saved = JSON.parse(localStorage.getItem("iraq_guide_extra_hospitals_v3") || "[]");
+          saved.push(rec);
+          localStorage.setItem("iraq_guide_extra_hospitals_v3", JSON.stringify(saved));
+          renderGovernorates();
           closeModal();
         }
       });
     });
 
-    document.getElementById("searchInput").addEventListener("input", renderGovs);
-    govSelect.addEventListener("change", renderGovs);
-    specSelect.addEventListener("change", renderSurgeries);
-    document.getElementById("surgerySearch").addEventListener("input", renderSurgeries);
+    govSelect.addEventListener("change", () => {
+      syncGovPills(govSelect.value);
+      renderGovernorates();
+    });
+    document.getElementById("govSearch").addEventListener("input", renderGovernorates);
+    orSpecSelect.addEventListener("change", renderOrDepartments);
+    document.getElementById("orSearch").addEventListener("input", renderOrDepartments);
+    videoSpecSelect.addEventListener("change", renderEducationalVideos);
+    document.getElementById("videoSearch").addEventListener("input", renderEducationalVideos);
 
-    renderGovs();
-    renderSurgeries();
+    // تشغيل العرض الأولي
+    initGovernorateControls();
+    initOrAndVideoFilters();
+    renderGovernorates();
+    renderOrDepartments();
+    renderEducationalVideos();
     renderWards();
   </script>
 </body>
 </html>
+```
