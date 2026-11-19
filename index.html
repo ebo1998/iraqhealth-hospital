@@ -114,7 +114,7 @@
             <div class="mt-3 relative">
                 <i class="fa-solid fa-magnifying-glass absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
                 <input type="text" id="globalSearch" oninput="handleGlobalSearch(this.value)" 
-                    placeholder="ابحث عن محافظة، مستشفى، قطاع، عملية (ENT، كسور...)، جهاز، أو سيت جراحي..." 
+                    placeholder="ابحث عن محافظة، مستشفى، عملية (مرارة، فتق، قيصرية...)، ست جراحي، أداة، أو خيط جراحي (Vicryl, Prolene)..." 
                     class="w-full pl-10 pr-10 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 transition">
                 <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
                     <i class="fa-solid fa-circle-xmark"></i>
@@ -221,9 +221,9 @@
                         <span class="inline-block px-2.5 py-0.5 rounded-full bg-white/20 text-xs font-bold mb-2">
                             المعايير العالمية (ISO/WHO) & معايير وزارة الصحة العراقية (MOH)
                         </span>
-                        <h2 class="text-xl font-extrabold">صالات العمليات والتخصصات الجراحية الدقيقة</h2>
+                        <h2 class="text-xl font-extrabold">صالات العمليات، العمليات الجراحية، الستات، الخيوط والفيديوهات</h2>
                         <p class="text-xs sm:text-sm text-teal-100 mt-1">
-                            دليل تفصيلي يشمل أنواع العمليات، تصنيف المرضى المستلمين، الأجهزة القياسية في كل صالة، ومكونات السيتات الجراحية أداة بأداة.
+                            اختر التخصص ثم اضغط على أي عملية لعرض: الخطوات الجراحية، صور الأدوات والستات التفاعلية، جدول الخيوط الجراحية، والفيديو التعليمي العالمي.
                         </p>
                     </div>
                     <button onclick="window.print()" class="self-start sm:self-center px-3.5 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-xs font-bold flex items-center gap-2 transition no-print">
@@ -238,8 +238,8 @@
                 <!-- Populated via JS -->
             </div>
 
-            <!-- Surgical Specialty Detailed Cards -->
-            <div id="surgicalDetailsContainer" class="space-y-5">
+            <!-- Surgical Specialty & Operations Cards -->
+            <div id="surgicalDetailsContainer" class="space-y-6">
                 <!-- Populated via JS -->
             </div>
         </section>
@@ -261,8 +261,8 @@
         <!-- Subtle Footer Credit -->
         <footer class="mt-10 pt-6 border-t border-slate-200 dark:border-slate-800 text-center text-xs text-slate-500 dark:text-slate-400 space-y-1">
             <p class="font-semibold">الموسوعة الشاملة للمؤسسات الصحية العراقية والبروتوكولات الجراحية والسريرية</p>
-            <p class="text-[11px] font-mono text-teal-700 dark:text-teal-400 pt-1">
-                # Made by Ibrahim Ismail | صنع من قبل إبراهيم إسماعيل
+            <p class="text-xs font-bold text-teal-700 dark:text-teal-400 pt-1">
+                صنع من قبل إبراهيم إسماعيل
             </p>
         </footer>
     </main>
@@ -315,6 +315,61 @@
                 <button onclick="closeHospitalModal()" class="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-bold">
                     إغلاق
                 </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SURGICAL OPERATION DEEP-DIVE MODAL (STEPS, SET IMAGE, SUTURES, VIDEO) -->
+    <div id="operationModal" class="fixed inset-0 z-50 hidden bg-slate-950/75 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="bg-white dark:bg-slate-900 w-full max-w-4xl max-h-[94vh] rounded-t-3xl sm:rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 flex flex-col overflow-hidden">
+            <!-- Modal Header -->
+            <div class="p-4 sm:p-5 bg-gradient-to-l from-slate-900 via-teal-900 to-teal-700 text-white flex items-start justify-between gap-3 shrink-0">
+                <div>
+                    <div class="flex flex-wrap items-center gap-2 mb-1">
+                        <span id="opModalSpec" class="px-2.5 py-0.5 rounded-md bg-white/20 text-[11px] font-bold">التخصص</span>
+                        <span id="opModalEnName" class="px-2.5 py-0.5 rounded-md bg-teal-400/20 text-teal-200 text-[11px] font-mono">Procedure</span>
+                    </div>
+                    <h3 id="opModalTitle" class="text-lg sm:text-xl font-extrabold leading-snug">اسم العملية الجراحية</h3>
+                </div>
+                <button onclick="closeOperationModal()" class="w-9 h-9 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center text-white transition shrink-0">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div id="opModalBody" class="p-4 sm:p-6 overflow-y-auto space-y-6 text-sm">
+                <!-- Populated dynamically -->
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-3.5 bg-slate-50 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between gap-2 shrink-0">
+                <button onclick="copyOperationProtocol()" class="px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold flex items-center gap-2 transition">
+                    <i class="fa-solid fa-copy"></i>
+                    نسخ بروتوكول العملية والخيوط
+                </button>
+                <button onclick="closeOperationModal()" class="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-bold">
+                    إغلاق
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- INSTRUMENT IMAGE LIGHTBOX MODAL -->
+    <div id="imageLightboxModal" onclick="closeLightbox()" class="fixed inset-0 z-[60] hidden bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4">
+        <div onclick="event.stopPropagation()" class="bg-white dark:bg-slate-900 w-full max-w-3xl rounded-3xl border border-slate-700 shadow-2xl overflow-hidden">
+            <div class="p-4 bg-slate-900 text-white flex items-center justify-between">
+                <h4 id="lightboxTitle" class="font-extrabold text-sm sm:text-base flex items-center gap-2">
+                    <i class="fa-solid fa-magnifying-glass-plus text-teal-400"></i>
+                    معاينة الست الجراحي والأدوات
+                </h4>
+                <button onclick="closeLightbox()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div id="lightboxContent" class="p-4 sm:p-6 bg-slate-50 dark:bg-slate-950 flex flex-col items-center justify-center">
+                <!-- High-res interactive SVG diagram injected here -->
+            </div>
+            <div id="lightboxCaption" class="p-4 text-xs sm:text-sm text-slate-700 dark:text-slate-300 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
             </div>
         </div>
     </div>
@@ -381,633 +436,447 @@
 
     <script>
         // =========================================================================
-        // 1. COMPREHENSIVE IRAQI HEALTHCARE DATABASE (ALL 18 GOVERNORATES)
+        // 2. SURGICAL SPECIALTIES, OPERATIONS, INSTRUMENT DIAGRAMS, SUTURES & VIDEOS
         // =========================================================================
-        const iraqiHealthData = [
-            {
-                id: "baghdad",
-                name: "بغداد (الرصافة والكرخ)",
-                directorates: ["دائرة صحة بغداد - الرصافة", "دائرة صحة بغداد - الكرخ", "دائرة مدينة الطب"],
-                sectors: [
-                    { name: "قطاع الرصافة الأول والثاني", centers: 24, services: "رعاية الأمومة، اللقاحات، المفرز الأولي، طب الأسرة" },
-                    { name: "قطاع الأعظمية ومدينة الصدر", centers: 32, services: "طوارئ أولية، رعاية الحوامل، مختبرات، أسنان" },
-                    { name: "قطاع الكرخ والمنصور والدورة", centers: 28, services: "مراكز صحية نموذجية، فحص ما قبل الزواج، صحة مدرسية" },
-                    { name: "قطاع الكاظمية وأبو غريب والمحمودية", centers: 26, services: "مفرز حوادث الطرق، رعاية أولية، تطعيمات" }
-                ],
-                hospitals: [
-                    {
-                        name: "مجمع مدينة الطب التعليمي",
-                        type: "مجمع طبي تخصصي وتعليمي",
-                        directorate: "دائرة مدينة الطب",
-                        beds: 2500,
-                        orCount: 38,
-                        wards: ["الجراحة العامة", "الجملة العصبية", "القلب المفتوح", "الكسور", "الأورام", "الباطنية", "الجناح الخاص"],
-                        radiology: ["رنين مغناطيسي MRI 3T", "مفراس حلزوني CT 128", "قسطرة قلبية", "أشعة رقمية وسونار دوبلر"],
-                        triage: "طوارئ كبرى متخصصة تعمل 24/7 مع نظام فرز أحمر/أصفر/أخضر وصالة إنعاش فوري",
-                        units: ["بنك الدم المركزي", "العناية المركزة RCU/ICU", "وحدة الحروق", "غسيل الكلى", "مختبرات مرجعية"]
-                    },
-                    {
-                        name: "مستشفى اليرموك التعليمي",
-                        type: "مستشفى تعليمي عام",
-                        directorate: "دائرة صحة بغداد - الكرخ",
-                        beds: 720,
-                        orCount: 14,
-                        wards: ["ردهات الجراحة", "ردهات الباطنية", "النسائية والتوليد", "الكسور", "الجناح العام والخاص"],
-                        radiology: ["مفراس حلزوني CT", "رنين مغناطيسي MRI", "أشعة سينية متنقلة C-Arm", "سونار"],
-                        triage: "أكبر طوارئ حوادث في جانب الكرخ مع مفرز إصابات بليغة ووحدة صدمة (Trauma Unit)",
-                        units: ["العناية المركزة", "الخدج NICU", "المصرف الدموي", "الاستشاريات الخارجية"]
-                    },
-                    {
-                        name: "مستشفى الكندي التعليمي",
-                        type: "مستشفى تعليمي عام",
-                        directorate: "دائرة صحة بغداد - الرصافة",
-                        beds: 450,
-                        orCount: 10,
-                        wards: ["الجراحة التجميلية والحروق", "جراحة السمنة والناظور", "الباطنية", "الكسور", "الجناح العام"],
-                        radiology: ["مفراس حلزوني CT", "أشعة رقمية", "سونار ملون", "إيكو القلب"],
-                        triage: "طوارئ ومفرز مركزي لاستقبال حالات الحوادث والحروق والطوارئ الباطنية",
-                        units: ["وحدة الحروق المتخصصة", "الإنعاش الجراحي", "المختبر المركزي"]
-                    },
-                    {
-                        name: "مستشفى الكاظمية التعليمي (الإمامين الكاظمين)",
-                        type: "مستشفى تعليمي عام",
-                        directorate: "دائرة صحة بغداد - الكرخ",
-                        beds: 650,
-                        orCount: 12,
-                        wards: ["الجراحة العامة", "المسالك البولية", "ENT", "النسائية", "الباطنية", "الأطفال"],
-                        radiology: ["رنين MRI", "مفراس CT", "ناظور القنوات الصفراوية ERCP", "أشعة تداخلية"],
-                        triage: "طوارئ متكاملة مع مفرز فحص أولي وغرفة إنعاش قلبي رئوي CPR",
-                        units: ["وحدة تفتيت الحصى", "العناية القلبية CCU", "بنك الدم"]
-                    }
-                ]
-            },
-            {
-                id: "kirkuk",
-                name: "كركوك",
-                directorates: ["دائرة صحة كركوك"],
-                sectors: [
-                    { name: "قطاع كركوك الأول (المركز)", centers: 18, services: "رعاية صحية أولية، مفرز طوارئ، لقاحات، رعاية حوامل" },
-                    { name: "قطاع كركوك الثاني", centers: 16, services: "طب الأسرة، المختبرات الأولية، الصحة المدرسية" },
-                    { name: "قطاع الدبس الصحي", centers: 8, services: "مراكز صحية في قضاء الدبس والنواحي، مفرز إسعاف أولي، ولادة طبيعية" },
-                    { name: "قطاع الحويجة وداقوق", centers: 22, services: "مراكز ريفية، مفرز حوادث الطرق، رعاية الأم والطفل" }
-                ],
-                hospitals: [
-                    {
-                        name: "مستشفى آزادي التعليمي",
-                        type: "مستشفى تعليمي مرجعي",
-                        directorate: "دائرة صحة كركوك",
-                        beds: 450,
-                        orCount: 11,
-                        wards: ["الجراحة العامة", "الجملة العصبية", "الكسور", "البولية", "الباطنية", "الجناح الخاص والعام"],
-                        radiology: ["رنين مغناطيسي MRI", "مفراس حلزوني CT", "قسطرة قلبية", "أشعة رقمية وسونار"],
-                        triage: "طوارئ كبرى ومفرز استقبال الحوادث والإصابات والحالات القلبية الحرجة",
-                        units: ["العناية المركزة ICU", "العناية القلبية CCU", "غسيل الكلى", "المختبرات التعليمية"]
-                    },
-                    {
-                        name: "مستشفى كركوك العام (الجمهوري)",
-                        type: "مستشفى عام",
-                        directorate: "دائرة صحة كركوك",
-                        beds: 320,
-                        orCount: 8,
-                        wards: ["ردهات الجراحة", "ردهات الباطنية", "ENT", "العيون", "الجناح العام"],
-                        radiology: ["مفراس حلزوني CT", "أشعة سينية", "سونار دوبلر"],
-                        triage: "طوارئ ومفرز 24 ساعة لاستقبال الحالات الباطنية والجراحية الحادة",
-                        units: ["وحدة الإنعاش", "المختبر وبنك الدم الفرعي", "الاستشاريات"]
-                    },
-                    {
-                        name: "مستشفى النسائية والأطفال التعليمي - كركوك",
-                        type: "مستشفى تخصصي",
-                        directorate: "دائرة صحة كركوك",
-                        beds: 260,
-                        orCount: 6,
-                        wards: ["النسائية", "صالات الولادة", "ردهات الأطفال", "الخدج"],
-                        radiology: ["سونار رباعي الأبعاد 4D", "أشعة متنقلة للخدج"],
-                        triage: "طوارئ نسائية وتوليد وطوارئ أطفال مع مفرز عزل الحميات",
-                        units: ["وحدة الخدج وحديثي الولادة NICU", "عناية مركزة للأطفال PICU"]
-                    },
-                    {
-                        name: "مستشفى الدبس العام",
-                        type: "مستشفى قضاء عام",
-                        directorate: "دائرة صحة كركوك - قضاء الدبس",
-                        beds: 100,
-                        orCount: 3,
-                        wards: ["الجراحة العامة", "الباطنية", "النسائية والتوليد", "الأطفال"],
-                        radiology: ["أشعة رقمية X-Ray", "سونار تشخيصي"],
-                        triage: "مفرز طوارئ لاستقبال حوادث طريق أربيل - كركوك والإحالة السريعة",
-                        units: ["مختبر طوارئ", "بنك دم فرعي", "صالة ولادة"]
-                    }
-                ]
-            },
-            {
-                id: "basra",
-                name: "البصرة",
-                directorates: ["دائرة صحة البصرة"],
-                sectors: [
-                    { name: "قطاع البصرة الأول والثاني (المركز)", centers: 26, services: "رعاية أولية، طب أسرة، فحوصات دورية" },
-                    { name: "قطاع الزبير وأبو الخصيب", centers: 19, services: "مفرز طوارئ، رعاية حوامل، لقاحات" },
-                    { name: "قطاع القرنة والمدينة", centers: 17, services: "مراكز صحية، طوارئ أولية، مختبرات" }
-                ],
-                hospitals: [
-                    {
-                        name: "مستشفى البصرة التعليمي (الجمهوري)",
-                        type: "مستشفى تعليمي عام",
-                        directorate: "دائرة صحة البصرة",
-                        beds: 600,
-                        orCount: 12,
-                        wards: ["الجراحة العامة", "الكسور", "الجملة العصبية", "الباطنية", "الجناح الخاص"],
-                        radiology: ["رنين MRI", "مفراس CT", "أشعة رقمية", "سونار"],
-                        triage: "طوارئ حوادث رئيسية ومفرز فرز الإصابات والحالات الحرجة",
-                        units: ["مركز الحروق والتجميل", "العناية المركزة", "بنك الدم"]
-                    },
-                    {
-                        name: "مستشفى الصدر التعليمي - البصرة",
-                        type: "مستشفى تعليمي عام",
-                        directorate: "دائرة صحة البصرة",
-                        beds: 550,
-                        orCount: 11,
-                        wards: ["الجراحة", "الباطنية", "البولية", "ENT", "العيون"],
-                        radiology: ["مفراس حلزوني", "رنين مغناطيسي", "قسطرة"],
-                        triage: "مفرز طوارئ 24 ساعة مع وحدة إنعاش متكاملة",
-                        units: ["مركز القلب", "وحدة غسيل الكلى", "الاستشاريات"]
-                    },
-                    {
-                        name: "مستشفى السياب التعليمي (التركي)",
-                        type: "مستشفى حديث متطور",
-                        directorate: "دائرة صحة البصرة",
-                        beds: 492,
-                        orCount: 14,
-                        wards: ["أجنحة حديثة بنظام فندقي", "جراحات تخصصية", "باطنية", "نسائية"],
-                        radiology: ["أحدث أجهزة MRI و CT", "ماموغرام", "أشعة تداخلية"],
-                        triage: "نظام فرز إلكتروني ذكي في الطوارئ مع غرف عمليات طارئة",
-                        units: ["عناية مركزة حديثة", "مختبرات أوتوماتيكية بالكامل"]
-                    }
-                ]
-            },
-            {
-                id: "nineveh",
-                name: "نينوى",
-                directorates: ["دائرة صحة نينوى"],
-                sectors: [
-                    { name: "قطاع الأيمن والأيسر (الموصل)", centers: 34, services: "رعاية أولية، إعادة تأهيل، لقاحات، مفرز أولي" },
-                    { name: "قطاع تلكيف والحمدانية", centers: 18, services: "مراكز صحية، رعاية أمومة وطفولة" },
-                    { name: "قطاع تلعفر وسنجار", centers: 20, services: "مراكز صحية، طوارئ أولية" }
-                ],
-                hospitals: [
-                    {
-                        name: "مستشفى الجمهوري التعليمي - الموصل",
-                        type: "مستشفى تعليمي عام",
-                        directorate: "دائرة صحة نينوى",
-                        beds: 500,
-                        orCount: 10,
-                        wards: ["الجراحة العامة", "الكسور", "الباطنية", "البولية", "الجناح العام"],
-                        radiology: ["مفراس CT", "رنين MRI", "أشعة رقمية", "سونار"],
-                        triage: "طوارئ مركزية ومفرز استقبال الحوادث في الجانب الأيمن",
-                        units: ["العناية المركزة", "بنك الدم", "الاستشاريات"]
-                    },
-                    {
-                        name: "مستشفى السلام التعليمي",
-                        type: "مستشفى تعليمي عام",
-                        directorate: "دائرة صحة نينوى",
-                        beds: 450,
-                        orCount: 9,
-                        wards: ["الجراحة", "الباطنية", "ENT", "العيون", "الأطفال"],
-                        radiology: ["مفراس حلزوني", "سونار دوبلر", "أشعة سينية"],
-                        triage: "طوارئ الجانب الأيسر مع مفرز فرز سريع وصالة عمليات طارئة",
-                        units: ["وحدة الإنعاش", "غسيل الكلى", "المختبر المركزي"]
-                    }
-                ]
-            },
-            {
-                id: "erbil",
-                name: "أربيل",
-                directorates: ["مديرية صحة أربيل (وزارة صحة الإقليم)"],
-                sectors: [
-                    { name: "قطاع مركز أربيل", centers: 28, services: "مراكز طب الأسرة، اللقاحات، المفرز الأولي" },
-                    { name: "قطاع سوران وشقلاوة وكويسنجق", centers: 24, services: "مراكز صحية جبلية، طوارئ حوادث الطرق" }
-                ],
-                hospitals: [
-                    {
-                        name: "مستشفى رزكاري التعليمي (Rizgary)",
-                        type: "مستشفى تعليمي مرجعي",
-                        directorate: "مديرية صحة أربيل",
-                        beds: 550,
-                        orCount: 12,
-                        wards: ["الجراحة العامة", "البولية", "ENT", "الباطنية", "الأورام", "الجناح الخاص"],
-                        radiology: ["رنين مغناطيسي MRI", "مفراس CT", "أشعة تداخلية", "سونار"],
-                        triage: "استقبال الحالات المحالة والطارئة مع وحدة عناية مركزة متقدمة",
-                        units: ["وحدة تفتيت الحصى", "العناية المركزة", "مختبرات تخصصية"]
-                    },
-                    {
-                        name: "مستشفى طوارئ غرب أربيل (West Emergency)",
-                        type: "مستشفى طوارئ وحوادث تخصصي",
-                        directorate: "مديرية صحة أربيل",
-                        beds: 250,
-                        orCount: 8,
-                        wards: ["الكسور", "الجملة العصبية", "الحروق", "الجراحة الطارئة"],
-                        radiology: ["مفراس CT فوري داخل الطوارئ", "أشعة رقمية متنقلة", "سونار FAST"],
-                        triage: "نظام فرز عالمي (Triage) للحوادث المرورية والكسور وإصابات الرأس",
-                        units: ["وحدة الحروق والتجميل", "العناية المركزة للصدمات"]
-                    }
-                ]
-            },
-            {
-                id: "sulaymaniyah",
-                name: "السليمانية",
-                directorates: ["مديرية صحة السليمانية"],
-                sectors: [
-                    { name: "قطاع مركز السليمانية", centers: 30, services: "مراكز صحية، طب أسرة، رعاية وقائية" },
-                    { name: "قطاع رانية ودربنديخان وكلار (كرميان)", centers: 25, services: "مراكز صحية، طوارئ أولية" }
-                ],
-                hospitals: [
-                    {
-                        name: "مستشفى شار التعليمي (Shar Hospital)",
-                        type: "مستشفى تعليمي متكامل",
-                        directorate: "مديرية صحة السليمانية",
-                        beds: 650,
-                        orCount: 15,
-                        wards: ["الجراحة العامة", "الجملة العصبية", "الكسور", "القلب", "الباطنية", "الجناح الخاص"],
-                        radiology: ["رنين MRI 3T", "مفراس CT", "قسطرة قلبية ودماغية", "سونار"],
-                        triage: "أكبر قسم طوارئ ومفرز في السليمانية مجهز بصالات عمليات فورية",
-                        units: ["العناية المركزة", "بنك الدم", "وحدة السكتة الدماغية"]
-                    }
-                ]
-            },
-            {
-                id: "duhok",
-                name: "دهوك",
-                directorates: ["مديرية صحة دهوك"],
-                sectors: [
-                    { name: "قطاع مركز دهوك وزاخو", centers: 24, services: "مراكز صحية، رعاية النازحين والمجتمع، لقاحات" },
-                    { name: "قطاع العمادية وعقرة", centers: 18, services: "مراكز صحية، مفرز إسعاف" }
-                ],
-                hospitals: [
-                    {
-                        name: "مستشفى آزادي التعليمي - دهوك",
-                        type: "مستشفى تعليمي عام",
-                        directorate: "مديرية صحة دهوك",
-                        beds: 480,
-                        orCount: 10,
-                        wards: ["الجراحة العامة", "الباطنية", "البولية", "ENT", "العيون"],
-                        radiology: ["رنين MRI", "مفراس CT", "أشعة رقمية", "سونار"],
-                        triage: "طوارئ ومفرز مركزي للحالات الباطنية والجراحية",
-                        units: ["العناية المركزة", "غسيل الكلى", "الاستشاريات"]
-                    },
-                    {
-                        name: "مستشفى الطوارئ التعليمي - دهوك",
-                        type: "مستشفى طوارئ وكسور",
-                        directorate: "مديرية صحة دهوك",
-                        beds: 220,
-                        orCount: 6,
-                        wards: ["الكسور", "الجملة العصبية", "الجراحة الطارئة"],
-                        radiology: ["مفراس CT", "C-Arm", "سونار طوارئ"],
-                        triage: "مفرز حوادث وكسور يعمل على مدار الساعة",
-                        units: ["وحدة الإنعاش", "بنك دم طوارئ"]
-                    }
-                ]
-            },
-            {
-                id: "anbar",
-                name: "الأنبار",
-                directorates: ["دائرة صحة الأنبار"],
-                sectors: [
-                    { name: "قطاع الرمادي الأول والثاني", centers: 20, services: "رعاية أولية، لقاحات، مفرز" },
-                    { name: "قطاع الفلوجة وهيت وحديثة والقائم", centers: 28, services: "مراكز صحية، طوارئ الطرق السريعة" }
-                ],
-                hospitals: [
-                    {
-                        name: "مستشفى الرمادي التعليمي",
-                        type: "مستشفى تعليمي عام",
-                        directorate: "دائرة صحة الأنبار",
-                        beds: 450,
-                        orCount: 10,
-                        wards: ["الجراحة العامة", "الكسور", "الباطنية", "البولية", "الجناح العام"],
-                        radiology: ["رنين MRI", "مفراس CT", "أشعة رقمية", "سونار"],
-                        triage: "طوارئ ومفرز لاستقبال حوادث الطريق الدولي السريع",
-                        units: ["العناية المركزة", "بنك الدم", "الاستشاريات"]
-                    },
-                    {
-                        name: "مستشفى الفلوجة التعليمي",
-                        type: "مستشفى تعليمي عام",
-                        directorate: "دائرة صحة الأنبار",
-                        beds: 400,
-                        orCount: 9,
-                        wards: ["الجراحة", "الباطنية", "الكسور", "ENT"],
-                        radiology: ["مفراس CT", "رنين MRI", "سونار"],
-                        triage: "طوارئ ومفرز 24 ساعة مع وحدة إنعاش متكاملة",
-                        units: ["غسيل الكلى", "العناية القلبية CCU"]
-                    }
-                ]
-            },
-            {
-                id: "diyala",
-                name: "ديالى",
-                directorates: ["دائرة صحة ديالى"],
-                sectors: [
-                    { name: "قطاع بعقوبة الأول والثاني", centers: 22, services: "رعاية صحية أولية، مفرز، لقاحات" },
-                    { name: "قطاع الخالص والمقدادية وخانقين", centers: 24, services: "مراكز صحية، رعاية أمومة وطفولة" }
-                ],
-                hospitals: [
-                    {
-                        name: "مستشفى بعقوبة التعليمي",
-                        type: "مستشفى تعليمي عام",
-                        directorate: "دائرة صحة ديالى",
-                        beds: 450,
-                        orCount: 10,
-                        wards: ["الجراحة العامة", "الكسور", "الجملة العصبية", "الباطنية", "الجناح الخاص"],
-                        radiology: ["رنين MRI", "مفراس CT", "أشعة رقمية", "سونار"],
-                        triage: "طوارئ كبرى ومفرز حوادث للمحافظة",
-                        units: ["العناية المركزة", "مركز القلب", "بنك الدم"]
-                    }
-                ]
-            },
-            {
-                id: "salahaldin",
-                name: "صلاح الدين",
-                directorates: ["دائرة صحة صلاح الدين"],
-                sectors: [
-                    { name: "قطاع تكريت وسامراء", centers: 20, services: "رعاية أولية، لقاحات، مفرز طوارئ" },
-                    { name: "قطاع بيجي والشرقاط وبلد والدجيل", centers: 22, services: "مراكز صحية، طوارئ طرق" }
-                ],
-                hospitals: [
-                    {
-                        name: "مستشفى صلاح الدين العام (تكريت)",
-                        type: "مستشفى عام وتعليمي",
-                        directorate: "دائرة صحة صلاح الدين",
-                        beds: 400,
-                        orCount: 8,
-                        wards: ["الجراحة العامة", "الكسور", "الباطنية", "النسائية", "الأطفال"],
-                        radiology: ["رنين MRI", "مفراس CT", "أشعة وسونار"],
-                        triage: "مفرز طوارئ مركزي واستقبال الحالات المحالة من الأقضية",
-                        units: ["العناية المركزة", "غسيل الكلى", "المختبر المركزي"]
-                    }
-                ]
-            },
-            {
-                id: "babil",
-                name: "بابل",
-                directorates: ["دائرة صحة بابل"],
-                sectors: [
-                    { name: "قطاع الحلة الأول والثاني", centers: 24, services: "طب الأسرة، اللقاحات، المفرز الأولي" },
-                    { name: "قطاع المسيب والمحاويل والهاشمية", centers: 22, services: "مراكز صحية، طوارئ أولية" }
-                ],
-                hospitals: [
-                    {
-                        name: "مستشفى الحلة التعليمي العام",
-                        type: "مستشفى تعليمي عام",
-                        directorate: "دائرة صحة بابل",
-                        beds: 450,
-                        orCount: 10,
-                        wards: ["الجراحة العامة", "الكسور", "الجملة العصبية", "البولية", "الجناح العام"],
-                        radiology: ["مفراس CT", "رنين MRI", "أشعة رقمية", "سونار"],
-                        triage: "طوارئ ومفرز حوادث يعمل على مدار الساعة",
-                        units: ["العناية المركزة", "بنك الدم", "الاستشاريات"]
-                    },
-                    {
-                        name: "مستشفى مرجان التعليمي",
-                        type: "مستشفى تعليمي باطني وتخصصي",
-                        directorate: "دائرة صحة بابل",
-                        beds: 400,
-                        orCount: 6,
-                        wards: ["الباطنية", "القلبية", "الأورام", "الجهاز الهضمي"],
-                        radiology: ["قسطرة قلبية", "مفراس CT", "رنين MRI", "إيكو"],
-                        triage: "طوارئ باطنية وقلبية ومفرز الحالات الحرجة",
-                        units: ["مركز القلب", "العناية القلبية CCU", "غسيل الكلى"]
-                    }
-                ]
-            },
-            {
-                id: "karbala",
-                name: "كربلاء المقدسة",
-                directorates: ["دائرة صحة كربلاء المقدسة"],
-                sectors: [
-                    { name: "قطاع المركز والحسينية والهندية", centers: 26, services: "رعاية أولية، خطط طوارئ الزيارات المليونية، مفرز" }
-                ],
-                hospitals: [
-                    {
-                        name: "مدينة الإمام الحسين (ع) الطبية",
-                        type: "مدينة طبية تعليمية",
-                        directorate: "دائرة صحة كربلاء",
-                        beds: 650,
-                        orCount: 14,
-                        wards: ["الجراحة العامة", "الكسور", "الجملة العصبية", "الباطنية", "البولية", "الجناح الخاص"],
-                        radiology: ["رنين MRI 3T", "مفراس CT", "قسطرة قلبية", "أشعة رقمية"],
-                        triage: "طوارئ ضخمة مجهزة لاستيعاب الحالات الاعتيادية والزيارات المليونية",
-                        units: ["العناية المركزة", "وحدة الحروق", "بنك الدم المركزي"]
-                    },
-                    {
-                        name: "مستشفى الكفيل التخصصي",
-                        type: "مستشفى تخصصي متطور",
-                        directorate: "العتبة العباسية المقدسة",
-                        beds: 300,
-                        orCount: 12,
-                        wards: ["أجنحة خاصة وعامة", "جراحات القلب", "الجملة العصبية", "الكسور والمفاصل"],
-                        radiology: ["أحدث تقنيات MRI و CT", "قسطرة تداخلية", "ماموغرام"],
-                        triage: "طوارئ متطورة مع نظام فرز سريع وغرف عمليات مجهزة بأعلى المواصفات",
-                        units: ["عناية مركزة ICU/CCU", "مختبرات عالمية"]
-                    }
-                ]
-            },
-            {
-                id: "najaf",
-                name: "النجف الأشرف",
-                directorates: ["دائرة صحة النجف الأشرف"],
-                sectors: [
-                    { name: "قطاع النجف الشمالي والجنوبي والكوفة والمناذرة", centers: 28, services: "مراكز صحية، طب أسرة، مفرز طوارئ" }
-                ],
-                hospitals: [
-                    {
-                        name: "مدينة الصدر الطبية",
-                        type: "مدينة طبية تعليمية",
-                        directorate: "دائرة صحة النجف الأشرف",
-                        beds: 600,
-                        orCount: 13,
-                        wards: ["الجراحة العامة", "الكسور", "الجملة العصبية", "الباطنية", "الجناح الخاص"],
-                        radiology: ["رنين MRI", "مفراس CT", "قسطرة قلبية", "أشعة وسونار"],
-                        triage: "طوارئ كبرى ومفرز فرز الإصابات والحالات الحرجة",
-                        units: ["مركز القلب", "العناية المركزة", "بنك الدم"]
-                    },
-                    {
-                        name: "مستشفى الحكيم العام",
-                        type: "مستشفى عام",
-                        directorate: "دائرة صحة النجف الأشرف",
-                        beds: 350,
-                        orCount: 8,
-                        wards: ["الجراحة", "الباطنية", "ENT", "العيون"],
-                        radiology: ["مفراس CT", "أشعة رقمية", "سونار"],
-                        triage: "طوارئ ومفرز 24 ساعة",
-                        units: ["وحدة الإنعاش", "الاستشاريات"]
-                    }
-                ]
-            },
-            {
-                id: "wasit",
-                name: "واسط",
-                directorates: ["دائرة صحة واسط"],
-                sectors: [
-                    { name: "قطاع الكوت الأول والثاني والصويرة والحي والنعمانية", centers: 26, services: "رعاية أولية، لقاحات، مفرز حوادث" }
-                ],
-                hospitals: [
-                    {
-                        name: "مستشفى الزهراء التعليمي - الكوت",
-                        type: "مستشفى تعليمي عام",
-                        directorate: "دائرة صحة واسط",
-                        beds: 450,
-                        orCount: 9,
-                        wards: ["الجراحة العامة", "الكسور", "الباطنية", "النسائية", "الأطفال"],
-                        radiology: ["رنين MRI", "مفراس CT", "أشعة وسونار"],
-                        triage: "طوارئ ومفرز رئيسي للمحافظة",
-                        units: ["العناية المركزة", "الخدج", "بنك الدم"]
-                    }
-                ]
-            },
-            {
-                id: "maysan",
-                name: "ميسان",
-                directorates: ["دائرة صحة ميسان"],
-                sectors: [
-                    { name: "قطاع العمارة الأول والثاني والمجر الكبير وقلعة صالح", centers: 24, services: "مراكز صحية، رعاية أمومة، مفرز" }
-                ],
-                hospitals: [
-                    {
-                        name: "مستشفى الصدر التعليمي - العمارة",
-                        type: "مستشفى تعليمي عام",
-                        directorate: "دائرة صحة ميسان",
-                        beds: 480,
-                        orCount: 10,
-                        wards: ["الجراحة العامة", "الكسور", "الجملة العصبية", "الباطنية", "البولية"],
-                        radiology: ["رنين MRI", "مفراس CT", "قسطرة قلبية", "سونار"],
-                        triage: "طوارئ كبرى ومفرز استقبال الحوادث",
-                        units: ["العناية المركزة", "مركز القلب", "بنك الدم"]
-                    }
-                ]
-            },
-            {
-                id: "dhiqar",
-                name: "ذي قار",
-                directorates: ["دائرة صحة ذي قار"],
-                sectors: [
-                    { name: "قطاع الناصرية الأول والثاني والشطرة والرفاعي وسوق الشيوخ", centers: 32, services: "مراكز صحية، طب أسرة، مفرز طوارئ" }
-                ],
-                hospitals: [
-                    {
-                        name: "مستشفى الحسين التعليمي - الناصرية",
-                        type: "مستشفى تعليمي عام",
-                        directorate: "دائرة صحة ذي قار",
-                        beds: 520,
-                        orCount: 11,
-                        wards: ["الجراحة العامة", "الكسور", "الباطنية", "البولية", "ENT"],
-                        radiology: ["رنين MRI", "مفراس CT", "أشعة رقمية", "سونار"],
-                        triage: "طوارئ كبرى ومفرز حوادث للمحافظة",
-                        units: ["العناية المركزة", "غسيل الكلى", "بنك الدم"]
-                    },
-                    {
-                        name: "مستشفى الناصرية التعليمي (التركي)",
-                        type: "مستشفى حديث متكامل",
-                        directorate: "دائرة صحة ذي قار",
-                        beds: 492,
-                        orCount: 14,
-                        wards: ["أجنحة حديثة", "الجملة العصبية", "جراحات تخصصية", "باطنية"],
-                        radiology: ["أحدث أجهزة MRI و CT", "أشعة تداخلية"],
-                        triage: "قسم طوارئ متطور بنظام فرز عالمي",
-                        units: ["عناية مركزة ICU/CCU", "مختبرات حديثة"]
-                    }
-                ]
-            },
-            {
-                id: "muthanna",
-                name: "المثنى",
-                directorates: ["دائرة صحة المثنى"],
-                sectors: [
-                    { name: "قطاع السماوة الأول والثاني والرميثة والخضر", centers: 20, services: "رعاية أولية، لقاحات، مفرز" }
-                ],
-                hospitals: [
-                    {
-                        name: "مستشفى الحسين التعليمي - السماوة",
-                        type: "مستشفى تعليمي عام",
-                        directorate: "دائرة صحة المثنى",
-                        beds: 400,
-                        orCount: 8,
-                        wards: ["الجراحة العامة", "الكسور", "الباطنية", "البولية", "الجناح العام"],
-                        radiology: ["رنين MRI", "مفراس CT", "أشعة رقمية", "سونار"],
-                        triage: "طوارئ ومفرز مركزي للمحافظة",
-                        units: ["العناية المركزة", "بنك الدم", "الاستشاريات"]
-                    }
-                ]
-            },
-            {
-                id: "qadisiyyah",
-                name: "الديوانية (القادسية)",
-                directorates: ["دائرة صحة الديوانية"],
-                sectors: [
-                    { name: "قطاع الديوانية الأول والثاني وعفك والشامية والحمزة", centers: 25, services: "مراكز صحية، طب أسرة، مفرز طوارئ" }
-                ],
-                hospitals: [
-                    {
-                        name: "مستشفى الديوانية التعليمي",
-                        type: "مستشفى تعليمي عام",
-                        directorate: "دائرة صحة الديوانية",
-                        beds: 500,
-                        orCount: 10,
-                        wards: ["الجراحة العامة", "الكسور", "الجملة العصبية", "الباطنية", "الجناح الخاص"],
-                        radiology: ["رنين MRI", "مفراس CT", "أشعة رقمية", "سونار"],
-                        triage: "طوارئ ومفرز حوادث 24 ساعة",
-                        units: ["العناية المركزة", "مركز القلب", "بنك الدم"]
-                    }
-                ]
-            }
-        ];
 
-        // =========================================================================
-        // 2. SURGICAL SPECIALTIES, EQUIPMENT & INSTRUMENT SETS (GLOBAL & IRAQI MOH)
-        // =========================================================================
+        // High-precision inline SVG generator for Surgical Instrument Sets (100% offline & crisp)
+        function generateInstrumentSetSVG(diagramType, setName) {
+            const diagrams = {
+                laparoscopy: `
+                    <svg viewBox="0 0 800 320" class="w-full h-auto rounded-xl bg-slate-900 border border-slate-700">
+                        <defs>
+                            <linearGradient id="metalGrad" x1="0" y1="0" x2="1" y2="1">
+                                <stop offset="0%" stop-color="#f8fafc"/>
+                                <stop offset="50%" stop-color="#94a3b8"/>
+                                <stop offset="100%" stop-color="#475569"/>
+                            </linearGradient>
+                        </defs>
+                        <rect width="800" height="320" fill="#0f172a"/>
+                        <text x="770" y="32" fill="#2dd4bf" font-size="16" font-weight="bold" text-anchor="end">${setName} - مخطط الأدوات القياسي</text>
+                        
+                        <!-- 1. Trocar 10mm -->
+                        <g transform="translate(60, 65)">
+                            <rect x="0" y="15" width="220" height="14" rx="4" fill="url(#metalGrad)"/>
+                            <polygon points="220,15 245,22 220,29" fill="#e2e8f0"/>
+                            <rect x="15" y="5" width="35" height="34" rx="6" fill="#0d9488"/>
+                            <circle cx="32" cy="0" r="6" fill="#38bdf8"/>
+                            <text x="120" y="58" fill="#cbd5e1" font-size="12" text-anchor="middle">1. تروكار (Trocar 10mm & 5mm)</text>
+                        </g>
+
+                        <!-- 2. Veress Needle -->
+                        <g transform="translate(430, 65)">
+                            <rect x="20" y="19" width="240" height="5" rx="2" fill="url(#metalGrad)"/>
+                            <rect x="0" y="12" width="25" height="19" rx="4" fill="#f59e0b"/>
+                            <text x="130" y="58" fill="#cbd5e1" font-size="12" text-anchor="middle">2. إبرة فيرس لنفخ البطن (Veress Needle)</text>
+                        </g>
+
+                        <!-- 3. Maryland Dissector / Grasper -->
+                        <g transform="translate(60, 165)">
+                            <rect x="75" y="22" width="210" height="7" fill="url(#metalGrad)"/>
+                            <path d="M285,22 Q305,15 312,18 M285,29 Q305,36 312,33" stroke="#f8fafc" stroke-width="3" fill="none"/>
+                            <ellipse cx="35" cy="14" rx="25" ry="12" stroke="#14b8a6" stroke-width="5" fill="none"/>
+                            <ellipse cx="35" cy="38" rx="25" ry="12" stroke="#14b8a6" stroke-width="5" fill="none"/>
+                            <text x="165" y="72" fill="#cbd5e1" font-size="12" text-anchor="middle">3. ملقط ميريلاند للتسليخ (Maryland Dissector)</text>
+                        </g>
+
+                        <!-- 4. Rigid Telescope 30° & Clip Applicator -->
+                        <g transform="translate(430, 165)">
+                            <rect x="40" y="20" width="250" height="11" rx="3" fill="url(#metalGrad)"/>
+                            <polygon points="290,20 305,15 305,36 290,31" fill="#38bdf8"/>
+                            <rect x="10" y="14" width="30" height="23" rx="4" fill="#334155"/>
+                            <text x="160" y="72" fill="#cbd5e1" font-size="12" text-anchor="middle">4. منظار 30 درجة + حامل كلبسات التيتانيوم</text>
+                        </g>
+                    </svg>
+                `,
+                laparotomy: `
+                    <svg viewBox="0 0 800 320" class="w-full h-auto rounded-xl bg-slate-900 border border-slate-700">
+                        <rect width="800" height="320" fill="#0f172a"/>
+                        <text x="770" y="32" fill="#2dd4bf" font-size="16" font-weight="bold" text-anchor="end">${setName} - الأدوات الجراحية المفتوحة</text>
+                        
+                        <!-- 1. Scalpel Handle #4 -->
+                        <g transform="translate(50, 65)">
+                            <rect x="0" y="14" width="160" height="12" rx="3" fill="#94a3b8"/>
+                            <path d="M160,14 L205,16 Q215,24 195,28 L160,26 Z" fill="#f8fafc"/>
+                            <text x="105" y="55" fill="#cbd5e1" font-size="12" text-anchor="middle">1. مقبض مشرط رقم 4 + نصل 22</text>
+                        </g>
+
+                        <!-- 2. Artery Forceps (Kocher / Kelly) -->
+                        <g transform="translate(320, 60)">
+                            <line x1="40" y1="15" x2="210" y2="26" stroke="#cbd5e1" stroke-width="4"/>
+                            <line x1="40" y1="32" x2="210" y2="21" stroke="#94a3b8" stroke-width="4"/>
+                            <circle cx="25" cy="14" r="12" stroke="#cbd5e1" stroke-width="4" fill="none"/>
+                            <circle cx="25" cy="34" r="12" stroke="#cbd5e1" stroke-width="4" fill="none"/>
+                            <text x="115" y="62" fill="#cbd5e1" font-size="12" text-anchor="middle">2. ملاقط إرقاء النزف (Kelly / Kocher)</text>
+                        </g>
+
+                        <!-- 3. Balfour / Langenbeck Retractor -->
+                        <g transform="translate(580, 60)">
+                            <path d="M20,10 L140,10 L140,42 L115,42" stroke="#38bdf8" stroke-width="7" fill="none" stroke-linecap="round"/>
+                            <rect x="0" y="4" width="35" height="14" rx="4" fill="#0d9488"/>
+                            <text x="80" y="65" fill="#cbd5e1" font-size="12" text-anchor="middle">3. مباعدات جراحية (Retractors)</text>
+                        </g>
+
+                        <!-- 4. Mayo & Metzenbaum Scissors -->
+                        <g transform="translate(80, 175)">
+                            <line x1="45" y1="15" x2="220" y2="28" stroke="#e2e8f0" stroke-width="5"/>
+                            <line x1="45" y1="33" x2="220" y2="20" stroke="#94a3b8" stroke-width="5"/>
+                            <circle cx="28" cy="13" r="13" stroke="#f59e0b" stroke-width="4" fill="none"/>
+                            <circle cx="28" cy="36" r="13" stroke="#f59e0b" stroke-width="4" fill="none"/>
+                            <text x="125" y="70" fill="#cbd5e1" font-size="12" text-anchor="middle">4. مقصات مايو وميتزنباوم (Mayo & Metzenbaum)</text>
+                        </g>
+
+                        <!-- 5. Needle Holder & Babcock/Allis -->
+                        <g transform="translate(430, 175)">
+                            <line x1="45" y1="16" x2="230" y2="24" stroke="#e2e8f0" stroke-width="5"/>
+                            <line x1="45" y1="32" x2="230" y2="24" stroke="#94a3b8" stroke-width="5"/>
+                            <circle cx="28" cy="13" r="13" stroke="#14b8a6" stroke-width="4" fill="none"/>
+                            <circle cx="28" cy="36" r="13" stroke="#14b8a6" stroke-width="4" fill="none"/>
+                            <text x="135" y="70" fill="#cbd5e1" font-size="12" text-anchor="middle">5. حامل الإبر (Needle Holder) + ملقط بابكوك</text>
+                        </g>
+                    </svg>
+                `,
+                ent: `
+                    <svg viewBox="0 0 800 320" class="w-full h-auto rounded-xl bg-slate-900 border border-slate-700">
+                        <rect width="800" height="320" fill="#0f172a"/>
+                        <text x="770" y="32" fill="#2dd4bf" font-size="16" font-weight="bold" text-anchor="end">${setName} - أدوات الأنف والأذن والحنجرة</text>
+                        
+                        <!-- 1. Boyle-Davis Mouth Gag -->
+                        <g transform="translate(60, 70)">
+                            <rect x="20" y="10" width="140" height="60" rx="12" stroke="#38bdf8" stroke-width="6" fill="none"/>
+                            <path d="M90,70 L90,125 Q90,140 115,140" stroke="#e2e8f0" stroke-width="8" fill="none"/>
+                            <text x="90" y="168" fill="#cbd5e1" font-size="12" text-anchor="middle">1. فاتح الفم بويل-ديفيس (Boyle-Davis Gag)</text>
+                        </g>
+
+                        <!-- 2. Killian Nasal Speculum -->
+                        <g transform="translate(310, 75)">
+                            <path d="M20,20 L110,45 L210,38 M20,85 L110,60 L210,67" stroke="#e2e8f0" stroke-width="5" fill="none"/>
+                            <text x="115" y="135" fill="#cbd5e1" font-size="12" text-anchor="middle">2. منظار الأنف كيليان (Killian Speculum)</text>
+                        </g>
+
+                        <!-- 3. Freer Elevator & Adenoid Curette -->
+                        <g transform="translate(560, 75)">
+                            <rect x="10" y="20" width="180" height="8" rx="4" fill="#94a3b8"/>
+                            <ellipse cx="195" cy="24" rx="14" ry="6" fill="#f8fafc"/>
+                            <rect x="10" y="65" width="170" height="8" rx="4" fill="#94a3b8"/>
+                            <rect x="175" y="55" width="22" height="28" rx="4" stroke="#f59e0b" stroke-width="4" fill="none"/>
+                            <text x="100" y="135" fill="#cbd5e1" font-size="12" text-anchor="middle">3. رافع السمحاق Freer + مكشطة الناميات</text>
+                        </g>
+                    </svg>
+                `,
+                urology: `
+                    <svg viewBox="0 0 800 320" class="w-full h-auto rounded-xl bg-slate-900 border border-slate-700">
+                        <rect width="800" height="320" fill="#0f172a"/>
+                        <text x="770" y="32" fill="#2dd4bf" font-size="16" font-weight="bold" text-anchor="end">${setName} - مناظير وأدوات المسالك البولية</text>
+                        
+                        <!-- 1. Resectoscope / Ureteroscope -->
+                        <g transform="translate(60, 80)">
+                            <rect x="70" y="25" width="280" height="10" rx="3" fill="#cbd5e1"/>
+                            <rect x="20" y="12" width="55" height="36" rx="6" fill="#0284c7"/>
+                            <circle cx="95" cy="60" r="16" stroke="#38bdf8" stroke-width="4" fill="none"/>
+                            <text x="185" y="105" fill="#cbd5e1" font-size="12" text-anchor="middle">1. منظار الحالب والمثانة (URS / Resectoscope)</text>
+                        </g>
+
+                        <!-- 2. Ellik Evacuator & Stone Forceps -->
+                        <g transform="translate(450, 75)">
+                            <circle cx="70" cy="40" r="32" stroke="#38bdf8" stroke-width="4" fill="#1e293b"/>
+                            <rect x="100" y="34" width="60" height="12" fill="#94a3b8"/>
+                            <line x1="180" y1="20" x2="300" y2="55" stroke="#e2e8f0" stroke-width="4"/>
+                            <line x1="180" y1="60" x2="300" y2="25" stroke="#94a3b8" stroke-width="4"/>
+                            <text x="160" y="110" fill="#cbd5e1" font-size="12" text-anchor="middle">2. مفرغ الخثرات Ellik + ملقط الحصى Randall</text>
+                        </g>
+                    </svg>
+                `,
+                obgyn: `
+                    <svg viewBox="0 0 800 320" class="w-full h-auto rounded-xl bg-slate-900 border border-slate-700">
+                        <rect width="800" height="320" fill="#0f172a"/>
+                        <text x="770" y="32" fill="#fb7185" font-size="16" font-weight="bold" text-anchor="end">${setName} - أدوات النسائية والولادة القيصرية</text>
+                        
+                        <!-- 1. Doyen Pelvic Retractor -->
+                        <g transform="translate(60, 70)">
+                            <path d="M20,25 L150,25 Q175,25 175,55 L175,95 L130,95" stroke="#f43f5e" stroke-width="10" fill="none" stroke-linecap="round"/>
+                            <text x="105" y="135" fill="#cbd5e1" font-size="12" text-anchor="middle">1. مباعد المثانة دوين (Doyen Retractor)</text>
+                        </g>
+
+                        <!-- 2. Green-Armytage Forceps -->
+                        <g transform="translate(310, 75)">
+                            <line x1="40" y1="20" x2="210" y2="32" stroke="#e2e8f0" stroke-width="4"/>
+                            <line x1="40" y1="44" x2="210" y2="32" stroke="#94a3b8" stroke-width="4"/>
+                            <polygon points="210,24 235,20 235,44 210,40" fill="#fda4af"/>
+                            <text x="135" y="100" fill="#cbd5e1" font-size="12" text-anchor="middle">2. ملقط إرقاء حواف الرحم (Green-Armytage)</text>
+                        </g>
+
+                        <!-- 3. Hegar Dilators & Curette -->
+                        <g transform="translate(580, 75)">
+                            <path d="M10,30 Q100,15 190,30" stroke="#cbd5e1" stroke-width="8" fill="none" stroke-linecap="round"/>
+                            <path d="M10,65 Q100,50 190,65" stroke="#94a3b8" stroke-width="6" fill="none" stroke-linecap="round"/>
+                            <text x="100" y="105" fill="#cbd5e1" font-size="12" text-anchor="middle">3. موسعات هيغار ومكشطة الرحم</text>
+                        </g>
+                    </svg>
+                `,
+                ortho: `
+                    <svg viewBox="0 0 800 320" class="w-full h-auto rounded-xl bg-slate-900 border border-slate-700">
+                        <rect width="800" height="320" fill="#0f172a"/>
+                        <text x="770" y="32" fill="#fbbf24" font-size="16" font-weight="bold" text-anchor="end">${setName} - سيت الكسور والصفائح AO</text>
+                        
+                        <!-- 1. Locking Plate & Screws -->
+                        <g transform="translate(60, 75)">
+                            <rect x="10" y="20" width="230" height="22" rx="10" fill="#cbd5e1"/>
+                            <circle cx="40" cy="31" r="5" fill="#0f172a"/>
+                            <circle cx="85" cy="31" r="5" fill="#0f172a"/>
+                            <circle cx="130" cy="31" r="5" fill="#0f172a"/>
+                            <circle cx="175" cy="31" r="5" fill="#0f172a"/>
+                            <circle cx="215" cy="31" r="5" fill="#0f172a"/>
+                            <text x="125" y="75" fill="#cbd5e1" font-size="12" text-anchor="middle">1. صفيحة تثبيت الكسور (LCP Locking Plate)</text>
+                        </g>
+
+                        <!-- 2. Bone Holding Forceps -->
+                        <g transform="translate(360, 65)">
+                            <path d="M40,25 L160,35 Q200,10 220,32" stroke="#f59e0b" stroke-width="5" fill="none"/>
+                            <path d="M40,55 L160,45 Q200,70 220,48" stroke="#cbd5e1" stroke-width="5" fill="none"/>
+                            <text x="130" y="95" fill="#cbd5e1" font-size="12" text-anchor="middle">2. ملقط رد وتثبيت العظم (Bone Holding Forceps)</text>
+                        </g>
+
+                        <!-- 3. Orthopedic Drill & Mallet -->
+                        <g transform="translate(60, 175)">
+                            <rect x="20" y="15" width="140" height="28" rx="6" fill="#0284c7"/>
+                            <rect x="40" y="43" width="26" height="45" rx="4" fill="#334155"/>
+                            <line x1="160" y1="29" x2="230" y2="29" stroke="#f8fafc" stroke-width="4"/>
+                            <text x="125" y="110" fill="#cbd5e1" font-size="12" text-anchor="middle">3. مثقاب العظام الجراحي (Orthopedic Drill)</text>
+                        </g>
+
+                        <!-- 4. Periosteal Elevator & Osteotome -->
+                        <g transform="translate(380, 185)">
+                            <rect x="10" y="20" width="250" height="10" rx="3" fill="#94a3b8"/>
+                            <polygon points="260,16 290,25 260,34" fill="#f8fafc"/>
+                            <text x="150" y="70" fill="#cbd5e1" font-size="12" text-anchor="middle">4. رافع السمحاق Cobb + أزاميل العظام</text>
+                        </g>
+                    </svg>
+                `,
+                neuro: `
+                    <svg viewBox="0 0 800 320" class="w-full h-auto rounded-xl bg-slate-900 border border-slate-700">
+                        <rect width="800" height="320" fill="#0f172a"/>
+                        <text x="770" y="32" fill="#818cf8" font-size="16" font-weight="bold" text-anchor="end">${setName} - أدوات الجملة العصبية الدقيقة</text>
+                        
+                        <!-- 1. Kerrison Rongeur -->
+                        <g transform="translate(60, 75)">
+                            <path d="M20,75 L80,30 L260,25 L260,15" stroke="#818cf8" stroke-width="6" fill="none"/>
+                            <path d="M45,85 L95,40 L250,35" stroke="#cbd5e1" stroke-width="5" fill="none"/>
+                            <text x="145" y="115" fill="#cbd5e1" font-size="12" text-anchor="middle">1. قاضم عظام الفقرات والجمجمة (Kerrison Rongeur)</text>
+                        </g>
+
+                        <!-- 2. Bayonet Micro Forceps & Penfield Dissector -->
+                        <g transform="translate(410, 80)">
+                            <path d="M10,20 L110,20 L130,35 L260,35" stroke="#e2e8f0" stroke-width="3" fill="none"/>
+                            <path d="M10,32 L110,32 L130,43 L260,40" stroke="#94a3b8" stroke-width="3" fill="none"/>
+                            <text x="140" y="85" fill="#cbd5e1" font-size="12" text-anchor="middle">2. ملقط بايونيت المجهري (Bayonet Micro-Forceps)</text>
+                        </g>
+                    </svg>
+                `,
+                plastic: `
+                    <svg viewBox="0 0 800 320" class="w-full h-auto rounded-xl bg-slate-900 border border-slate-700">
+                        <rect width="800" height="320" fill="#0f172a"/>
+                        <text x="770" y="32" fill="#f472b6" font-size="16" font-weight="bold" text-anchor="end">${setName} - أدوات التجميل وترقيع الجلد</text>
+                        <g transform="translate(70, 85)">
+                            <rect x="10" y="20" width="180" height="36" rx="8" fill="#ec4899"/>
+                            <rect x="190" y="14" width="18" height="48" rx="3" fill="#f8fafc"/>
+                            <text x="105" y="85" fill="#cbd5e1" font-size="12" text-anchor="middle">1. جهاز أخذ الرقع الجلدية (Dermatome)</text>
+                        </g>
+                        <g transform="translate(380, 85)">
+                            <line x1="20" y1="25" x2="230" y2="35" stroke="#f8fafc" stroke-width="3"/>
+                            <line x1="20" y1="45" x2="230" y2="35" stroke="#94a3b8" stroke-width="3"/>
+                            <text x="125" y="85" fill="#cbd5e1" font-size="12" text-anchor="middle">2. ملقط أدسون الدقيق + حامل إبر Castroviejo</text>
+                        </g>
+                    </svg>
+                `,
+                cardio: `
+                    <svg viewBox="0 0 800 320" class="w-full h-auto rounded-xl bg-slate-900 border border-slate-700">
+                        <rect width="800" height="320" fill="#0f172a"/>
+                        <text x="770" y="32" fill="#f87171" font-size="16" font-weight="bold" text-anchor="end">${setName} - أدوات القلب والصدر والأوعية</text>
+                        <g transform="translate(70, 75)">
+                            <rect x="20" y="20" width="190" height="12" rx="4" fill="#ef4444"/>
+                            <path d="M60,32 L60,75 L95,75 M160,32 L160,75 L125,75" stroke="#f8fafc" stroke-width="6" fill="none"/>
+                            <text x="115" y="105" fill="#cbd5e1" font-size="12" text-anchor="middle">1. مباعد الأضلاع والقص (Finochietto Retractor)</text>
+                        </g>
+                        <g transform="translate(390, 80)">
+                            <path d="M20,25 L160,35 Q185,15 215,25" stroke="#e2e8f0" stroke-width="4" fill="none"/>
+                            <path d="M20,50 L160,40 Q185,25 215,32" stroke="#94a3b8" stroke-width="4" fill="none"/>
+                            <text x="125" y="95" fill="#cbd5e1" font-size="12" text-anchor="middle">2. ملقط الأوعية ساتينسكي وديبيكي (Satinsky & DeBakey)</text>
+                        </g>
+                    </svg>
+                `,
+                eye: `
+                    <svg viewBox="0 0 800 320" class="w-full h-auto rounded-xl bg-slate-900 border border-slate-700">
+                        <rect width="800" height="320" fill="#0f172a"/>
+                        <text x="770" y="32" fill="#34d399" font-size="16" font-weight="bold" text-anchor="end">${setName} - أدوات جراحة العيون المجهرية</text>
+                        <g transform="translate(80, 80)">
+                            <path d="M20,40 C70,10 140,10 190,25 M20,40 C70,70 140,70 190,55" stroke="#34d399" stroke-width="4" fill="none"/>
+                            <text x="105" y="95" fill="#cbd5e1" font-size="12" text-anchor="middle">1. مباعد الجفون باراكر (Barraquer Wire Speculum)</text>
+                        </g>
+                        <g transform="translate(380, 80)">
+                            <rect x="20" y="32" width="180" height="14" rx="7" fill="#059669"/>
+                            <polygon points="200,36 245,39 200,42" fill="#f8fafc"/>
+                            <text x="130" y="95" fill="#cbd5e1" font-size="12" text-anchor="middle">2. قبضة الفاكو بالموجات فوق الصوتية (Phaco Handpiece)</text>
+                        </g>
+                    </svg>
+                `
+            };
+            return diagrams[diagramType] || diagrams.laparotomy;
+        }
+
         const surgicalSpecialties = [
             {
                 id: "general-surgery",
-                title: "الجراحة العامة والعمليات الكبرى (General & Major Surgery)",
+                title: "الجراحة العامة والناظور (General & Laparoscopic Surgery)",
                 icon: "fa-scalpel",
-                color: "teal",
-                patients: [
-                    "حالات الطوارئ الجراحية الحادة: التهاب الزائدة الدودية الحاد (Acute Appendicitis)، انسداد الأمعاء، انثقاب القرحة المعدية، وإصابات البطن النافذة والرضية (Trauma).",
-                    "الحالات المبرمجة (Elective): استئصال المرارة بالناظور أو الفتح، إصلاح الفتوق (الأربي، السري، الجراحي)، استئصال الغدة الدرقية، وأورام الجهاز الهضمي والثدي."
-                ],
-                procedures: [
-                    "فتح البطن الاستكشافي (Exploratory Laparotomy) - عمليات كبرى",
-                    "استئصال المرارة بالناظور (Laparoscopic Cholecystectomy)",
-                    "استئصال الزائدة الدودية (Appendectomy)",
-                    "إصلاح الفتوق مع الشبكة (Hernioplasty with Mesh)",
-                    "استئصال الغدة الدرقية (Thyroidectomy) وأورام الثدي (Mastectomy)",
-                    "جراحات القولون والمعدة والكبد والطحال"
-                ],
-                devices: [
-                    "عربة التخدير المتكاملة (Anesthesia Workstation) مع جهاز تنفس اصطناعي ومراقبة الغازات.",
-                    "برج الجراحة المنظارية (Laparoscopy Tower): شاشة طبية 4K، مصدر ضوء بارد LED، جهاز نفخ غاز ثاني أكسيد الكربون (CO2 Insufflator)، وكاميرا منظار.",
-                    "جهاز الكي الكهربائي ثنائي وأحادي القطب (Electrosurgical Unit / Diathermy).",
-                    "جهاز القص بالموجات فوق الصوتية (Harmonic Scalpel / LigaSure) لقطع الأوعية بدون نزف.",
-                    "جهاز الشفط الجراحي المزدوج (Double-Jar Suction Unit) ومونيتور العلامات الحيوية."
-                ],
-                sets: [
+                operations: [
                     {
-                        setName: "سيت فتح البطن الكبرى (Major Laparotomy Set)",
-                        standardNote: "مطابق لمواصفات ISO 7153-1 المعتمدة في مخازن وزارة الصحة العراقية (كيماديا)",
-                        instruments: [
-                            "مباعدات بطنية ذاتية التثبيت: Balfour Self-Retaining Retractor & Deaver Retractors (أحجام متعددة).",
-                            "ملاقط إرقاء النزف (Hemostatic Forceps): Artery Forceps (Kelly, Mosquito, Kocher, Roberts) مستقيمة ومنحنية.",
-                            "ملاقط الأنسجة (Tissue Forceps): Babcock, Allis, Duval, Dissecting Forceps (Toothed & Non-toothed).",
-                            "مقصات جراحية: Mayo Scissors (مستقيم ومنحني للخيوط والأنسجة القوية) و Metzenbaum Scissors (للتسليخ الدقيق).",
-                            "حاملات الإبر (Needle Holders): Mayo-Hegar & Ryder بأطوال مختلفة.",
-                            "مقابض المشارط (Scalpel Handles): رقم 3 و 4، مع ملاقط المناشف (Towel Clips - Backhaus)."
-                        ]
+                        id: "lap-chole",
+                        name: "استئصال المرارة بالناظور",
+                        enName: "Laparoscopic Cholecystectomy",
+                        patients: "مرضى حصى المرارة (Cholelithiasis)، التهاب المرارة الحاد والمزمن (Cholecystitis)، وسلائل المرارة.",
+                        steps: [
+                            "التخدير العام (General Anesthesia) وتعقيم البطن بمحلول البوفيدون اليودي (Povidone-Iodine) وفرش المناشف المعقمة.",
+                            "إحداث شق صغير تحت السرة وإدخال إبرة فيرس (Veress Needle) أو طريقة Hasson لنفخ البطن بغاز CO2 حتى ضغط 12-14 mmHg.",
+                            "إدخال التروكارات الأربعة (10mm عند السرة للكاميرا، 10mm أسفل القص، واثنين 5mm في الجانب الأيمن).",
+                            "تسليخ مثلث كالو (Calot's Triangle) بدقة لتحقيق الرؤية الحرجة للأمان (Critical View of Safety) وعزل القناة المرارية والشريان المراري.",
+                            "وضع كلبسات التيتانيوم (Titanium Clips) على القناة والشريان المراري ثم قطعهما بالمقص المنظاري.",
+                            "فصل المرارة عن سرير الكبد باستخدام خطاف الكي الكهربائي (L-Hook) واستخراجها عبر كيس الاستخراج (Endobag).",
+                            "التأكد من إرقاء النزف، تفريغ غاز CO2، وإغلاق فتحات التروكار."
+                        ],
+                        devices: [
+                            "برج الجراحة المنظارية 4K (Laparoscopy Tower: Monitor, Camera, LED Light Source, CO2 Insufflator).",
+                            "جهاز الكي الكهربائي (Diathermy) وجهاز الشفط والغسل (Suction-Irrigation).",
+                            "عربة التخدير المتكاملة ومونيتور العلامات الحيوية."
+                        ],
+                        set: {
+                            name: "سيت جراحة الناظور للمرارة (Laparoscopic Cholecystectomy Set)",
+                            diagramType: "laparoscopy",
+                            standard: "مواصفات Karl Storz العالمية / مخازن كيماديا العراقية",
+                            instruments: [
+                                "إبرة فيرس لنفخ البطن (Veress Needle 120mm).",
+                                "تروكارات جراحية (2x 10mm Trocars & 2x 5mm Trocars).",
+                                "عدسة منظار بزاوية 30 درجة (Rigid Telescope 30° - 10mm).",
+                                "ملقط تسليخ ميريلاند (Maryland Dissecting Forceps 5mm).",
+                                "ملاقط إمساك المرارة (Atraumatic & Ratcheted Graspers 5mm).",
+                                "مقص منظاري منحني (Metzenbaum Laparoscopic Scissors 5mm).",
+                                "خطاف كي كهربائي (Monopolar L-Hook Electrode).",
+                                "حامل كلبسات التيتانيوم (Clip Applicator 10mm) وأنبوب شفط وغسل."
+                            ]
+                        },
+                        sutures: [
+                            { layer: "إغلاق اللفافة العضلية لفتحة السرة (Fascia / Linea Alba)", suture: "Vicryl (Polyglactin 910) 0 أو 1", type: "قابل للامتصاص (Absorbable)", needle: "إبرة دائرية (Round Body - 1/2 Circle)" },
+                            { layer: "الأنسجة تحت الجلد (Subcutaneous Tissue)", suture: "Vicryl 2-0 أو 3-0", type: "قابل للامتصاص (Absorbable)", needle: "إبرة دائرية (Round Body)" },
+                            { layer: "إغلاق الجلد (Skin Closure)", suture: "Prolene 3-0 أو Monocryl 4-0 (تجميلي)", type: "غير قابل للامتصاص / تجميلي", needle: "إبرة قاطعة (Reverse Cutting)" }
+                        ],
+                        videoSearchQuery: "Laparoscopic Cholecystectomy Critical View of Safety standard surgical steps",
+                        videoEmbedId: "9R69x1v_P30"
                     },
                     {
-                        setName: "سيت جراحة الناظور (Laparoscopic Instrument Set)",
-                        standardNote: "ستاندر عالمي (Karl Storz / Olympus) المعتمد في المستشفيات التعليمية العراقية",
-                        instruments: [
-                            "إبرة فيرس لنفخ البطن (Veress Needle) وتروكارات (Trocars 5mm & 10mm).",
-                            "منظار صلب (Rigid Telescope 0° & 30° - 10mm).",
-                            "ملاقط إمساك (Graspers: Maryland Dissector, Traumatic & Atraumatic Graspers).",
-                            "مقص منظاري (Laparoscopic Metzenbaum Scissors) وخطاف كي (L-Hook Electrode).",
-                            "حامل كلبسات التيتانيوم (Clip Applicator 10mm) وأنبوب الشفط والغسل (Suction-Irrigation Cannula)."
-                        ]
+                        id: "hernia-repair",
+                        name: "إصلاح الفتق الإربي والسري مع الشبكة",
+                        enName: "Inguinal / Umbilical Hernioplasty (Lichtenstein Mesh Repair)",
+                        patients: "مرضى الفتق الإربي المباشر وغير المباشر، الفتق السري، والفتق الجراحي (Incisional Hernia).",
+                        steps: [
+                            "التخدير النصفي (Spinal Anesthesia) أو العام، وتعقيم المنطقة الإربية أو البطنية.",
+                            "إحداث شق جراحي مائل فوق الرباط الإربي (Inguinal Ligament) وفتح طبقات الجلد والنسيج تحت الجلد.",
+                            "فتح سفاق العضلة المائلة الخارجية (External Oblique Aponeurosis) وعزل الحبل المنوي (Spermatic Cord).",
+                            "تحديد كيس الفتق (Hernia Sac)، فصله عن عناصر الحبل المنوي، وربطه أو رده إلى تجويف البطن.",
+                            "تثبيت شبكة البولي بروبيلين (Polypropylene Mesh) لتقوية الجدار الخلفي للقناة الإربية.",
+                            "إغلاق طبقات السفاق والجلد على التوالي."
+                        ],
+                        devices: [
+                            "جهاز الكي الكهربائي ثنائي وأحادي القطب (Electrosurgical Unit).",
+                            "جهاز الشفط الجراحي ومصابيح الصالة الرئيسية."
+                        ],
+                        set: {
+                            name: "سيت الفتق والجراحة الصغرى/المتوسطة (Hernia & Minor Laparotomy Set)",
+                            diagramType: "laparotomy",
+                            standard: "ستاندر وزارة الصحة العراقية (ISO 7153)",
+                            instruments: [
+                                "مقبض مشرط رقم 3 و 4 مع شفرات 15 و 22.",
+                                "مباعدات لانغينبيك (Langenbeck Retractors) ومباعد ذاتي (Self-Retaining Retractor).",
+                                "ملاقط إرقاء النزف (Mosquito & Kelly Artery Forceps).",
+                                "ملاقط أنسجة (Allis Forceps, Babcock, Adson & Debakey Forceps).",
+                                "مقص مايو ومقص ميتزنباوم، وحاملات إبر (Mayo-Hegar Needle Holder)."
+                            ]
+                        },
+                        sutures: [
+                            { layer: "ربط عنق كيس الفتق (Hernia Sac Ligation)", suture: "Vicryl 2-0 أو Silk 2-0", type: "قابل / غير قابل للامتصاص", needle: "إبرة دائرية (Round Body)" },
+                            { layer: "تثبيت الشبكة الجراحية (Mesh Fixation)", suture: "Prolene (Polypropylene) 2-0 أو 3-0", type: "غير قابل للامتصاص (Non-Absorbable)", needle: "إبرة دائرية (Round Body)" },
+                            { layer: "إغلاق سفاق العضلة المائلة (External Oblique)", suture: "Vicryl 2-0", type: "قابل للامتصاص (Absorbable)", needle: "إبرة دائرية (Round Body)" },
+                            { layer: "إغلاق الجلد (Skin)", suture: "Prolene 3-0 أو Nylon 3-0", type: "غير قابل للامتصاص", needle: "إبرة قاطعة (Cutting Needle)" }
+                        ],
+                        videoSearchQuery: "Lichtenstein Inguinal Hernia Mesh Repair surgical procedure",
+                        videoEmbedId: "B1k_009r4L8"
+                    },
+                    {
+                        id: "appendectomy",
+                        name: "استئصال الزائدة الدودية (فتح أو ناظور)",
+                        enName: "Open & Laparoscopic Appendectomy",
+                        patients: "حالات الطوارئ الجراحية الحادة المصابة بالتهاب الزائدة الدودية الحاد (Acute Appendicitis).",
+                        steps: [
+                            "التخدير العام، تعقيم البطن، وإحداث شق ماكبيرني (McBurney's / Gridiron Incision) في الربع السفلي الأيمن.",
+                            "شق العضلات باتجاه أليافها وفتح الصفاق (Peritoneum) للوصول إلى الأعور والزائدة الدودية.",
+                            "ربط وقطع مساريق الزائدة (Mesoappendix) الحاوي على الشريان الزائدي.",
+                            "سحق قاعدة الزائدة، ربطها، واستئصالها ثم تعقيم الجذمور.",
+                            "غسل المنطقة بالمحلول الملحي الدافئ في حال وجود انثقاب، وإغلاق طبقات البطن."
+                        ],
+                        devices: [
+                            "جهاز الكي الكهربائي، جهاز الشفط الجراحي، ومونيتور الطوارئ."
+                        ],
+                        set: {
+                            name: "سيت استئصال الزائدة الدودية (Appendectomy Set)",
+                            diagramType: "laparotomy",
+                            standard: "قياسي في جميع طوارئ المستشفيات العراقية",
+                            instruments: [
+                                "مباعدات لانغينبيك (Langenbeck) وريشاردسون (Richardson Retractors).",
+                                "ملاقط إمساك الزائدة (Babcock Tissue Forceps).",
+                                "ملاقط شريانية (Kelly & Mosquito Forceps) وملاقط كوخر.",
+                                "مقصات مايو وميتزنباوم، حامل إبر، وملاقط مناشف Backhaus."
+                            ]
+                        },
+                        sutures: [
+                            { layer: "ربط قاعدة الزائدة ومساريقها", suture: "Vicryl 2-0 أو Silk 2-0 (Tie)", type: "خيط ربط (Free Tie) / إبرة دائرية", needle: "Round Body" },
+                            { layer: "إغلاق الصفاق والعضلات (Peritoneum & Muscle)", suture: "Vicryl 2-0", type: "قابل للامتصاص", needle: "إبرة دائرية (Round Body)" },
+                            { layer: "إغلاق السفاق الخارجي (External Oblique)", suture: "Vicryl 1 أو 0", type: "قابل للامتصاص", needle: "إبرة دائرية (Round Body)" },
+                            { layer: "الجلد (Skin)", suture: "Prolene 3-0 أو Silk 3-0", type: "غير قابل للامتصاص", needle: "إبرة قاطعة (Cutting)" }
+                        ],
+                        videoSearchQuery: "Open Appendectomy McBurney incision surgical steps",
+                        videoEmbedId: "kR9nL0E1K8A"
+                    },
+                    {
+                        id: "thyroidectomy",
+                        name: "استئصال الغدة الدرقية الكلي أو الجزئي",
+                        enName: "Total / Subtotal Thyroidectomy",
+                        patients: "مرضى تضخم الغدة الدرقية السام أو العقدي (Goiter) وأورام الغدة الدرقية.",
+                        steps: [
+                            "التخدير العام مع بسط الرقبة قليلاً، وإحداث شق كوخر العرضي (Kocher Collar Incision) في أسفل الرقبة.",
+                            "رفع السدائل الجلدية والعضلة الجلدية للعنق (Platysma) وفصل العضلات الشريطية (Strap Muscles).",
+                            "ربط الأوعية الدرقية العلوية والسفلية بدقة مع الحفاظ التام على العصب الحنجري الراجع (RLN) والغدد جارات الدرقية.",
+                            "استئصال فصوص الغدة الدرقية، وضع أنبوب تصريف (Redivac Drain)، وإغلاق الطبقات تجميلياً."
+                        ],
+                        devices: [
+                            "جهاز القص بالموجات فوق الصوتية (Harmonic Scalpel / LigaSure) لتقليل النزف وحماية العصب.",
+                            "جهاز مراقبة العصب الحنجري الراجع (Nerve Integrity Monitor - NIM) في المراكز المتقدمة."
+                        ],
+                        set: {
+                            name: "سيت جراحة الغدة الدرقية والرقبة (Thyroidectomy Set)",
+                            diagramType: "laparotomy",
+                            standard: "ستاندر عالمي / مستشفيات التعليمي العراقية",
+                            instruments: [
+                                "مباعد جولي الذاتي للغدة الدرقية (Joll's Thyroid Self-Retaining Retractor).",
+                                "ملاقط دقيقة جداً للإرقاء (Halsted Mosquito Forceps - عدد 12-18).",
+                                "ملاقط لايحي لإمساك الغدة (Lahey Thyroid Traction Forceps).",
+                                "ملاقط زاوية قائمة للتسليخ (Mixter Right-Angle Forceps)."
+                            ]
+                        },
+                        sutures: [
+                            { layer: "ربط الأوعية الدرقية (Thyroid Vessels)", suture: "Vicryl 3-0 أو Silk 3-0", type: "قابل / غير قابل للامتصاص", needle: "إبرة دائرية دقيقة" },
+                            { layer: "تقريب العضلات وعضلة البلاتيزما", suture: "Vicryl 3-0", type: "قابل للامتصاص", needle: "إبرة دائرية" },
+                            { layer: "إغلاق جلد الرقبة التجميلي (Subcuticular)", suture: "Monocryl 4-0 أو Prolene 4-0", type: "تجميلي تحت الجلد", needle: "إبرة قاطعة عكسية (Reverse Cutting)" }
+                        ],
+                        videoSearchQuery: "Total Thyroidectomy surgical technique recurrent laryngeal nerve",
+                        videoEmbedId: "7p0R_W8oV4Q"
                     }
                 ]
             },
@@ -1015,46 +884,73 @@
                 id: "ent-surgery",
                 title: "جراحة الأنف والأذن والحنجرة (ENT Surgery)",
                 icon: "fa-ear-listen",
-                color: "cyan",
-                patients: [
-                    "الأطفال والبالغون الذين يعانون من التهاب اللوزتين المزمن وتضخم الناميات الأنفية وانقطاع النفس الانسدادي.",
-                    "مرضى انحراف الحاجز الأنفي، التهاب الجيوب الأنفية المزمن، اللحميات الأنفية، وثقب طبلة الأذن وضعف السمع.",
-                    "حالات الطوارئ: استخراج الأجسام الغريبة من القصبات والمريء والأنف والأذن، والرعاف الشديد (Epistaxis)."
-                ],
-                procedures: [
-                    "استئصال اللوزتين والناميات (Tonsillectomy & Adenoidectomy)",
-                    "تعديل الحاجز الأنفي (Septoplasty) وتجميل الأنف الوظيفي",
-                    "جراحة الجيوب الأنفية بالمنظار (FESS - Functional Endoscopic Sinus Surgery)",
-                    "ترقيع طبلة الأذن (Tympanoplasty) واستئصال الخشاء (Mastoidectomy)",
-                    "تنظير الحنجرة والقصبات الصلب (Direct Laryngoscopy & Bronchoscopy)"
-                ],
-                devices: [
-                    "المجهر الجراحي للأذن والحنجرة (ENT Operating Microscope) بقدرة تكبير عالية.",
-                    "برج مناظير الأنف والجيوب (Sinuscopy Tower) مع مناظير صلبة بزاوية 0 و 30 و 70 درجة.",
-                    "جهاز الحفر الدقيق للأذن (Micro-Drill / Otologic Drill) وجهاز الشفط الدقيق (Microdebrider).",
-                    "مصباح الرأس الجراحي عالي الإضاءة (LED Surgical Headlight) وجهاز الكي ثنائي القطب الدقيق."
-                ],
-                sets: [
+                operations: [
                     {
-                        setName: "سيت استئصال اللوزتين والناميات (Tonsillectomy & Adenoidectomy Set)",
-                        standardNote: "قياسي في جميع مستشفيات الأقضية والمراكز العراقية",
-                        instruments: [
-                            "فاتح الفم (Boyle-Davis Mouth Gag) مع أنصال اللسان بأحجام للأطفال والكبار وحامل (Draffin Bipods).",
-                            "ملقط إمساك اللوزة (Denis Browne Tonsil Holding Forceps).",
-                            "مسلخ اللوزة ومرافع الأنسجة (Mollison Tonsil Dissector & Pillar Retractor).",
-                            "قاطع اللوزة السلكي (Eve's Tonsil Snare) وملاقط إرقاء عميقة (Birkett & Negus Artery Forceps).",
-                            "مكشطة الناميات الأنفية (St. Clair Thomson Adenoid Curette with Guard)."
-                        ]
+                        id: "tonsillectomy",
+                        name: "استئصال اللوزتين والناميات الأنفية",
+                        enName: "Tonsillectomy & Adenoidectomy",
+                        patients: "الأطفال والبالغون المصابون بالتهاب اللوزتين المتكرر أو تضخم الناميات المسبب للاختناق الليلي.",
+                        steps: [
+                            "التخدير العام مع أنبوب رغامي خاص (RAE Tube)، ووضع وسادة تحت الكتفين لبسط الرأس.",
+                            "تركيب فاتح الفم بويل-ديفيس (Boyle-Davis Mouth Gag) وتثبيته على حامل درافين.",
+                            "كشط الناميات الأنفية من البلعوم الأنفي باستخدام مكشطة الناميات وإرقاء النزف بشاش مبلل.",
+                            "إمساك اللوزة بملقط دينيس براون، شق الغشاء المخاطي، وتسليخ اللوزة من محفظتها وصولاً للقطب السفلي.",
+                            "إرقاء النزف بالكي ثنائي القطب (Bipolar) أو ربط الأوعية النازفة."
+                        ],
+                        devices: [
+                            "مصباح الرأس الجراحي عالي الإضاءة (LED Surgical Headlight).",
+                            "جهاز الكي ثنائي القطب (Bipolar Diathermy) وجهاز الشفط المزود بقنية يانكاور (Yankauer Suction)."
+                        ],
+                        set: {
+                            name: "سيت استئصال اللوزتين والناميات (Tonsillectomy & Adenoidectomy Set)",
+                            diagramType: "ent",
+                            standard: "قياسي في جميع مستشفيات العراق",
+                            instruments: [
+                                "فاتح الفم Boyle-Davis مع 4 أنصال بأحجام مختلفة + حامل Draffin Bipods.",
+                                "ملقط إمساك اللوزة (Denis Browne Tonsil Holding Forceps).",
+                                "مسلخ اللوزة ومباعد العمود الأمامي (Mollison Dissector & Pillar Retractor).",
+                                "قاطع اللوزة السلكي (Eve's Tonsil Snare) وملاقط إرقاء عميقة (Negus & Birkett Forceps).",
+                                "مكشطة الناميات الأنفية الواقية (St. Clair Thomson Adenoid Curette)."
+                            ]
+                        },
+                        sutures: [
+                            { layer: "ربط الأوعية النازفة في سرير اللوزة (في حال الحاجة)", suture: "Vicryl 3-0 أو Plain Catgut 3-0", type: "قابل للامتصاص السريع", needle: "إبرة دائرية (Round Body - 5/8 Circle)" }
+                        ],
+                        videoSearchQuery: "Tonsillectomy and Adenoidectomy dissection surgical procedure",
+                        videoEmbedId: "h3A-M_F6G7Q"
                     },
                     {
-                        setName: "سيت تعديل الحاجز الأنفي والجيوب (Septoplasty & FESS Set)",
-                        standardNote: "ستاندر عالمي / وزارة الصحة العراقية",
-                        instruments: [
-                            "منظار الأنف (Killian & Thudichum Nasal Speculums).",
-                            "رافع السمحاق والغضروف (Freer Elevator & Cottle Elevator).",
-                            "ملاقط استئصال الغضروف والعظم (Takahashi Forceps, Blakesley Nasal Forceps, Jansen-Middleton).",
-                            "أزاميل ومطرقة أنفية (Cottle Chisels & Mallet) ومقص أنفي (Heymann Nasal Scissors)."
-                        ]
+                        id: "septoplasty",
+                        name: "تعديل الحاجز الأنفي وجراحة الجيوب بالمنظار",
+                        enName: "Septoplasty & FESS",
+                        patients: "مرضى انحراف الحاجز الأنفي، انسداد الأنف المزمن، واللحميات والتهاب الجيوب الأنفية.",
+                        steps: [
+                            "التخدير العام مع وضع حشوات أنفية مبللة بالأدرينالين لتقليل النزف.",
+                            "إحداث شق غشائي أمامي (Hemitransfixion Incision) في الحاجز الأنفي.",
+                            "رفع الغشاء المخاطي والسمحاق (Mucoperichondrial Flap) باستخدام رافع فريير (Freer Elevator).",
+                            "استئصال الجزء المنحرف من الغضروف والعظم مع الحفاظ على دعامة أمامية وعلوية (L-Strut).",
+                            "إغلاق الشق الأنفي ووضع جبائر سيليكون داخلية (Nasal Splints)."
+                        ],
+                        devices: [
+                            "برج مناظير الجيوب الأنفية (Sinuscopy Tower) بعدسات 0 و 30 درجة.",
+                            "جهاز إزالة اللحميات الدقيق (Microdebrider) ومصباح الرأس LED."
+                        ],
+                        set: {
+                            name: "سيت تعديل الحاجز الأنفي والجيوب (Septoplasty & FESS Set)",
+                            diagramType: "ent",
+                            standard: "مواصفات Karl Storz المعتمدة",
+                            instruments: [
+                                "مناظير الأنف (Killian & Thudichum Nasal Speculums).",
+                                "رافع السمحاق (Freer & Cottle Elevators) ومشرط دوار (Ballenger Swivel Knife).",
+                                "ملاقط استئصال الغضروف (Takahashi & Blakesley Nasal Forceps).",
+                                "أزاميل ومطرقة أنفية دقيقة (Cottle Chisels & Mallet)."
+                            ]
+                        },
+                        sutures: [
+                            { layer: "إغلاق شق الحاجز الأنفي وتثبيت الجبائر", suture: "Vicryl Rapide 3-0 أو 4-0", type: "سريع الامتصاص (Fast Absorbing)", needle: "إبرة قاطعة صغيرة" }
+                        ],
+                        videoSearchQuery: "Septoplasty surgical technique step by step ENT",
+                        videoEmbedId: "z7C_P3o-d5c"
                     }
                 ]
             },
@@ -1062,44 +958,72 @@
                 id: "urology-surgery",
                 title: "جراحة المسالك البولية (Urology Surgery)",
                 icon: "fa-kidneys",
-                color: "blue",
-                patients: [
-                    "مرضى حصى الكلى والحالب والمثانة (Renal & Ureteric Calculi) والمغص الكلوي الانسدادي.",
-                    "مرضى تضخم البروستات الحميد (BPH) وأورام المثانة والكلى والبروستات.",
-                    "حالات التشوهات الولادية لدى الأطفال (الإحليل التحتي، الخصية الهاجرة) وحالات دوالي الخصية والعقم."
-                ],
-                procedures: [
-                    "تجريف البروستات وأورام المثانة بالناظور (TURP & TURBT)",
-                    "تفتيت حصى الحالب والكلى بالمنظار والليزر (URS & RIRS)",
-                    "استخراج حصى الكلى عن طريق الجلد (PCNL)",
-                    "استئصال الكلية (Nephrectomy) وإصلاح تضيق حوض الكلية (Pyeloplasty)",
-                    "ربط دوالي الخصية بالمجهر (Microscopic Varicocelectomy)"
-                ],
-                devices: [
-                    "جهاز الليزر الجراحي لتفتيت الحصى (Holmium:YAG Laser).",
-                    "جهاز الأشعة السينية المتحرك داخل الصالة (C-Arm Fluoroscopy) لتحديد موقع الحصى والقساطر.",
-                    "برج مناظير المسالك البولية (Endourology Tower) مع مضخة سوائل الري (Irrigation Pump).",
-                    "جهاز تفتيت الحصى بالموجات التصادمية من خارج الجسم (ESWL) وجهاز الكي البلازمي (Bipolar TUR)."
-                ],
-                sets: [
+                operations: [
                     {
-                        setName: "سيت ناظور المثانة وتجريف البروستات (Cystoscopy & TURP Resectoscope Set)",
-                        standardNote: "مواصفات Karl Storz / Wolf المعتمدة في مراكز البولية العراقية",
-                        instruments: [
-                            "غمد المنظار (Resectoscope Sheath 24Fr / 26Fr) مع سدادة (Obturator).",
-                            "عنصر العمل (Working Element) وحلقات القطع والكي الكهربائي (Cutting Loops & Roller Ball).",
-                            "منظار بصري 30 درجة (Hopkins Rod-Lens Telescope 30°).",
-                            "أداة تفريغ الخثرات والأنسجة من المثانة (Ellik Evacuator) وجسر قسطرة الحالب (Albarran Bridge)."
-                        ]
+                        id: "urs-laser",
+                        name: "تفتيت حصى الحالب بالمنظار والليزر",
+                        enName: "Ureteroscopy & Laser Lithotripsy (URS)",
+                        patients: "مرضى حصى الحالب السفلية والوسطى والعلوية المسببة للمغص الكلوي وانسداد الكلية.",
+                        steps: [
+                            "التخدير النصفي أو العام ووضع المريض بوضعية تفتيت الحصى (Lithotomy Position).",
+                            "إدخال منظار المثانة، تحديد فوهة الحالب، وإدخال سلك التوجيه (Guidewire) حتى حوض الكلية تحت توجيه الأشعة C-Arm.",
+                            "إدخال منظار الحالب الدقيق (Ureteroscope) بمصاحبة مضخة السوائل للوصول إلى الحصوة.",
+                            "تفتيت الحصوة إلى غبار ناعم باستخدام ألياف ليزر الهولميوم (Holmium Laser) واستخراج الشظايا بسلة دورميا (Dormia Basket).",
+                            "وضع قسطرة الحالب الداخلية (Double-J Stent) لضمان تصريف البول ومنع التضيق."
+                        ],
+                        devices: [
+                            "جهاز الليزر الجراحي (Holmium:YAG Laser).",
+                            "جهاز الأشعة التنظيرية المتحرك (C-Arm Fluoroscopy).",
+                            "برج مناظير المسالك البولية ومضخة سوائل الري."
+                        ],
+                        set: {
+                            name: "سيت ناظور الحالب والمثانة (Ureteroscopy & Cystoscopy Set)",
+                            diagramType: "urology",
+                            standard: "ستاندر عالمي / مراكز البولية العراقية",
+                            instruments: [
+                                "منظار الحالب شبه الصلب والمرن (Semi-Rigid & Flexible Ureteroscope 6.5Fr - 8Fr).",
+                                "منظار المثانة التشخيصي (Cystoscope Sheath 19Fr/22Fr + Telescope 30°).",
+                                "سلة استخراج الحصى (Nitinol Stone Basket) وملقط استخراج الحصى.",
+                                "أسلاك التوجيه (Hydrophilic Guidewires) وقسطرة Double-J."
+                            ]
+                        },
+                        sutures: [
+                            { layer: "عملية منظارية عبر الفتحات الطبيعية", suture: "لا تتطلب خيوطاً جراحية", type: "تثبيت قسطرة فولي بالبالون", needle: "بدون إبر" }
+                        ],
+                        videoSearchQuery: "Ureteroscopy and Holmium Laser Lithotripsy ureteral stone",
+                        videoEmbedId: "6Y0g2tL7k-I"
                     },
                     {
-                        setName: "سيت جراحة الكلى المفتوحة (Open Renal & Nephrectomy Set)",
-                        standardNote: "ستاندر الجراحة البولية الكبرى",
-                        instruments: [
-                            "ملاقط عنق الكلية الوعائية (Satinsky & Guyon Renal Pedicle Clamps).",
-                            "ملاقط استخراج الحصى الكلوية (Randall Stone Forceps بمختلف الانحناءات).",
-                            "مباعدات عميقة للخاصرة (Finochietto Rib Spreader & Morris Retractors)."
-                        ]
+                        id: "turp-prostate",
+                        name: "تجريف البروستات وأورام المثانة بالناظور",
+                        enName: "TURP (Transurethral Resection of Prostate)",
+                        patients: "مرضى تضخم البروستات الحميد (BPH) المصابون باحتباس البول المتكرر.",
+                        steps: [
+                            "التخدير النصفي (Spinal Anesthesia) ووضع المريض بوضعية Lithotomy.",
+                            "إدخال غمد منظار القطع (Resectoscope Sheath 26Fr) مع استخدام محلول الري المناسب (Glycine للمونوبولار أو Normal Saline للبايبولار).",
+                            "تجريف فصوص البروستات المتضخمة تدريجياً باستخدام حلقة القطع الكهربائية (Cutting Loop).",
+                            "إرقاء الأوعية النازفة بالكي الكروي (Roller Ball)، وتفريغ القطع المجروفة بمفرغ إيليك (Ellik Evacuator).",
+                            "تركيب قسطرة بولية ثلاثية المسالك (3-Way Foley Catheter 22Fr) مع الغسل المستمر للمثانة."
+                        ],
+                        devices: [
+                            "جهاز الكي البلازمي ثنائي القطب (Bipolar TURP Generator) وبرج المناظير البولية."
+                        ],
+                        set: {
+                            name: "سيت تجريف البروستات بالناظور (TURP Resectoscope Set)",
+                            diagramType: "urology",
+                            standard: "مواصفات Karl Storz / Wolf",
+                            instruments: [
+                                "غمد منظار القطع (Resectoscope Sheath 24Fr/26Fr) مع سدادة Obturator.",
+                                "عنصر العمل (Working Element) وعدسة منظار 30 درجة.",
+                                "حلقات القطع والكي (Cutting Loops & Roller Ball Electrodes).",
+                                "أداة تفريغ الأنسجة (Ellik Evacuator)."
+                            ]
+                        },
+                        sutures: [
+                            { layer: "عملية منظارية عبر الإحليل", suture: "لا توجد خيوط جراحية", type: "تصريف عبر قسطرة 3-Way Foley", needle: "بدون إبر" }
+                        ],
+                        videoSearchQuery: "Bipolar TURP Transurethral Resection of Prostate surgical video",
+                        videoEmbedId: "9gX2zM-8p1Q"
                     }
                 ]
             },
@@ -1107,45 +1031,77 @@
                 id: "obgyn-surgery",
                 title: "النسائية والتوليد (Obstetrics & Gynecology)",
                 icon: "fa-person-pregnant",
-                color: "rose",
-                patients: [
-                    "النساء الحوامل في حالات الولادة القيصرية المبرمجة أو الطارئة (تعسر الولادة، انفصال المشيمة، تسمم الحمل).",
-                    "المريضات المصابات بألياف الرحم (Fibroids)، أكياس المبايض، الحمل خارج الرحم (Ectopic Pregnancy)، والنزف الرحمي.",
-                    "حالات الإجهاض غير المكتمل وعمليات تنظير الرحم التشخيصي والعلاجي."
-                ],
-                procedures: [
-                    "العملية القيصرية (Cesarean Section - C/S)",
-                    "استئصال الرحم البطني أو المهبلي أو بالناظور (TAH / VH / TLH)",
-                    "استئصال الألياف الرحمية (Myomectomy) وأكياس المبايض (Ovarian Cystectomy)",
-                    "عملية الكورتاج وتنظيف الرحم (D&C) وربط عنق الرحم (Cervical Cerclage)",
-                    "جراحات الحمل خارج الرحم الطارئة"
-                ],
-                devices: [
-                    "طاولة عمليات نسائية متعددة الوضعيات (Lithotomy & Trendelenburg Positioning).",
-                    "حاضنة إنعاش حديثي الولادة داخل صالة العمليات (Infant Radiant Warmer) مع جهاز شفط وأوكسجين للوليد.",
-                    "جهاز مراقبة نبض الجنين (CTG Monitor) وجهاز السونار المتنقل.",
-                    "برج تنظير البطن والرحم (Laparoscopy & Hysteroscopy Tower) وجهاز الكي الكهربائي."
-                ],
-                sets: [
+                operations: [
                     {
-                        setName: "سيت العملية القيصرية (Cesarean Section Set)",
-                        standardNote: "أساسي في جميع مستشفيات الولادة والعامة العراقية",
-                        instruments: [
-                            "مباعد المثانة الخاص بالقيصرية (Doyen Pelvic Retractor).",
-                            "ملاقط إمساك حواف الرحم النازفة (Green-Armytage Hemostatic Forceps - عدد 4 إلى 6).",
-                            "ملقط إخراج رأس الجنين (Wrigley's Obstetric Forceps).",
-                            "مقص الحبل السري (Umbilical Cord Scissors) وملاقط كوخر (Kocher Clamps).",
-                            "حاملات إبر طويلة، مقصات مايو وميتزنباوم، وملاقط إرقاء."
-                        ]
+                        id: "c-section",
+                        name: "العملية القيصرية",
+                        enName: "Lower Segment Cesarean Section (LSCS)",
+                        patients: "النساء الحوامل في حالات تعسر الولادة، القيصرية السابقة، وضعية الجنين المقعدية، أو انفصال المشيمة.",
+                        steps: [
+                            "التخدير النصفي (Spinal) أو العام، تركيب قسطرة بولية، وتعقيم البطن.",
+                            "إحداث شق فانينستيل العرضي (Pfannenstiel Incision) فوق العانة وفتح طبقات جدار البطن.",
+                            "وضع مباعد المثانة (Doyen Retractor) لحماية المثانة، وإحداث شق عرضي في القطعة السفلية للرحم.",
+                            "إخراج رأس وجسم الجنين بلطف، قص الحبل السري وتسليم المولود لفريق إنعاش الخدج، ثم استخراج المشيمة.",
+                            "إمساك حواف الرحم بملاقط غرين أرميتاج وإغلاق جدار الرحم على طبقتين، ثم إغلاق طبقات البطن."
+                        ],
+                        devices: [
+                            "حاضنة إنعاش حديثي الولادة (Infant Radiant Warmer) داخل صالة العمليات.",
+                            "جهاز الشفط الجراحي وجهاز الكي الكهربائي ومونيتور الأم."
+                        ],
+                        set: {
+                            name: "سيت العملية القيصرية (Cesarean Section Set)",
+                            diagramType: "obgyn",
+                            standard: "أساسي في جميع صالات الولادة العراقية",
+                            instruments: [
+                                "مباعد المثانة دوين (Doyen Pelvic Retractor).",
+                                "ملاقط إرقاء حواف الرحم (Green-Armytage Forceps - عدد 6).",
+                                "ملقط إخراج رأس الجنين (Wrigley's Obstetric Forceps).",
+                                "مقص الحبل السري (Umbilical Cord Scissors) وملاقط كوخر (Kocher Clamps).",
+                                "حاملات إبر طويلة، مقصات مايو وميتزنباوم، وملاقط إرقاء."
+                            ]
+                        },
+                        sutures: [
+                            { layer: "إغلاق جدار الرحم (Uterine Wall - 2 Layers)", suture: "Vicryl No. 1 أو No. 2", type: "قابل للامتصاص القوي", needle: "إبرة دائرية كبيرة (Heavy Round Body 40mm)" },
+                            { layer: "إغلاق غمد العضلة المستقيمة (Rectus Sheath)", suture: "Vicryl No. 1 أو PDS No. 1", type: "قابل للامتصاص", needle: "إبرة دائرية (Round Body)" },
+                            { layer: "النسيج تحت الجلد (Subcutaneous Fat)", suture: "Vicryl 2-0", type: "قابل للامتصاص", needle: "إبرة دائرية" },
+                            { layer: "إغلاق الجلد التجميلي (Subcuticular Skin)", suture: "Monocryl 3-0 أو Prolene 3-0", type: "تجميلي / غير قابل للامتصاص", needle: "إبرة قاطعة عكسية (Reverse Cutting)" }
+                        ],
+                        videoSearchQuery: "Lower Segment Cesarean Section LSCS surgical steps",
+                        videoEmbedId: "7p0R_W8oV4Q"
                     },
                     {
-                        setName: "سيت استئصال الرحم والكورتاج (Hysterectomy & D&C Set)",
-                        standardNote: "ستاندر عالمي / وزارة الصحة العراقية",
-                        instruments: [
-                            "ملاقط أربطة الرحم القوية (Heaney, Zeppelin & Maingot Hysterectomy Clamps).",
-                            "ملقط عنق الرحم (Vulsellum & Pozzi Tenaculum Forceps) ومسامير الألياف (Myoma Screw).",
-                            "موسعات عنق الرحم (Hegar Dilators) ومكاحط بطانة الرحم (Sims Uterine Curettes) ومسبار الرحم (Uterine Sound)."
-                        ]
+                        id: "hysterectomy",
+                        name: "استئصال الرحم البطني الكلي",
+                        enName: "Total Abdominal Hysterectomy (TAH)",
+                        patients: "المريضات المصابات بألياف الرحم الكبيرة (Fibroids)، النزف الرحمي المستعصي، أو أورام الرحم.",
+                        steps: [
+                            "التخدير العام، وفتح البطن بشق عرضي أو طولي تحت السرة.",
+                            "وضع مباعد بلفور الذاتي (Balfour Retractor) وعزل الأمعاء بشاش مبلل دافئ.",
+                            "ربط وقطع الأربطة المدورة (Round Ligaments) والأربطة المبيضية/الحوضية.",
+                            "فصل المثانة للأسفل، ربط الشرايين الرحمية (Uterine Arteries) بدقة على جانبي الرحم.",
+                            "استئصال الرحم وعنق الرحم، وإغلاق قبة المهبل (Vaginal Vault) وطبقات البطن."
+                        ],
+                        devices: [
+                            "جهاز الكي الكهربائي، جهاز LigaSure لربط الأربطة بسرعة وأمان، وجهاز الشفط."
+                        ],
+                        set: {
+                            name: "سيت استئصال الرحم (Abdominal Hysterectomy Set)",
+                            diagramType: "obgyn",
+                            standard: "ستاندر عالمي / وزارة الصحة العراقية",
+                            instruments: [
+                                "مباعد بلفور الحوضي (Balfour Self-Retaining Retractor).",
+                                "ملاقط أربطة الرحم القوية (Heaney, Zeppelin & Maingot Hysterectomy Clamps).",
+                                "ملقط عنق الرحم (Vulsellum & Pozzi Tenaculum Forceps) ومسمار الألياف (Myoma Screw).",
+                                "حاملات إبر طويلة، مقصات طويلة، وملاقط إرقاء."
+                            ]
+                        },
+                        sutures: [
+                            { layer: "ربط الشرايين الرحمية والأربطة (Pedicles)", suture: "Vicryl No. 1 (Transfixion Ligation)", type: "قابل للامتصاص القوي", needle: "إبرة دائرية (Round Body)" },
+                            { layer: "إغلاق قبة المهبل (Vaginal Cuff)", suture: "Vicryl No. 1 أو 0", type: "قابل للامتصاص", needle: "إبرة دائرية" },
+                            { layer: "إغلاق اللفافة البطنية والجلد", suture: "PDS No. 1 (Fascia) + Prolene 3-0 (Skin)", type: "متعدد الطبقات", needle: "دائرية للفافة / قاطعة للجلد" }
+                        ],
+                        videoSearchQuery: "Total Abdominal Hysterectomy surgical technique step by step",
+                        videoEmbedId: "B1k_009r4L8"
                     }
                 ]
             },
@@ -1153,36 +1109,75 @@
                 id: "orthopedic-surgery",
                 title: "جراحة العظام والكسور (Orthopedic & Trauma Surgery)",
                 icon: "fa-bone",
-                color: "amber",
-                patients: [
-                    "مصابو حوادث السير والسقوط من المرتفعات والكسور المغلقة والمفتوحة (Open & Closed Fractures).",
-                    "مرضى سوفان المفاصل المتقدم الذين يحتاجون إلى تبديل مفصل الركبة أو الورك الصناعي.",
-                    "إصابات الملاعب (تمزق الرباط الصليبي والغضروف الهلالي) وتشوهات العظام الولادية."
-                ],
-                procedures: [
-                    "التثبيت الداخلي للكسور بالصفائح والبراغي (ORIF - Plate & Screws)",
-                    "تثبيت كسور العظام الطويلة بالسفود النخاعي (Intramedullary Nailing - IMN)",
-                    "التثبيت الخارجي للكسور المفتوحة والمفتتة (External Fixation - Ilizarov / AO)",
-                    "تبديل مفصل الورك والركبة الكلي (THR & TKR)",
-                    "تنظير مفصل الركبة والكتف (Arthroscopy)"
-                ],
-                devices: [
-                    "جهاز الأشعة التنظيرية المتحرك (C-Arm Image Intensifier) وهو عصب صالة الكسور.",
-                    "طاولة الكسور الخاصة بالشد (Orthopedic Traction Table).",
-                    "منظومة الحفر والقص العظمي الهوائية أو الكهربائية (Pneumatic/Battery Orthopedic Drill & Oscillating Saw).",
-                    "جهاز إيقاف النزف الهوائي للأطراف (Pneumatic Tourniquet System) وبرج تنظير المفاصل."
-                ],
-                sets: [
+                operations: [
                     {
-                        setName: "سيت الكسور العام والصفائح (Basic Orthopedic & AO Plating Set)",
-                        standardNote: "مواصفات AO/ASIF العالمية المعتمدة في مستشفيات الكسور العراقية",
-                        instruments: [
-                            "مرافع السمحاق (Periosteal Elevators: Cobb, Langenbeck, Freer).",
-                            "ملاقط تثبيت ورد الكسور (Bone Holding Forceps: Kern, Lowman, Verbrugge, Reduction Clamps).",
-                            "قواضم وقواطع العظام (Bone Rongeurs - Luer/Ruskin & Bone Cutters).",
-                            "مكاحط العظام (Volkmann Bone Curettes)، أزاميل ومطرقة عظمية (Osteotomes, Chisels & Mallet).",
-                            "أدلة الحفر، مقياس عمق البراغي (Depth Gauge)، ومفكات البراغي السداسية والنجمية (Screwdrivers)."
-                        ]
+                        id: "orif-fracture",
+                        name: "التثبيت الداخلي للكسور بالصفائح والبراغي",
+                        enName: "Open Reduction & Internal Fixation (ORIF - Plating)",
+                        patients: "مصابو كسور عظم الفخذ، الساق، العضد، والساعد الناتجة عن الحوادث والسقوط.",
+                        steps: [
+                            "التخدير العام أو الناحي (Regional Block)، ووضع جهاز إيقاف النزف الهوائي (Tourniquet) للأطراف.",
+                            "التعقيم المضاعف للطرف وفرش المناشف المقاومة للسوائل.",
+                            "الشق الجراحي للوصول إلى موقع الكسر، تنظيف الخثرات، ورد شظايا العظم تشريحياً (Anatomical Reduction).",
+                            "اختيار الصفيحة المعدنية المناسبة (LCP / DCP Plate)، حفر الثقوب بالمثقاب الجراحي تحت التبريد، وقياس الطول.",
+                            "تثبيت البراغي القافلة والاعتيادية والتأكد من الوضعية عبر جهاز الأشعة C-Arm، ثم إغلاق الجرح."
+                        ],
+                        devices: [
+                            "جهاز الأشعة السينية المتحرك داخل الصالة (C-Arm Image Intensifier).",
+                            "منظومة الحفر والقص العظمي (Orthopedic Power Drill & Saw).",
+                            "جهاز التورنيكيه الهوائي (Pneumatic Tourniquet System)."
+                        ],
+                        set: {
+                            name: "سيت الكسور والصفائح الأساسي (AO Basic Orthopedic & Plating Set)",
+                            diagramType: "ortho",
+                            standard: "مواصفات AO/ASIF العالمية المعتمدة في العراق",
+                            instruments: [
+                                "مرافع السمحاق (Periosteal Elevators: Cobb, Langenbeck, Freer).",
+                                "ملاقط رد وتثبيت العظام (Bone Holding Forceps: Kern, Lowman, Verbrugge).",
+                                "قواضم العظام (Bone Rongeurs) ومكاحط العظام (Volkmann Curettes).",
+                                "أدلة الحفر (Drill Guides)، مقياس عمق البراغي (Depth Gauge)، ومفكات البراغي."
+                            ]
+                        },
+                        sutures: [
+                            { layer: "العضلات واللفافة العميقة (Muscle & Deep Fascia)", suture: "Vicryl No. 1 أو 0", type: "قابل للامتصاص القوي", needle: "إبرة دائرية قوية (Heavy Round Body)" },
+                            { layer: "النسيج تحت الجلد (Subcutaneous)", suture: "Vicryl 2-0", type: "قابل للامتصاص", needle: "إبرة دائرية" },
+                            { layer: "إغلاق الجلد (Skin)", suture: "Prolene 2-0 أو 3-0 / كابسات جلدية (Skin Stapler)", type: "غير قابل للامتصاص", needle: "إبرة قاطعة (Cutting)" }
+                        ],
+                        videoSearchQuery: "ORIF fracture plating surgical technique AO principles",
+                        videoEmbedId: "kR9nL0E1K8A"
+                    },
+                    {
+                        id: "arthroplasty-tkr",
+                        name: "تبديل مفصل الركبة والورك الصناعي",
+                        enName: "Total Knee & Hip Arthroplasty (TKR / THR)",
+                        patients: "مرضى سوفان المفاصل المتقدم (Osteoarthritis) وكسور عنق عظم الفخذ لدى كبار السن.",
+                        steps: [
+                            "التعقيم الفائق (Strict Asepsis) وارتداء بدلات العزل الجراحية، مع إعطاء مضاد حيوي وقائي قبل الشق.",
+                            "كشف مفصل الركبة أو الورك واستئصال الغضاريف المتآكلة باستخدام قوالب القطع القياسية (Cutting Jigs).",
+                            "تحضير الأسطح العظمية لعظم الفخذ والظنبوب وتجربة المفصل التجريبي (Trial Prosthesis).",
+                            "تثبيت المفصل الصناعي الدائم (التيتانيوم والكوبالت-كروم) باستخدام الإسمنت العظمي (Bone Cement).",
+                            "اختبار مدى حركة المفصل وثباته وإغلاق الكبسولة والجلد."
+                        ],
+                        devices: [
+                            "منشار العظام الترددي (Oscillating Bone Saw) ومثقاب العظام.",
+                            "جهاز الغسل النبضي (Pulse Lavage System) لتنظيف العظم قبل الإسمنت."
+                        ],
+                        set: {
+                            name: "سيت تبديل المفاصل الصناعية (Joint Arthroplasty Set)",
+                            diagramType: "ortho",
+                            standard: "ستاندر عالمي (Zimmer / Stryker / DePuy)",
+                            instruments: [
+                                "مباعدات هومان للمفاصل (Hohmann Bone Retractors بأحجام مختلفة).",
+                                "قواضم الغضاريف والأنسجة (Leksell Rongeurs) ومطارق عظمية ثقيلة.",
+                                "قوالب القياس والقطع (Femoral & Tibial Cutting Blocks) ومسدس حقن الإسمنت العظمي."
+                            ]
+                        },
+                        sutures: [
+                            { layer: "كبسولة المفصل والأربطة (Joint Capsule)", suture: "Vicryl No. 1 أو Ethibond No. 2", type: "قوي جداً", needle: "إبرة دائرية ثقيلة" },
+                            { layer: "إغلاق الجلد (Skin)", suture: "Skin Stapler أو Prolene 2-0", type: "غير قابل للامتصاص", needle: "إبرة قاطعة" }
+                        ],
+                        videoSearchQuery: "Total Knee Replacement Arthroplasty surgical procedure",
+                        videoEmbedId: "9R69x1v_P30"
                     }
                 ]
             },
@@ -1190,69 +1185,82 @@
                 id: "neurosurgery",
                 title: "جراحة الجملة العصبية (Neurosurgery)",
                 icon: "fa-brain",
-                color: "indigo",
-                patients: [
-                    "مرضى إصابات الرأس الحادة والنزف الدماغي فوق وتحت الجافية (EDH, SDH, ICH) وكسور الجمجمة المنخسفة.",
-                    "مرضى أورام الدماغ والحبل الشوكي، واستسقاء الدماغ (Hydrocephalus).",
-                    "مرضى الانزلاق الغضروفي العنقي والقطني وتضيق القناة الشوكية."
-                ],
-                procedures: [
-                    "فتح القحف لتفريغ النزف أو استئصال الأورام (Craniotomy)",
-                    "زرع صمام تصريف السائل الدماغي (Ventriculoperitoneal Shunt - VP Shunt)",
-                    "استئصال الغضروف المنزلق وتثبيت الفقرات (Microdiscectomy & Spinal Fusion)",
-                    "ترميم كسور الجمجمة وإزالة الضغط عن الحبل الشوكي (Laminectomy)"
-                ],
-                devices: [
-                    "المجهر الجراحي العصبي المتقدم (Neurosurgical Operating Microscope - Zeiss/Leica).",
-                    "حفار الجمجمة عالي السرعة (High-Speed Pneumatic Craniotome & Perforator).",
-                    "جهاز الكي ثنائي القطب غير اللاصق (Non-Stick Bipolar Coagulator) لحماية الأنسجة العصبية.",
-                    "جهاز شفط الأورام بالموجات فوق الصوتية (CUSA) ومثبت الرأس ثلاثي النقاط (Mayfield Skull Clamp)."
-                ],
-                sets: [
+                operations: [
                     {
-                        setName: "سيت فتح القحف والجراحة المجهرية (Craniotomy & Micro-Neuro Set)",
-                        standardNote: "ستاندر عالمي للمراكز التخصصية للجملة العصبية",
-                        instruments: [
-                            "مثقاب الجمجمة اليدوي والآلي (Hudson Brace & Raney Scalp Clips لتقليل نزف فروة الرأس).",
-                            "سلك جيجلي لقص عظم الجمجمة (Gigli Saw Wire & Handles) ومباعدات فروة الرأس (Weitlaner & Adson).",
-                            "ملاقط دقيقة جداً للأنسجة العصبية (Bayonet Micro Forceps, Yasargil Micro Scissors, Penfield Dissectors 1-5).",
-                            "قواضم عظام الفقرات والجمجمة الدقيقة (Kerrison Rongeurs بأحجام 1mm - 5mm)."
-                        ]
+                        id: "craniotomy",
+                        name: "فتح القحف لتفريغ النزف الدماغي أو استئصال الورم",
+                        enName: "Craniotomy for Hematoma / Tumor",
+                        patients: "مصابو حوادث الرأس والنزف فوق وتحت الجافية (EDH/SDH) ومرضى أورام الدماغ.",
+                        steps: [
+                            "التخدير العام، تثبيت الرأس بمثبت مايفيلد (Mayfield Skull Clamp)، وحلق وتعقيم فروة الرأس.",
+                            "إحداث شق فروة الرأس ووضع كلبسات راني (Raney Clips) على حواف الجلد لمنع النزف.",
+                            "حفر ثقوب في الجمجمة بالمثقاب الآلي (Perforator) ووصلها بمنشار الجمجمة (Craniotome) لرفع السديلة العظمية.",
+                            "فتح الأم الجافية (Dura Mater)، تفريغ النزف أو استئصال الورم تحت المجهر الجراحي.",
+                            "إغلاق الأم الجافية بإحكام، إعادة السديلة العظمية وتثبيتها بصفائح تيتانيوم دقيقة، وإغلاق فروة الرأس."
+                        ],
+                        devices: [
+                            "المجهر الجراحي العصبي (Neurosurgical Microscope).",
+                            "حفار الجمجمة عالي السرعة (High-Speed Pneumatic Craniotome).",
+                            "جهاز الكي ثنائي القطب غير اللاصق (Non-Stick Bipolar)."
+                        ],
+                        set: {
+                            name: "سيت فتح القحف والجراحة العصبية (Craniotomy & Neuro Set)",
+                            diagramType: "neuro",
+                            standard: "ستاندر عالمي للمراكز العصبية",
+                            instruments: [
+                                "كلبسات فروة الرأس (Raney Scalp Clips) وملقط تطبيقها.",
+                                "مباعدات فروة الرأس (Weitlaner & Adson Self-Retaining Retractors).",
+                                "مسلخات بينفيلد الدقيقة (Penfield Dissectors 1-5) وملاقط بايونيت المجهرية.",
+                                "قواضم العظام الدقيقة (Kerrison Rongeurs 1mm - 4mm)."
+                            ]
+                        },
+                        sutures: [
+                            { layer: "إغلاق الأم الجافية (Dura Mater)", suture: "Prolene 4-0 أو Nurolon 4-0 (Water-tight)", type: "غير قابل للامتصاص", needle: "إبرة دائرية دقيقة" },
+                            { layer: "الطبقة الخوذية لفروة الرأس (Galea Aponeurotica)", suture: "Vicryl 2-0", type: "قابل للامتصاص", needle: "إبرة قاطعة" },
+                            { layer: "إغلاق جلد فروة الرأس (Scalp Skin)", suture: "Prolene 3-0 أو Silk 2-0", type: "غير قابل للامتصاص", needle: "إبرة قاطعة (Cutting)" }
+                        ],
+                        videoSearchQuery: "Craniotomy surgical steps neurosurgery epidural hematoma",
+                        videoEmbedId: "z7C_P3o-d5c"
                     }
                 ]
             },
             {
                 id: "plastic-burns",
-                title: "الجراحة التجميلية والترميمية والحروق (Plastic, Reconstructive & Burns)",
+                title: "الجراحة التجميلية والحروق (Plastic, Reconstructive & Burns)",
                 icon: "fa-hand-sparkles",
-                color: "pink",
-                patients: [
-                    "ضحايا الحروق الحرارية والكيميائية والكهربائية (تنظيف الحروق وترقيع الجلد).",
-                    "مرضى التشوهات الخلقية مثل الشفة الأرنبية وشق سقف الحلق (Cleft Lip & Palate) والتصاق الأصابع.",
-                    "مرضى إصابات اليد والأوتار والأعصاب المحيطية، والترميم بعد استئصال الأورام."
-                ],
-                procedures: [
-                    "ترقيع الجلد الذاتي (Split-Thickness & Full-Thickness Skin Grafting)",
-                    "إصلاح الشفة الأرنبية وشق سقف الحلق",
-                    "نقل السدائل الجلدية والعضلية (Local & Free Flaps)",
-                    "إصلاح أوتار اليد والأعصاب الدقيقة (Tendon & Nerve Repair)",
-                    "تحرير التقلصات الندبية بعد الحروق (Scar Contracture Release)"
-                ],
-                devices: [
-                    "جهاز أخذ الرقع الجلدية الكهربائي أو الهوائي (Electric/Air Dermatome).",
-                    "جهاز توسيع الرقع الجلدية الشبكي (Skin Graft Mesher).",
-                    "عدسات التكبير الجراحية (Surgical Loupes 2.5x - 4.5x) والمجهر الجراحي للأوعية الدقيقة."
-                ],
-                sets: [
+                operations: [
                     {
-                        setName: "سيت الجراحة التجميلية الدقيقة واليد (Plastic & Hand Micro-Set)",
-                        standardNote: "ستاندر عالمي / مراكز الحروق العراقية",
-                        instruments: [
-                            "ملاقط أنسجة فائقة الدقة (Adson-Brown, Gillies & Bishop-Harmon Forceps).",
-                            "مقصات تجميلية دقيقة (Tenotomy, Iris & Jameson Scissors).",
-                            "حاملات إبر دقيقة جداً للخيوط الرفيعة 6-0 إلى 10-0 (Castroviejo & Webster Needle Holders).",
-                            "خطافات جلدية دقيقة (Joseph Skin Hooks) وسكاكين أخذ الرقع (Humby Knife)."
-                        ]
+                        id: "skin-grafting",
+                        name: "تنظيف الحروق وترقيع الجلد الذاتي",
+                        enName: "Burn Debridement & Split-Thickness Skin Grafting (STSG)",
+                        patients: "ضحايا الحروق العميقة من الدرجة الثانية العميقة والثالثة وإصابات فقدان الجلد.",
+                        steps: [
+                            "التخدير العام، تنظيف وإزالة الأنسجة الميتة (Tangential Excision) من منطقة الحرق حتى ظهور طبقة نازفة صحية.",
+                            "أخذ رقعة جلدية رقيقة من المنطقة المانحة (الفخذ عادة) باستخدام جهاز الديرماتوم (Dermatome).",
+                            "توسيع الرقعة الجلدية بشكل شبكي (Meshing) لزيادة مساحتها والسماح بتصريف السوائل.",
+                            "تثبيت الرقعة فوق سرير الجرح بالخيوط أو الكابسات الجراحية ووضع ضماد الفازلين الضاغط (Tie-over Dressing)."
+                        ],
+                        devices: [
+                            "جهاز أخذ الرقع الجلدية الكهربائي/الهوائي (Electric/Air Dermatome).",
+                            "جهاز توسيع الرقع الشبكي (Skin Graft Mesher)."
+                        ],
+                        set: {
+                            name: "سيت الحروق وترقيع الجلد والجراحة التجميلية (Burns & Plastic Set)",
+                            diagramType: "plastic",
+                            standard: "ستاندر مراكز الحروق العراقية والعالمية",
+                            instruments: [
+                                "سكين أخذ الرقع (Humby / Watson Skin Graft Knife).",
+                                "ملاقط أنسجة دقيقة جداً (Adson-Brown & Gillies Forceps).",
+                                "مقصات تجميلية دقيقة (Tenotomy & Iris Scissors) وخطافات جلدية (Joseph Skin Hooks).",
+                                "حاملات إبر دقيقة (Castroviejo & Webster Needle Holders)."
+                            ]
+                        },
+                        sutures: [
+                            { layer: "تثبيت حواف الرقعة الجلدية (Graft Fixation)", suture: "Vicryl Rapide 4-0 أو 5-0 / كابسات دقيقة", type: "سريع الامتصاص", needle: "إبرة قاطعة دقيقة" },
+                            { layer: "إغلاق الجروح التجميلية الوجهية", suture: "Prolene 5-0 أو 6-0", type: "غير قابل للامتصاص", needle: "إبرة قاطعة عكسية دقيقة (P-3)" }
+                        ],
+                        videoSearchQuery: "Split Thickness Skin Grafting Dermatome surgical technique",
+                        videoEmbedId: "h3A-M_F6G7Q"
                     }
                 ]
             },
@@ -1260,33 +1268,39 @@
                 id: "cardiothoracic-vascular",
                 title: "جراحة القلب والصدر والأوعية الدموية (Cardiothoracic & Vascular)",
                 icon: "fa-heart-pulse",
-                color: "red",
-                patients: [
-                    "مرضى انسداد الشرايين التاجية وتشوهات صمامات القلب والعيوب الخلقية للقلب.",
-                    "مصابو الطعنات والطلقات النارية في الصدر والأوعية الدموية الكبرى (إصابات الشريان الفخذي والعضدي).",
-                    "مرضى تمدد الشريان الأبهر، جلطات الشرايين الحادة، وعمل الوصلات الشريانية الوريدية لغسيل الكلى (AV Fistula)."
-                ],
-                procedures: [
-                    "زراعة شرايين القلب التاجية (CABG) وتبديل الصمامات القلبية",
-                    "ترميم الشرايين والأوردة المصابة واستخراج الخثرات (Embolectomy)",
-                    "فتح الصدر (Thoracotomy) واستئصال فصوص الرئة أو أورام المنصف",
-                    "إنشاء الناسور الشرياني الوريدي لمرضى الفشل الكلوي (AV Fistula)"
-                ],
-                devices: [
-                    "ماكينة القلب والرئة الاصطناعية (Heart-Lung Bypass Machine).",
-                    "منشار قص عظم القص (Sternum Saw) وجهاز الصدمات القلبية الداخلي (Internal Defibrillator Paddles).",
-                    "جهاز الدوبلر الوعائي داخل الصالة (Intraoperative Vascular Doppler)."
-                ],
-                sets: [
+                operations: [
                     {
-                        setName: "سيت جراحة الأوعية الدموية والصدر (Vascular & Thoracic Set)",
-                        standardNote: "ستاندر مراكز القلب التخصصية (ابن البيطار، الناصرية، أربيل، السليمانية)",
-                        instruments: [
-                            "ملاقط الأوعية الدموية غير الراضة (DeBakey, Satinsky, Bulldog & Cooley Vascular Clamps).",
-                            "ملاقط ديبيكي للأنسجة الرقيقة (DeBakey Atraumatic Tissue Forceps بأطوال متعددة).",
-                            "مقصات الأوعية الدموية بزاوية (Potts-Smith Vascular Scissors) ومباعد الأضلاع (Finochietto Retractor).",
-                            "قسطرة فوغارتي لاستخراج الخثرات (Fogarty Embolectomy Catheter)."
-                        ]
+                        id: "vascular-repair",
+                        name: "ترميم الشرايين المصابة واستخراج الخثرات",
+                        enName: "Vascular Repair & Embolectomy",
+                        patients: "مصابو الطعنات والطلقات النارية في الأطراف، وجلطات الشرايين الحادة (Acute Limb Ischemia).",
+                        steps: [
+                            "التخدير العام، كشف الشريان المصاب (الفخذي أو العضدي) والسيطرة عليه من الأعلى والأسفل بأشرطة وعائية (Vessel Loops).",
+                            "إعطاء الهيبارين الوريدي لمنع التجلط، ووضع ملاقط الأوعية غير الراضة (Bulldog / Satinsky Clamps).",
+                            "إدخال قسطرة فوغارتي (Fogarty Catheter) ونفخ البالون لسحب الخثرات الدموية واستعادة التدفق.",
+                            "تنظيف حواف الشريان وخياطته بدقة متناهية أو وضع رقعة وريدية (Saphenous Vein Graft)."
+                        ],
+                        devices: [
+                            "جهاز الدوبلر الوعائي داخل الصالة (Intraoperative Vascular Doppler).",
+                            "عدسات التكبير الجراحية (Surgical Loupes 3.5x)."
+                        ],
+                        set: {
+                            name: "سيت جراحة الأوعية الدموية والصدر (Vascular & Thoracic Set)",
+                            diagramType: "cardio",
+                            standard: "ستاندر مراكز القلب والأوعية التخصصية",
+                            instruments: [
+                                "ملاقط الأوعية الدموية غير الراضة (DeBakey, Satinsky, Bulldog & Cooley Clamps).",
+                                "ملاقط ديبيكي للأنسجة الرقيقة (DeBakey Atraumatic Forceps).",
+                                "مقصات الأوعية بزاوية (Potts-Smith Vascular Scissors) ومباعد الأضلاع (Finochietto).",
+                                "حامل إبر الأوعية الدقيق (Castroviejo / Ryder Needle Holder)."
+                            ]
+                        },
+                        sutures: [
+                            { layer: "خياطة جدار الشريان أو الوريد (Vascular Anastomosis)", suture: "Prolene (Polypropylene) 5-0 أو 6-0 (Double-Armed)", type: "غير قابل للامتصاص أملس", needle: "إبرة دائرية مزدوجة دقيقة (Tapercut / Round Body)" },
+                            { layer: "إغلاق الصدر (في حال فتح الصدر)", suture: "أسلاك فولاذية للقص (Sternum Steel Wire) + Vicryl 1", type: "تثبيت عظمي وعضلي", needle: "إبرة قاطعة ثقيلة" }
+                        ],
+                        videoSearchQuery: "Vascular repair femoral artery Fogarty embolectomy surgical steps",
+                        videoEmbedId: "6Y0g2tL7k-I"
                     }
                 ]
             },
@@ -1294,31 +1308,39 @@
                 id: "ophthalmology",
                 title: "جراحة العيون (Ophthalmology)",
                 icon: "fa-eye",
-                color: "emerald",
-                patients: [
-                    "مرضى الساد (الماء الأبيض - Cataract) والزرق (الماء الأسود - Glaucoma).",
-                    "مرضى اعتلال الشبكية السكري، انفصال الشبكية، والحول، وإصابات العين النافذة."
-                ],
-                procedures: [
-                    "إزالة الماء الأبيض بالموجات فوق الصوتية وزراعة عدسة (Phacoemulsification + IOL)",
-                    "قص السائل الزجاجي وعلاج الشبكية (Pars Plana Vitrectomy)",
-                    "عمليات الحول وتصحيح البصر وإصلاح جروح القرنية والصلبة"
-                ],
-                devices: [
-                    "المجهر الجراحي للعيون المزود بإضاءة محورية (Ophthalmic Operating Microscope).",
-                    "جهاز الفاكو وقص السائل الزجاجي (Phaco & Vitrectomy Machine).",
-                    "كرسي الجراح الميكروسكوبي المزود بمساند للذراعين."
-                ],
-                sets: [
+                operations: [
                     {
-                        setName: "سيت جراحة العيون الدقيق (Micro-Ophthalmic & Cataract Set)",
-                        standardNote: "ستاندر عالمي / مستشفى ابن الهيثم للعيون",
-                        instruments: [
-                            "مباعد الجفون (Barraquer Wire Eye Speculum).",
-                            "ملاقط مجهرية للقرنية والقزحية (Colibri, McPherson & Pierse Micro Forceps).",
-                            "مقصات مجهرية (Vannas & Westcott Micro Scissors) وحامل إبر كاستروفيجو الدقيق.",
-                            "مشارط الماس أو السفير الدقيقة (Keratome & Crescent Knives)."
-                        ]
+                        id: "phaco-cataract",
+                        name: "إزالة الساد الأبيض بالفاكو وزراعة عدسة",
+                        enName: "Phacoemulsification & Intraocular Lens Implantation (IOL)",
+                        patients: "مرضى الساد (الماء الأبيض - Cataract) وضعف الرؤية الناتج عن عتامة عدسة العين.",
+                        steps: [
+                            "التخدير الموضعي بالقطرات (Topical Anesthesia) وتعقيم الجفون بمحلول بوفيدون مخفف 5%.",
+                            "وضع مباعد الجفون باراكر (Barraquer Speculum)، وإحداث شق قرني دقيق جداً (2.2mm) بمشرط الكيراتوم.",
+                            "حقن المادة اللزجة لحماية القرنية، وعمل فتحة دائرية في محفظة العدسة الأمامية (Capsulorhexis).",
+                            "تفتيت وشفط نواة العدسة المعتمة بالموجات فوق الصوتية (Phaco Handpiece).",
+                            "حقن العدسة المطوية المرنة (Foldable IOL) داخل المحفظة، وإغلاق الشق ذاتياً بالترطيب بدون خيوط."
+                        ],
+                        devices: [
+                            "المجهر الجراحي للعيون (Ophthalmic Operating Microscope).",
+                            "جهاز الفاكو بالموجات فوق الصوتية (Phacoemulsification Machine)."
+                        ],
+                        set: {
+                            name: "سيت جراحة العيون الدقيق والفاكو (Micro-Ophthalmic & Phaco Set)",
+                            diagramType: "eye",
+                            standard: "ستاندر عالمي / مستشفى ابن الهيثم للعيون",
+                            instruments: [
+                                "مباعد الجفون السلكي (Barraquer Wire Eye Speculum).",
+                                "ملاقط مجهرية للقرنية والقزحية (Colibri, McPherson & Utrata Capsulorhexis Forceps).",
+                                "مقصات مجهرية (Vannas & Westcott Micro Scissors) وخطاف سنسكي (Sinskey Hook).",
+                                "مشارط دقيقة (Keratome 2.2mm & Side-Port Blade 15°)."
+                            ]
+                        },
+                        sutures: [
+                            { layer: "جرح الفاكو الدقيق (2.2mm)", suture: "يُغلق ذاتياً بدون خيوط (Sutureless)", type: "في حال الحاجة للخياطة: Nylon 10-0", needle: "إبرة مجهرية مسطحة (Spatula Needle)" }
+                        ],
+                        videoSearchQuery: "Phacoemulsification cataract surgery step by step IOL implantation",
+                        videoEmbedId: "9gX2zM-8p1Q"
                     }
                 ]
             }
@@ -1403,6 +1425,7 @@
         let selectedGovId = "baghdad";
         let selectedSurgicalFilter = "all";
         let currentModalHospital = null;
+        let currentModalOperation = null;
         let fontScale = 1;
 
         // Load any custom user-added hospitals from localStorage
@@ -1442,304 +1465,7 @@
         }
 
         // =========================================================================
-        // 5. TAB NAVIGATION & THEME CONTROLS
-        // =========================================================================
-        function switchTab(tabName) {
-            // Hide all sections
-            document.querySelectorAll(".tab-section").forEach(sec => sec.classList.add("hidden"));
-            document.getElementById(`section-${tabName}`).classList.remove("hidden");
-
-            // Update Desktop Tabs
-            document.querySelectorAll(".tab-btn-desk").forEach(btn => {
-                btn.classList.remove("bg-teal-600", "text-white", "shadow-sm");
-                btn.classList.add("text-slate-600", "dark:text-slate-300", "hover:bg-slate-100", "dark:hover:bg-slate-800");
-            });
-            const activeDesk = document.getElementById(`desk-tab-${tabName}`);
-            if (activeDesk) {
-                activeDesk.classList.remove("text-slate-600", "dark:text-slate-300", "hover:bg-slate-100", "dark:hover:bg-slate-800");
-                activeDesk.classList.add("bg-teal-600", "text-white", "shadow-sm");
-            }
-
-            // Update Mobile Tabs
-            document.querySelectorAll(".tab-btn-mob").forEach(btn => {
-                btn.classList.remove("text-teal-600", "dark:text-teal-400", "font-bold");
-                btn.classList.add("text-slate-500", "dark:text-slate-400", "font-medium");
-            });
-            const activeMob = document.getElementById(`mob-tab-${tabName}`);
-            if (activeMob) {
-                activeMob.classList.remove("text-slate-500", "dark:text-slate-400", "font-medium");
-                activeMob.classList.add("text-teal-600", "dark:text-teal-400", "font-bold");
-            }
-
-            window.scrollTo({ top: 0, behavior: "smooth" });
-        }
-
-        function toggleDarkMode() {
-            const html = document.documentElement;
-            const icon = document.getElementById("themeIcon");
-            html.classList.toggle("dark");
-            if (html.classList.contains("dark")) {
-                icon.classList.replace("fa-moon", "fa-sun");
-            } else {
-                icon.classList.replace("fa-sun", "fa-moon");
-            }
-        }
-
-        function toggleFontSize() {
-            fontScale = fontScale === 1 ? 1.1 : (fontScale === 1.1 ? 1.2 : 1);
-            document.documentElement.style.fontSize = `${fontScale * 16}px`;
-            showToast(`حجم الخط: ${Math.round(fontScale * 100)}%`);
-        }
-
-        // =========================================================================
-        // 6. RENDER GOVERNORATES, SECTORS & HOSPITALS
-        // =========================================================================
-        function renderGovPills() {
-            const container = document.getElementById("govPillsContainer");
-            container.innerHTML = iraqiHealthData.map(gov => {
-                const isActive = gov.id === selectedGovId;
-                return `
-                    <button onclick="selectGovernorate('${gov.id}')" 
-                        class="px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition shrink-0 ${
-                            isActive 
-                            ? 'bg-teal-600 text-white shadow-sm' 
-                            : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-teal-50 dark:hover:bg-slate-700'
-                        }">
-                        ${gov.name}
-                    </button>
-                `;
-            }).join("");
-        }
-
-        function selectGovernorate(govId) {
-            selectedGovId = govId;
-            renderGovPills();
-            renderGovDetails(govId);
-        }
-
-        function renderGovDetails(govId) {
-            const gov = iraqiHealthData.find(g => g.id === govId);
-            if (!gov) return;
-
-            document.getElementById("selectedGovBadge").textContent = gov.name;
-            const container = document.getElementById("govDetailContainer");
-
-            container.innerHTML = `
-                <!-- Health Directorates & Primary Health Sectors -->
-                <div class="bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-5 border border-slate-200 dark:border-slate-800 shadow-sm">
-                    <div class="flex flex-wrap items-center justify-between gap-2 pb-3 mb-4 border-b border-slate-100 dark:border-slate-800">
-                        <div>
-                            <h3 class="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
-                                <i class="fa-solid fa-building-shield text-teal-600"></i>
-                                دوائر الصحة والقطاعات الصحية في ${gov.name}
-                            </h3>
-                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                                الجهة الإدارية: ${gov.directorates.join(" • ")}
-                            </p>
-                        </div>
-                        <span class="px-3 py-1 rounded-full bg-teal-50 dark:bg-teal-900/40 text-teal-700 dark:text-teal-300 text-xs font-bold">
-                            ${gov.sectors.length} قطاعات رئيسية
-                        </span>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        ${gov.sectors.map(sec => `
-                            <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700/70">
-                                <div class="flex items-center justify-between mb-1.5">
-                                    <h4 class="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-2">
-                                        <i class="fa-solid fa-house-medical-flag text-emerald-600"></i>
-                                        ${sec.name}
-                                    </h4>
-                                    <span class="px-2 py-0.5 rounded-md bg-emerald-100 dark:bg-emerald-900/50 text-emerald-800 dark:text-emerald-300 text-[11px] font-bold">
-                                        ~${sec.centers} مركز صحي
-                                    </span>
-                                </div>
-                                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                                    <strong class="text-slate-800 dark:text-slate-200">الخدمات:</strong> ${sec.services}
-                                </p>
-                            </div>
-                        `).join("")}
-                    </div>
-                </div>
-
-                <!-- Hospitals Grid -->
-                <div>
-                    <div class="flex items-center justify-between mb-3">
-                        <h3 class="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
-                            <i class="fa-solid fa-hospital text-blue-600"></i>
-                            المستشفيات والمراكز التخصصية في ${gov.name} (${gov.hospitals.length})
-                        </h3>
-                        <span class="text-xs text-slate-500">اضغط على المستشفى للتفاصيل الكاملة</span>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        ${gov.hospitals.map((hosp, idx) => `
-                            <div onclick="openHospitalModal('${gov.id}', ${idx})" 
-                                class="card-hover cursor-pointer bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-800 shadow-sm hover:border-teal-500 flex flex-col justify-between">
-                                <div>
-                                    <div class="flex items-start justify-between gap-2 mb-2">
-                                        <span class="px-2.5 py-0.5 rounded-lg bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-[11px] font-bold">
-                                            ${hosp.type}
-                                        </span>
-                                        <span class="text-xs font-extrabold text-teal-600 dark:text-teal-400">
-                                            ${hosp.beds} سرير
-                                        </span>
-                                    </div>
-                                    <h4 class="font-extrabold text-base text-slate-900 dark:text-white mb-1">
-                                        ${hosp.name}
-                                    </h4>
-                                    <p class="text-xs text-slate-500 dark:text-slate-400 mb-3">
-                                        ${hosp.directorate}
-                                    </p>
-
-                                    <!-- Quick Badges for OR & Wards -->
-                                    <div class="flex flex-wrap gap-1.5 mb-3">
-                                        <span class="px-2 py-0.5 rounded-md bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 text-[11px] font-bold">
-                                            <i class="fa-solid fa-scalpel ml-1"></i>${hosp.orCount} صالات عمليات
-                                        </span>
-                                        <span class="px-2 py-0.5 rounded-md bg-rose-50 dark:bg-rose-900/30 text-rose-700 dark:text-rose-300 text-[11px] font-bold">
-                                            <i class="fa-solid fa-truck-medical ml-1"></i>طوارئ ومفرز
-                                        </span>
-                                    </div>
-
-                                    <div class="text-xs text-slate-600 dark:text-slate-300 line-clamp-2">
-                                        <strong class="text-slate-800 dark:text-slate-200">الردهات:</strong> ${hosp.wards.join("، ")}
-                                    </div>
-                                </div>
-
-                                <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-bold text-teal-600 dark:text-teal-400">
-                                    <span>عرض الأقسام، الأشعة، والردهات</span>
-                                    <i class="fa-solid fa-arrow-left"></i>
-                                </div>
-                            </div>
-                        `).join("")}
-                    </div>
-                </div>
-            `;
-        }
-
-        // =========================================================================
-        // 7. HOSPITAL PROFILE MODAL
-        // =========================================================================
-        function openHospitalModal(govId, hospIdx) {
-            const gov = iraqiHealthData.find(g => g.id === govId);
-            if (!gov || !gov.hospitals[hospIdx]) return;
-
-            const h = gov.hospitals[hospIdx];
-            currentModalHospital = { govName: gov.name, ...h };
-
-            document.getElementById("modalHospGov").textContent = gov.name;
-            document.getElementById("modalHospType").textContent = h.type;
-            document.getElementById("modalHospName").textContent = h.name;
-            document.getElementById("modalHospDirectorate").textContent = h.directorate;
-
-            const body = document.getElementById("modalHospBody");
-            body.innerHTML = `
-                <!-- Capacity & OR Summary -->
-                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                    <div class="p-3 rounded-2xl bg-teal-50 dark:bg-teal-900/30 border border-teal-100 dark:border-teal-800 text-center">
-                        <div class="text-xs text-teal-700 dark:text-teal-300">السعة السريرية</div>
-                        <div class="text-lg font-extrabold text-teal-900 dark:text-white">${h.beds} سرير</div>
-                    </div>
-                    <div class="p-3 rounded-2xl bg-amber-50 dark:bg-amber-900/30 border border-amber-100 dark:border-amber-800 text-center">
-                        <div class="text-xs text-amber-700 dark:text-amber-300">صالات العمليات</div>
-                        <div class="text-lg font-extrabold text-amber-900 dark:text-white">${h.orCount} صالة مجهزة</div>
-                    </div>
-                    <div class="col-span-2 sm:col-span-1 p-3 rounded-2xl bg-rose-50 dark:bg-rose-900/30 border border-rose-100 dark:border-rose-800 text-center">
-                        <div class="text-xs text-rose-700 dark:text-rose-300">الطوارئ والمفرز</div>
-                        <div class="text-sm font-extrabold text-rose-900 dark:text-white mt-0.5">يعمل 24 ساعة</div>
-                    </div>
-                </div>
-
-                <!-- Triage & ER -->
-                <div class="p-4 rounded-2xl bg-rose-50/70 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/50">
-                    <h4 class="font-extrabold text-rose-800 dark:text-rose-300 flex items-center gap-2 mb-1.5">
-                        <i class="fa-solid fa-truck-medical"></i>
-                        قسم الطوارئ والمفرز الطبي (ER & Triage)
-                    </h4>
-                    <p class="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed">${h.triage}</p>
-                </div>
-
-                <!-- Wards & Wings -->
-                <div>
-                    <h4 class="font-extrabold text-slate-900 dark:text-white flex items-center gap-2 mb-2">
-                        <i class="fa-solid fa-bed-pulse text-teal-600"></i>
-                        الردهات والجناح العام والخاص المتوفرة
-                    </h4>
-                    <div class="flex flex-wrap gap-2">
-                        ${h.wards.map(w => `
-                            <span class="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 text-xs font-bold border border-slate-200 dark:border-slate-700">
-                                <i class="fa-solid fa-check text-teal-600 ml-1"></i>${w}
-                            </span>
-                        `).join("")}
-                    </div>
-                </div>
-
-                <!-- Radiology & Imaging -->
-                <div>
-                    <h4 class="font-extrabold text-slate-900 dark:text-white flex items-center gap-2 mb-2">
-                        <i class="fa-solid fa-x-ray text-cyan-600"></i>
-                        قسم الأشعة والسونار والتشخيص الشعاعي
-                    </h4>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        ${h.radiology.map(r => `
-                            <div class="p-2.5 rounded-xl bg-cyan-50/60 dark:bg-cyan-950/30 border border-cyan-100 dark:border-cyan-900/50 text-xs font-bold text-cyan-900 dark:text-cyan-200 flex items-center gap-2">
-                                <i class="fa-solid fa-circle-radiation text-cyan-600"></i>
-                                ${r}
-                            </div>
-                        `).join("")}
-                    </div>
-                </div>
-
-                <!-- Clinical Support Units -->
-                <div>
-                    <h4 class="font-extrabold text-slate-900 dark:text-white flex items-center gap-2 mb-2">
-                        <i class="fa-solid fa-flask-vial text-indigo-600"></i>
-                        الوحدات الساندة (العناية، المختبرات، بنك الدم، الاستشاريات)
-                    </h4>
-                    <div class="flex flex-wrap gap-2">
-                        ${h.units.map(u => `
-                            <span class="px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-800 dark:text-indigo-200 text-xs font-bold border border-indigo-100 dark:border-indigo-900">
-                                ${u}
-                            </span>
-                        `).join("")}
-                    </div>
-                </div>
-
-                <!-- Direct shortcut to OR Standards -->
-                <div class="p-3.5 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-between gap-2">
-                    <span class="text-xs font-bold text-slate-700 dark:text-slate-300">
-                        تريد معرفة السيتات والأجهزة داخل صالات عمليات هذا المستشفى؟
-                    </span>
-                    <button onclick="closeHospitalModal(); switchTab('surgeries');" class="px-3 py-1.5 rounded-xl bg-teal-600 text-white text-xs font-bold shrink-0">
-                        دليل الصالات والسيتات
-                    </button>
-                </div>
-            `;
-
-            document.getElementById("hospitalModal").classList.remove("hidden");
-        }
-
-        function closeHospitalModal() {
-            document.getElementById("hospitalModal").classList.add("hidden");
-        }
-
-        function copyHospitalSummary() {
-            if (!currentModalHospital) return;
-            const h = currentModalHospital;
-            const text = `المستشفى: ${h.name} (${h.govName})\nالنوع: ${h.type}\nالسعة: ${h.beds} سرير | صالات العمليات: ${h.orCount}\nالردهات: ${h.wards.join("، ")}\nالأشعة: ${h.radiology.join("، ")}\nالطوارئ والمفرز: ${h.triage}`;
-            
-            const textarea = document.createElement("textarea");
-            textarea.value = text;
-            document.body.appendChild(textarea);
-            textarea.select();
-            document.execCommand("copy");
-            document.body.removeChild(textarea);
-            showToast("تم نسخ تقرير المستشفى للحافظة");
-        }
-
-        // =========================================================================
-        // 8. RENDER SURGICAL SPECIALTIES, DEVICES & INSTRUMENT SETS
+        // 8. RENDER SURGICAL SPECIALTIES, OPERATIONS, SETS, SUTURES & VIDEOS
         // =========================================================================
         function renderSurgicalPills() {
             const container = document.getElementById("surgicalPillsContainer");
@@ -1789,86 +1515,249 @@
                                     ${spec.title}
                                 </h3>
                                 <span class="text-xs text-teal-600 dark:text-teal-400 font-bold">
-                                    بروتوكول صالة العمليات، المرضى، الأجهزة، والسيتات الجراحية
+                                    اضغط على أي عملية لعرض الخطوات، الست الجراحي وصور الأدوات، الخيوط، والفيديو التعليمي
                                 </span>
                             </div>
                         </div>
+                        <span class="px-3 py-1 rounded-full bg-teal-100 dark:bg-teal-900/50 text-teal-800 dark:text-teal-300 text-xs font-extrabold shrink-0">
+                            ${spec.operations.length} عمليات مفصلة
+                        </span>
                     </div>
 
-                    <div class="p-4 sm:p-5 space-y-5 text-sm">
-                        <!-- Grid 1: Patients & Procedures -->
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                            <!-- Patient Profiles -->
-                            <div class="p-4 rounded-2xl bg-blue-50/50 dark:bg-blue-950/20 border border-blue-100 dark:border-blue-900/40">
-                                <h4 class="font-extrabold text-blue-900 dark:text-blue-300 flex items-center gap-2 mb-2.5">
-                                    <i class="fa-solid fa-hospital-user"></i>
-                                    أنواع المرضى المستلمين في هذا القسم
-                                </h4>
-                                <ul class="space-y-2 text-xs sm:text-sm text-slate-700 dark:text-slate-300 list-disc pr-4">
-                                    ${spec.patients.map(p => `<li>${p}</li>`).join("")}
-                                </ul>
-                            </div>
-
-                            <!-- Procedures -->
-                            <div class="p-4 rounded-2xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-900/40">
-                                <h4 class="font-extrabold text-emerald-900 dark:text-emerald-300 flex items-center gap-2 mb-2.5">
-                                    <i class="fa-solid fa-list-check"></i>
-                                    أنواع العمليات الجراحية التي تُجرى في الصالة
-                                </h4>
-                                <ul class="space-y-1.5 text-xs sm:text-sm text-slate-700 dark:text-slate-300">
-                                    ${spec.procedures.map(proc => `
-                                        <li class="flex items-start gap-2">
-                                            <i class="fa-solid fa-check-circle text-emerald-600 mt-1 shrink-0"></i>
-                                            <span>${proc}</span>
-                                        </li>
-                                    `).join("")}
-                                </ul>
-                            </div>
-                        </div>
-
-                        <!-- Standard Devices in OR -->
-                        <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700">
-                            <h4 class="font-extrabold text-slate-900 dark:text-white flex items-center gap-2 mb-2.5">
-                                <i class="fa-solid fa-microscope text-amber-600"></i>
-                                الأجهزة الطبية القياسية داخل صالة العمليات (OR Standard Equipment)
-                            </h4>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-                                ${spec.devices.map(dev => `
-                                    <div class="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-700 text-xs text-slate-700 dark:text-slate-300 flex items-start gap-2">
-                                        <i class="fa-solid fa-plug-circle-check text-amber-500 mt-0.5 shrink-0"></i>
-                                        <span>${dev}</span>
+                    <!-- Operations Grid inside this Specialty -->
+                    <div class="p-4 sm:p-5 grid grid-cols-1 md:grid-cols-2 gap-4">
+                        ${spec.operations.map((op, opIdx) => `
+                            <div onclick="openOperationModal('${spec.id}', ${opIdx})" 
+                                class="card-hover cursor-pointer rounded-2xl border border-slate-200 dark:border-slate-700/80 bg-slate-50/70 dark:bg-slate-800/40 hover:border-teal-500 p-4 flex flex-col justify-between transition">
+                                <div>
+                                    <div class="flex items-center justify-between gap-2 mb-1.5">
+                                        <span class="text-[11px] font-mono font-bold text-teal-700 dark:text-teal-400 bg-teal-50 dark:bg-teal-950/60 px-2 py-0.5 rounded-md">
+                                            ${op.enName}
+                                        </span>
+                                        <span class="text-[11px] font-bold text-rose-600 dark:text-rose-400 flex items-center gap-1">
+                                            <i class="fa-brands fa-youtube"></i> فيديو + صور
+                                        </span>
                                     </div>
-                                `).join("")}
-                            </div>
-                        </div>
+                                    <h4 class="text-base font-extrabold text-slate-900 dark:text-white mb-2">
+                                        ${op.name}
+                                    </h4>
+                                    <p class="text-xs text-slate-600 dark:text-slate-300 line-clamp-2 mb-3">
+                                        <strong>الحالات:</strong> ${op.patients}
+                                    </p>
 
-                        <!-- Surgical Sets & Instruments (Global & Iraqi MOH Standards) -->
-                        <div>
-                            <h4 class="font-extrabold text-teal-800 dark:text-teal-300 flex items-center gap-2 mb-3">
-                                <i class="fa-solid fa-toolbox"></i>
-                                السيتات الجراحية والأدوات (الستاندر العالمي وستاندر وزارة الصحة العراقية)
-                            </h4>
-                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                                ${spec.sets.map(set => `
-                                    <div class="p-4 rounded-2xl bg-teal-50/40 dark:bg-teal-950/20 border border-teal-200/80 dark:border-teal-800/60">
-                                        <div class="flex flex-wrap items-center justify-between gap-2 pb-2 mb-2.5 border-b border-teal-200/60 dark:border-teal-800/50">
-                                            <h5 class="font-extrabold text-sm text-slate-900 dark:text-white">
-                                                ${set.setName}
-                                            </h5>
-                                            <span class="px-2 py-0.5 rounded-md bg-teal-600 text-white text-[10px] font-bold">
-                                                ${set.standardNote}
+                                    <!-- Embedded Instrument Set Preview Thumbnail -->
+                                    <div class="mb-3 rounded-xl overflow-hidden border border-slate-300 dark:border-slate-700 relative group">
+                                        <div class="pointer-events-none">
+                                            ${generateInstrumentSetSVG(op.set.diagramType, op.set.name)}
+                                        </div>
+                                        <div class="absolute inset-0 bg-slate-950/40 group-hover:bg-slate-950/20 transition flex items-center justify-center">
+                                            <span class="px-3 py-1.5 rounded-xl bg-slate-900/90 text-white text-xs font-bold shadow flex items-center gap-1.5">
+                                                <i class="fa-solid fa-toolbox text-teal-400"></i>
+                                                ${op.set.name}
                                             </span>
                                         </div>
-                                        <ul class="space-y-1.5 text-xs text-slate-700 dark:text-slate-300 list-disc pr-4">
-                                            ${set.instruments.map(inst => `<li>${inst}</li>`).join("")}
-                                        </ul>
                                     </div>
-                                `).join("")}
+
+                                    <!-- Sutures Quick Summary -->
+                                    <div class="flex flex-wrap gap-1.5">
+                                        ${op.sutures.slice(0, 2).map(s => `
+                                            <span class="px-2 py-0.5 rounded-md bg-indigo-50 dark:bg-indigo-950/50 text-indigo-700 dark:text-indigo-300 text-[11px] font-bold border border-indigo-100 dark:border-indigo-900">
+                                                <i class="fa-solid fa-needle ml-1"></i>${s.suture}
+                                            </span>
+                                        `).join("")}
+                                    </div>
+                                </div>
+
+                                <div class="mt-4 pt-3 border-t border-slate-200/80 dark:border-slate-700 flex items-center justify-between text-xs font-extrabold text-teal-700 dark:text-teal-400">
+                                    <span>فتح الخطوات، صور الأدوات، الخيوط والفيديو</span>
+                                    <i class="fa-solid fa-arrow-left"></i>
+                                </div>
                             </div>
-                        </div>
+                        `).join("")}
                     </div>
                 </article>
             `).join("");
+        }
+
+        // =========================================================================
+        // 8B. OPERATION DEEP-DIVE MODAL & LIGHTBOX
+        // =========================================================================
+        function openOperationModal(specId, opIdx) {
+            const spec = surgicalSpecialties.find(s => s.id === specId);
+            if (!spec || !spec.operations[opIdx]) return;
+
+            const op = spec.operations[opIdx];
+            currentModalOperation = { specTitle: spec.title, ...op };
+
+            document.getElementById("opModalSpec").textContent = spec.title.split('(')[0].trim();
+            document.getElementById("opModalEnName").textContent = op.enName;
+            document.getElementById("opModalTitle").textContent = op.name;
+
+            const ytSearchUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(op.videoSearchQuery)}`;
+
+            const body = document.getElementById("opModalBody");
+            body.innerHTML = `
+                <!-- 1. Patients & Indications -->
+                <div class="p-4 rounded-2xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50">
+                    <h4 class="font-extrabold text-blue-900 dark:text-blue-300 flex items-center gap-2 mb-1.5">
+                        <i class="fa-solid fa-hospital-user"></i>
+                        الحالات والمرضى المستلمون لهذه العملية
+                    </h4>
+                    <p class="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed">${op.patients}</p>
+                </div>
+
+                <!-- 2. Step-by-Step Surgical Procedure -->
+                <div class="p-4 rounded-2xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200/80 dark:border-emerald-900/50">
+                    <h4 class="font-extrabold text-emerald-900 dark:text-emerald-300 flex items-center gap-2 mb-3">
+                        <i class="fa-solid fa-list-ol"></i>
+                        خطوات العملية الجراحية القياسية (Step-by-Step Surgical Steps)
+                    </h4>
+                    <ol class="space-y-2.5 text-xs sm:text-sm text-slate-700 dark:text-slate-300">
+                        ${op.steps.map((step, i) => `
+                            <li class="flex items-start gap-2.5">
+                                <span class="w-6 h-6 rounded-full bg-emerald-600 text-white text-xs font-extrabold flex items-center justify-center shrink-0 mt-0.5">
+                                    ${i + 1}
+                                </span>
+                                <span class="leading-relaxed">${step}</span>
+                            </li>
+                        `).join("")}
+                    </ol>
+                </div>
+
+                <!-- 3. Surgical Instrument Set + Interactive Zoomable Diagram -->
+                <div class="p-4 rounded-2xl bg-teal-50/40 dark:bg-teal-950/20 border border-teal-200 dark:border-teal-800/60 space-y-3">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <div>
+                            <h4 class="font-extrabold text-teal-900 dark:text-teal-300 flex items-center gap-2">
+                                <i class="fa-solid fa-toolbox"></i>
+                                الست الجراحي المستخدم: ${op.set.name}
+                            </h4>
+                            <span class="text-[11px] font-bold text-teal-700 dark:text-teal-400">${op.set.standard}</span>
+                        </div>
+                        <button onclick="openLightbox('${op.set.diagramType}', '${op.set.name.replace(/'/g, "\\'")}')" 
+                            class="px-3 py-1.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm transition">
+                            <i class="fa-solid fa-magnifying-glass-plus"></i>
+                            تكبير صورة الأدوات
+                        </button>
+                    </div>
+
+                    <!-- Interactive Image Box -->
+                    <div onclick="openLightbox('${op.set.diagramType}', '${op.set.name.replace(/'/g, "\\'")}')" 
+                        class="cursor-zoom-in rounded-2xl overflow-hidden border-2 border-teal-500/40 hover:border-teal-500 transition shadow-sm">
+                        ${generateInstrumentSetSVG(op.set.diagramType, op.set.name)}
+                    </div>
+
+                    <!-- Detailed Instrument List -->
+                    <div class="pt-1">
+                        <h5 class="text-xs font-extrabold text-slate-800 dark:text-slate-200 mb-2">مكونات الست الجراحي أداة بأداة:</h5>
+                        <ul class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs text-slate-700 dark:text-slate-300">
+                            ${op.set.instruments.map(inst => `
+                                <li class="p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 flex items-start gap-2">
+                                    <i class="fa-solid fa-check text-teal-600 mt-0.5 shrink-0"></i>
+                                    <span>${inst}</span>
+                                </li>
+                            `).join("")}
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 4. Surgical Sutures Table/Cards -->
+                <div class="p-4 rounded-2xl bg-indigo-50/40 dark:bg-indigo-950/20 border border-indigo-200/80 dark:border-indigo-900/60">
+                    <h4 class="font-extrabold text-indigo-900 dark:text-indigo-300 flex items-center gap-2 mb-3">
+                        <i class="fa-solid fa-staff-snake"></i>
+                        الخيوط الجراحية والإبر المستخدمة حسب الطبقات التشريحية (Surgical Sutures)
+                    </h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        ${op.sutures.map(sut => `
+                            <div class="p-3 rounded-xl bg-white dark:bg-slate-900 border border-indigo-100 dark:border-indigo-800/60 shadow-sm space-y-1">
+                                <div class="text-xs font-extrabold text-indigo-700 dark:text-indigo-400">
+                                    ${sut.layer}
+                                </div>
+                                <div class="text-sm font-extrabold text-slate-900 dark:text-white">
+                                    الخيط: <span class="text-teal-700 dark:text-teal-300">${sut.suture}</span>
+                                </div>
+                                <div class="text-[11px] text-slate-600 dark:text-slate-400 flex flex-wrap gap-2 pt-1">
+                                    <span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 font-bold">${sut.type}</span>
+                                    <span class="px-2 py-0.5 rounded bg-amber-50 dark:bg-amber-950/50 text-amber-800 dark:text-amber-300 font-bold">${sut.needle}</span>
+                                </div>
+                            </div>
+                        `).join("")}
+                    </div>
+                </div>
+
+                <!-- 5. Standard Medical Devices in OR -->
+                <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                    <h4 class="font-extrabold text-slate-900 dark:text-white flex items-center gap-2 mb-2">
+                        <i class="fa-solid fa-microscope text-amber-600"></i>
+                        الأجهزة الطبية القياسية المطلوبة داخل صالة العمليات
+                    </h4>
+                    <ul class="space-y-1.5 text-xs text-slate-700 dark:text-slate-300 list-disc pr-4">
+                        ${op.devices.map(d => `<li>${d}</li>`).join("")}
+                    </ul>
+                </div>
+
+                <!-- 6. Educational Surgical Video Section -->
+                <div class="p-4 rounded-2xl bg-rose-50/50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/60 space-y-3">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <h4 class="font-extrabold text-rose-900 dark:text-rose-300 flex items-center gap-2">
+                            <i class="fa-brands fa-youtube text-rose-600 text-lg"></i>
+                            الفيديو التعليمي الجراحي العالمي (Standard Educational Video)
+                        </h4>
+                        <a href="${ytSearchUrl}" target="_blank" rel="noopener noreferrer" 
+                            class="px-3 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm transition">
+                            <i class="fa-solid fa-up-right-from-square"></i>
+                            فتح فيديوهات العملية على YouTube
+                        </a>
+                    </div>
+                    <p class="text-xs text-slate-600 dark:text-slate-400">
+                        شاهد الشرح العملي للعملية (${op.enName}) وفق البروتوكولات الجراحية العالمية المعتمدة لطلبة الطب والتمريض وتقنيي التخدير والعمليات:
+                    </p>
+                    <div class="aspect-video w-full rounded-2xl overflow-hidden bg-slate-900 border border-slate-700 shadow-inner">
+                        <iframe class="w-full h-full" 
+                            src="https://www.youtube.com/embed/${op.videoEmbedId}?rel=0" 
+                            title="${op.name}" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById("operationModal").classList.remove("hidden");
+        }
+
+        function closeOperationModal() {
+            document.getElementById("operationModal").classList.add("hidden");
+            // Stop video playback on close
+            document.getElementById("opModalBody").innerHTML = "";
+        }
+
+        function openLightbox(diagramType, setName) {
+            document.getElementById("lightboxTitle").innerHTML = `<i class="fa-solid fa-toolbox text-teal-400"></i> ${setName}`;
+            document.getElementById("lightboxContent").innerHTML = generateInstrumentSetSVG(diagramType, setName);
+            document.getElementById("lightboxCaption").textContent = "مخطط توضيحي قياسي للأدوات الجراحية الأساسية داخل هذا الست وفق مواصفات وزارة الصحة العراقية والمعايير العالمية.";
+            document.getElementById("imageLightboxModal").classList.remove("hidden");
+        }
+
+        function closeLightbox() {
+            document.getElementById("imageLightboxModal").classList.add("hidden");
+        }
+
+        function copyOperationProtocol() {
+            if (!currentModalOperation) return;
+            const op = currentModalOperation;
+            const stepsText = op.steps.map((s, i) => `${i + 1}. ${s}`).join("\n");
+            const suturesText = op.sutures.map(s => `- ${s.layer}: ${s.suture} (${s.needle})`).join("\n");
+            const text = `العملية: ${op.name} (${op.enName})\nالتخصص: ${op.specTitle}\n\nالخطوات الجراحية:\n${stepsText}\n\nالست الجراحي (${op.set.name}):\n${op.set.instruments.join("، ")}\n\nالخيوط الجراحية:\n${suturesText}`;
+
+            const textarea = document.createElement("textarea");
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand("copy");
+            document.body.removeChild(textarea);
+            showToast("تم نسخ بروتوكول العملية والست والخيوط");
         }
 
         // =========================================================================
@@ -1962,19 +1851,19 @@
                         });
                     }
                 });
-            });
-
-            // Search Surgical Specialties & Sets
+            // Search Surgical Specialties, Operations, Sets & Sutures
             surgicalSpecialties.forEach(spec => {
-                const hay = `${spec.title} ${spec.procedures.join(" ")} ${spec.devices.join(" ")} ${spec.sets.map(s => s.setName + " " + s.instruments.join(" ")).join(" ")}`.toLowerCase();
-                if (hay.includes(q)) {
-                    matches.push({
-                        badge: "صالة عمليات وسيت جراحي",
-                        title: spec.title,
-                        desc: `السيتات: ${spec.sets.map(s => s.setName).join(" | ")}`,
-                        action: `switchTab('surgeries'); filterSurgical('${spec.id}'); clearSearch();`
-                    });
-                }
+                spec.operations.forEach((op, opIdx) => {
+                    const hay = `${spec.title} ${op.name} ${op.enName} ${op.patients} ${op.set.name} ${op.set.instruments.join(" ")} ${op.sutures.map(s => s.suture + " " + s.layer).join(" ")}`.toLowerCase();
+                    if (hay.includes(q)) {
+                        matches.push({
+                            badge: `عملية جراحية • ${spec.title.split('(')[0].trim()}`,
+                            title: `${op.name} (${op.enName})`,
+                            desc: `الست: ${op.set.name} | الخيوط: ${op.sutures.map(s => s.suture).join("، ")}`,
+                            action: `switchTab('surgeries'); openOperationModal('${spec.id}', ${opIdx}); clearSearch();`
+                        });
+                    }
+                });
             });
 
             document.getElementById("searchCount").textContent = matches.length;
